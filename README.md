@@ -9,11 +9,10 @@
 1. [Overview](#overview)
 2. [Setup requirements](#setup-requirements)
 3. [Parameters](#parameters)
-4. [Limitations](#limitations)
-5. [Usage](#usage)
-6. [Contributing](#contributing)
-7. [Contributors](#contributors)
-8. [License](#license)
+4. [Usage](#usage)
+5. [Contributing](#contributing)
+6. [Contributors](#contributors)
+7. [License](#license)
 
 ## Overview
 
@@ -21,7 +20,7 @@ This module manages the zabbix agent for a monitored machine. It can
 also, optionally, manage repositories related to Zabbix on Linux. On the Red Hat
 family of OS's, this includes both EPEL and Zabbix. On the Debian family,
 this is just the Zabbix repo.  On Windows this module utilizes the
-[Chocolatey](chocolatey.org) provider.
+[Chocolatey][chocolatey] provider.
 
 ## Setup Requirements
 
@@ -54,7 +53,8 @@ Type: String
 
 ##### `logfile`  
 The full path to where Zabbix should store it's logs.  
-Default: `'C:\zabbix_agentd.log'`  
+Default on Windows: `'C:/zabbix_agentd.log'`  
+Default on Linux: `'/var/log/zabbix/zabbix_agentd.log'`  
 Type: String
 
 ##### `manage_repo_epel`  
@@ -94,8 +94,8 @@ fully parameterized `zabbix_agentd.conf` will be coming soon.
 
 ## Contributing
 
-Pull requests, bug reports, and enancement requrest are welcome! Enhancement
-requests should be file just like other issues.
+Pull requests, bug reports, and enhancement requsts are welcome! Enhancement
+requests should be filed just like other issues.
 
 ## Contributors
 
@@ -121,6 +121,7 @@ not been responding to issues or pull requests for at least six months and some
 had sat for nearly two years. This response timeframe and my needs didn't line
 up so here we are.
 
+[chocolatey]: https://chocolatey.org
 [coveralls-master]: https://coveralls.io/r/genebean/genebean-zabbixagent?branch=master
 [coveralls-img-master]: https://img.shields.io/coveralls/genebean/genebean-zabbixagent/master.svg
 [gh-tag-img]: https://img.shields.io/github/tag/genebean/genebean-zabbixagent.svg

@@ -9,6 +9,8 @@ rvm:
 env:
  - PUPPET_VERSION=3.7.3
 
+bundler_args: --without packaging
+
 script: 'bundle exec rake tests'
 
 notifications:

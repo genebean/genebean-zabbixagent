@@ -1,5 +1,8 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2015-01-25 Release 2.0.5  
+- Added puppet_blacksmith for packaging
+
 ## 2015-01-25 Release 2.0.4  
 - Cleaned up formatting
 

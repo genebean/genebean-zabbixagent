@@ -66,8 +66,14 @@ class zabbixagent (
   validate_string($include_dir)
   validate_string($include_file)
   validate_string($logfile)
-  validate_string($servers)
-  validate_string($servers_active)
+
+  if (! (is_string($servers) or is_array($servers))) {
+    fail('$servers must be either a string or an array')
+  }
+
+  if (! (is_string($servers_active) or is_array($servers_active))) {
+    fail('$servers_active must be either a string or an array')
+  }
 
   class { '::zabbixagent::preinstall':
     manage_repo_epel   => $manage_repo_epel,
@@ -84,7 +90,6 @@ class zabbixagent (
     servers        => $servers,
     servers_active => $servers_active,
   } ->
-
   class { '::zabbixagent::service':
   }
 

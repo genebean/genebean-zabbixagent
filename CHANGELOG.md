@@ -1,5 +1,13 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2015-01-25 Release 2.0.7  
+- Fixed validation
+- Added new tests for Servers and ServersActive settings
+
+## 2015-01-25 Release 2.0.6  
+- Updated Vagrantfile
+- Fixed rspec settings so that details are shown
+
 ## 2015-01-25 Release 2.0.5  
 - Added puppet_blacksmith for packaging
 

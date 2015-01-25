@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'zabbixagent::config' do
 
-  describe 'with server and server_active params set' do
+  describe 'with servers and servers_active params set' do
     let :facts do
       {
         :kernel          => 'Linux',

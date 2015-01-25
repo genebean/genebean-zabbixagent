@@ -14,4 +14,6 @@ group :development, :unit_tests do
   gem 'rspec-puppet',            :git => 'https://github.com/rodjek/rspec-puppet.git'
 end
 
-
+group :packaging do
+  gem 'puppet-blacksmith',       '>= 3.1.0'
+end

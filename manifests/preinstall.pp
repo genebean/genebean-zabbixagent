@@ -28,6 +28,15 @@ class zabbixagent::preinstall (
           notify  => Exec['yum clean all'],
         }
       }
+      
+      exec { 'yum clean all':
+        path        => '/usr/bin',
+        user        => 'root',
+        logoutput   => true,
+        refreshonly => true,
+        command     => 'yum clean all',
+      }
+      
     } # end RedHat
     
     Debian: {
@@ -41,7 +50,7 @@ class zabbixagent::preinstall (
               notify  => Exec['apt-get update'],
             }
             
-          }
+          }          
           
         } # end Ubuntu
         
@@ -49,6 +58,14 @@ class zabbixagent::preinstall (
         }
         
       } # end case $::operatingsystem
+          
+      exec { 'apt-get update':
+        path        => '/usr/bin',
+        user        => 'root',
+        logoutput   => true,
+        refreshonly => true,
+        command     => 'apt-get update',
+      }
       
     } # end Debian
     
@@ -56,21 +73,5 @@ class zabbixagent::preinstall (
     }
     
   } # end case $::osfamily
-  
-  exec { 'yum clean all':
-    path        => '/usr/bin',
-    user        => 'root',
-    logoutput   => true,
-    refreshonly => true,
-    command     => 'yum clean all',
-  }
-  
-  exec { 'apt-get update':
-    path        => '/usr/bin',
-    user        => 'root',
-    logoutput   => true,
-    refreshonly => true,
-    command     => 'apt-get update',
-  }
   
 } # end class

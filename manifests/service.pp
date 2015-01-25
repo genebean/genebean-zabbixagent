@@ -4,7 +4,7 @@ class zabbixagent::service {
     'Windows' => 'Zabbix Agent',
     default   => 'zabbix-agent',
   }
-  
+
   service { 'zabbix-agent':
     ensure  => running,
     name    => $service_name,

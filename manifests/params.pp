@@ -12,7 +12,7 @@ class zabbixagent::params {
   # this isn't a parameter but, since this class is inherited by all classes
   # it is a good place to put this message so that it's the same everywhere
   $fail_message       = "${::kernel} is not yet supported by this module."
-  
+
   case $::kernel {
     'Linux'   : {
       $config_dir = '/etc/zabbix'
@@ -27,7 +27,6 @@ class zabbixagent::params {
     default   : {
       fail($fail_message)
     }
-    
-  } #end case
-  
+
+  } # end case
 }

@@ -3,22 +3,22 @@ class zabbixagent::install (
   $ensure_setting = $::zabbixagent::params::ensure_setting,
 ) inherits ::zabbixagent::params {
   case $::kernel {
-    Linux: {
+    Linux   : {
       package { 'zabbix-agent':
         ensure => $ensure_setting,
         notify => Service['zabbix-agent'],
       }
     } # end Linux
-    
-    Windows: {
+
+    Windows : {
       package { 'zabbix-agent':
         ensure   => $ensure_setting,
         provider => 'chocolatey',
         notify   => Service['zabbix-agent'],
       }
     } # end Windows
-    
-    default: {
+
+    default : {
       fail($::zabbixagent::params::fail_message)
     }
   }

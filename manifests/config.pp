@@ -8,8 +8,6 @@ class zabbixagent::config (
   $servers        = $::zabbixagent::params::servers,
   $servers_active = $::zabbixagent::params::servers,
 ) inherits ::zabbixagent::params {
-  
-
   ini_setting { 'servers setting':
     ensure  => present,
     path    => "${config_dir}/zabbix_agentd.conf",
@@ -45,19 +43,19 @@ class zabbixagent::config (
       setting => 'Include',
       notify  => Service['zabbix-agent'],
     }
-    
+
   } else {
     $include_value = "${config_dir}/${include_dir}/${include_file}"
-    
+
     file { "${config_dir}/${include_dir}":
       ensure => directory,
     }
-    
+
     file { "${config_dir}/${include_dir}/${include_file}":
       ensure  => file,
       require => File["${config_dir}/${include_dir}"],
     }
-    
+
     ini_setting { 'include setting':
       ensure  => present,
       path    => "${config_dir}/zabbix_agentd.conf",
@@ -66,9 +64,10 @@ class zabbixagent::config (
       value   => $include_value,
       notify  => Service['zabbix-agent'],
     }
-    
+
   } # end if / else for $include_file
-  
+
+
   ini_setting { 'logfile setting':
     ensure  => present,
     path    => "${config_dir}/zabbix_agentd.conf",
@@ -77,5 +76,5 @@ class zabbixagent::config (
     value   => $logfile,
     notify  => Service['zabbix-agent'],
   }
-  
+
 }

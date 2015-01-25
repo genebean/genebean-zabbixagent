@@ -1,5 +1,8 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2015-01-25 Release 2.0.4  
+- Cleaned up formatting
+
 ## 2015-01-25 Release 2.0.3  
 - Moved exec's in preinstall.pp inside osfamily case statement
 

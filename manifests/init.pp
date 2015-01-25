@@ -2,7 +2,7 @@
 #
 # This module manages the zabbix agent on a monitored machine.
 #
-# Parameters: 
+# Parameters:
 #   $ensure_setting     Passed directly to ensure of package resource
 #                       Default: 'present'
 #
@@ -41,8 +41,6 @@
 #                       Type: String separated by commas OR Array
 #
 #
-# Actions:
-#
 # Requires: see metadata.json
 #
 # Sample Usage:
@@ -58,11 +56,10 @@ class zabbixagent (
   $servers            = $::zabbixagent::params::servers,
   $servers_active     = $::zabbixagent::params::servers_active,
 ) inherits ::zabbixagent::params {
-  
   # validate booleans
   validate_bool($manage_repo_epel)
   validate_bool($manage_repo_zabbix)
-  
+
   # validate strings
   validate_string($ensure_setting)
   validate_string($hostname)
@@ -71,17 +68,14 @@ class zabbixagent (
   validate_string($logfile)
   validate_string($servers)
   validate_string($servers_active)
-  
+
   class { '::zabbixagent::preinstall':
     manage_repo_epel   => $manage_repo_epel,
     manage_repo_zabbix => $manage_repo_zabbix,
-    
   } ->
-  
   class { '::zabbixagent::install':
     ensure_setting => $ensure_setting,
   } ->
-  
   class { '::zabbixagent::config':
     hostname       => $hostname,
     include_dir    => $include_dir,
@@ -90,7 +84,8 @@ class zabbixagent (
     servers        => $servers,
     servers_active => $servers_active,
   } ->
-  
-  class { '::zabbixagent::service': }
-  
+
+  class { '::zabbixagent::service':
+  }
+
 }

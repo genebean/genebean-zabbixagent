@@ -1,6 +1,6 @@
 {
   "name": "genebean-zabbixagent",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "Gene Liverman",
   "summary": "This module manages the Zabbix Agent on Windows or Linux.",
   "license": "BSD-3-Clause",

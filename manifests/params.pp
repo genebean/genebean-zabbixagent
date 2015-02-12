@@ -8,29 +8,29 @@ class zabbixagent::params {
   $ensure_setting         = 'present'
 
   # config settings
-  $item_alias             = undef
   $allow_root             = undef
   $buffer_send            = undef
   $buffer_size            = undef
   $debug_level            = undef
   $enable_remote_commands = undef
-  $host_metadata_item     = undef
   $host_metadata          = undef
-  $hostname_item          = undef
+  $host_metadata_item     = 'system.uname'
   $hostname               = downcase($::fqdn)
-  $include                = undef
+  $hostname_item          = undef
+  $include_files          = undef
+  $item_alias             = undef
   $listen_ip              = undef
   $listen_port            = undef
-  $load_module_path       = undef
   $load_module            = undef
+  $load_module_path       = undef
   $log_file_size          = undef
   $log_remote_commands    = undef
   $max_lines_per_second   = undef
   $perf_counter           = undef
   $pid_file               = undef
   $refresh_active_checks  = undef
-  $server_active          = '127.0.0.1'
   $server                 = '127.0.0.1'
+  $server_active          = '127.0.0.1'
   $source_ip              = undef
   $start_agents           = undef
   $timeout                = undef

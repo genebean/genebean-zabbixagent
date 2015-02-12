@@ -1,5 +1,10 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2015-02-12 Release 2.1.0  
+- Transitioned to a fully templated zabbix_agentd.conf
+- Added code to fail compilation if depreciated variables exists
+- Added more tests
+
 ## 2015-01-25 Release 2.0.7  
 - Fixed validation
 - Added new tests for Servers and ServersActive settings

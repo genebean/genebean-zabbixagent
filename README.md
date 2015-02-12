@@ -4,6 +4,7 @@
 
 # Zabbix Agent Puppet Module
 
+
 #### Table of Contents
 
 1. [Overview](#overview)
@@ -14,6 +15,7 @@
 6. [Contributors](#contributors)
 7. [License](#license)
 
+
 ## Overview
 
 This module manages the zabbix agent for a monitored machine. It can
@@ -21,6 +23,7 @@ also, optionally, manage repositories related to Zabbix on Linux. On the Red Hat
 family of OS's, this includes both EPEL and Zabbix. On the Debian family,
 this is just the Zabbix repo.  On Windows this module utilizes the
 [Chocolatey][chocolatey] provider.
+
 
 ## Setup Requirements
 
@@ -33,49 +36,163 @@ This module has been tested against Puppet 3.7.3 on:
 
 ## Parameters:
 
-##### `ensure_setting`  
-Passed directly to ensure of package resource  
-Default: `'present'`
+#### Depreciated options  
+These options were removed in v2.1.0. If they exist in your
+manifests or hiera data they will cause a compilation failure.
 
-##### `hostname`  
-The hostname used in the config file.  
-Default: `downcase($::fqdn)`
+```puppet
+$include_dir
+$include_file
+$logfile
+$servers
+$servers_active
+```
 
-##### `include_dir`  
-The directory that additional config files will be placed in.  
-Default: `'zabbix_agentd.d'`  
-Type: String
 
-##### `include_file`  
-A file that that contain additional settings  
-Default: `''`  
-Type: String
+#### preinstall.pp settings
 
-##### `logfile`  
-The full path to where Zabbix should store it's logs.  
-Default on Windows: `'C:/zabbix_agentd.log'`  
-Default on Linux: `'/var/log/zabbix/zabbix_agentd.log'`  
-Type: String
-
-##### `manage_repo_epel`  
+#####`manage_repo_epel`  
 Determines if the EPEL repo is managed on the RedHat family of OS's.  
-Default: `false`  
+Default: false  
 Type: boolean
 
-##### `manage_repo_zabbix`  
+#####`manage_repo_zabbix`  
 Determines if the Zabbix repo is managed on the RedHat family of OS's.  
-Default: `false`  
+Default: false  
 Type: boolean
 
-##### `servers`  
-The server or servers used in the Servers setting.  
-Default: `'127.0.0.1'`  
+
+#### install.pp settings
+
+#####`ensure_setting`  
+Passed directly to ensure of package resource  
+Default: 'present'
+
+
+#### config.pp settings
+
+#####`allow_root`  
+0 - do not allow, 1 - allow  
+Type: integer
+
+#####`buffer_send`  
+Range: 1-3600  
+Type: integer
+
+#####`buffer_size`  
+Range: 2-65535  
+Type: integer
+
+#####`debug_level`  
+Range: 0-4  
+Type: integer
+
+#####`enable_remote_commands`  
+0 - not allowed, 1 - allowed  
+Type: integer
+
+#####`host_metadata`  
+Range: 0-255 characters  
+Type: string
+
+#####`host_metadata_item`  
+Parameter that defines an item used for getting host metadata used during host
+auto-registration process. To disable, set to ''.  
+Default: 'system.uname'
+
+#####`hostname`  
+The hostname used in the config file.  
+Default: downcase($::fqdn)
+
+#####`hostname_item`  
+An item to be used for determining a host's name  
+
+#####`include_files`  
+Equates to include in zabbix_agentd.conf. Renamed due to include being special in
+Puppet. An array with one or more files to be included in the config. On non-Windows
+systems, this can be a folder or a path with a wildcard. See zabbix_agentd.conf for details.  
+Type: array
+
+#####`item_alias`  
+Equates to alias in zabbix_agentd.conf. Renamed due to `alias` being the name of a
+Puppet metaparameter. Sets an alias for an item key.  
+Type: array
+
+#####`listen_ip`  
+List of comma delimited IP addresses that the agent should listen on.  
+Type: string
+
+#####`listen_port`  
+Range: 1024-32767  
+Default: 10050  
+Type: integer
+
+#####`load_module`  
+Type: string
+
+#####`load_module_path`  
+Type: string
+
+#####`log_file_size`  
+Range: 0-1024  
+Type: integer
+
+#####`log_file`  
+The full path to where Zabbix should store it's logs.  
+Default: 'C:\zabbix_agentd.log' OR '/var/log/zabbix/zabbix_agentd.log'  
+Type: string
+
+#####`log_remote_commands`  
+0 - disabled, 1 - enabled  
+Type: integer
+
+#####`max_lines_per_second`  
+Range: 1-1000  
+Type: integer
+
+#####`perf_counter`  
+Each item should be formated as follows:  
+`<parameter_name>,"<perf_counter_path>",<period>`  
+Type: array
+
+#####`pid_file`  
+Name of PID file.  
+Type: string
+
+#####`refresh_active_checks`  
+Range: 60-3600  
+Type: integer
+
+#####`server`  
+Default: '127.0.0.1'  
 Type: String separated by commas OR Array
 
-##### `servers_active`  
-The server or servers used in the Servers setting.  
-Default: `'127.0.0.1'`  
+#####`server_active`  
+Default: '127.0.0.1'  
 Type: String separated by commas OR Array
+
+#####`source_ip`  
+Source IP address for outgoing connections.  
+Type: string, formatted as an IP address
+
+#####`start_agents`  
+Range: 0-100  
+Type: integer
+
+#####`timeout`  
+Range: 1-30  
+Type: integer
+
+#####`unsafe_user_parameters`  
+0 - do not allow, 1 - allow
+
+#####`user_parameter`  
+User-defined parameter to monitor.  
+Type: array
+
+#####`user`  
+Drop privileges to a specific, existing user on the system.  
+Type: string
 
 
 ## Usage
@@ -83,29 +200,34 @@ Type: String separated by commas OR Array
 ```puppet
 class { 'zabbixagent':
   ensure_setting => 'latest',
-  include_file   => 'userparams.conf',
-  servers        => 'zabbix.example.com',
-  servers_active => 'zabbix.example.com',
+  include_files  => ['/etc/zabbix_agentd.conf.d/userparams.conf',],
+  log_file_size  => 0,
+  server         => 'zabbix.example.com,offsite.example.com',
+  server_active  => ['zabbix.example.com', 'offiste.example.com',],
 }
 ```
 
-The list of params above is the only configuration supported at this time but a
-fully parameterized `zabbix_agentd.conf` will be coming soon.
+All parameters available in `zabbix_agentd.conf` should be listed above. Please submit
+a bug report if you find this not to be the case and it will be added.
+
 
 ## Contributing
 
-Pull requests, bug reports, and enhancement requsts are welcome! Enhancement
+Pull requests, bug reports, and enhancement requests are welcome! Enhancement
 requests should be filed just like other issues.
+
 
 ## Contributors
 
 * Scott Smerchek (@smerchek) - Author of [softek-zabbixagent][pf-softek-zabbixagent]
 * Martijn Storck (@martijn)  - Added CentOS support
 
+
 ## License
 
 This is released under the New BSD / BSD 3 Clause license. A copy of the license
 can be found in the root of the module.
+
 
 ### History
 
@@ -115,8 +237,8 @@ one line of the original code was left. Since no 'substantial portions' of the c
 was reused and no written licence was contained in the repository I have chosen not
 to reuse the MIT license that was referenced in the original metadata.json file.
 
-This module has been released independant of the origial after reviewing the
-original author's GitHub issue tracker. Specificaly, it appeared that they had
+This module has been released independant of the original after reviewing the
+original author's GitHub issue tracker. Specifically, it appeared that they had
 not been responding to issues or pull requests for at least six months and some
 had sat for nearly two years. This response timeframe and my needs didn't line
 up so here we are.

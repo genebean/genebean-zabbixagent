@@ -9,7 +9,7 @@ class zabbixagent::config (
   $host_metadata          = $::zabbixagent::host_metadata,
   $hostname_item          = $::zabbixagent::hostname_item,
   $hostname               = $::zabbixagent::hostname,
-  $include                = $::zabbixagent::include,
+  $include_files          = $::zabbixagent::include_files,
   $item_alias             = $::zabbixagent::item_alias,
   $listen_ip              = $::zabbixagent::listen_ip,
   $listen_port            = $::zabbixagent::listen_port,

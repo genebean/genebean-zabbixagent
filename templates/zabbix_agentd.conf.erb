@@ -5,14 +5,14 @@
 #
 ################################################################
 ################################################################
-<% @kernel.downcase.eql?('windows') ? (os = 'Windows') : (os = 'Unix') -%>
+<% @kernel.downcase.eql?('windows') ? ($os = 'Windows') : ($os = 'Unix') -%>
 
-# This is a config file for the Zabbix agent daemon  <% "(#{os})" -%>
+# This is a config file for the Zabbix agent daemon  <%= "(#{$os})" %>
 # To get more information about Zabbix, visit http://www.zabbix.com
 
 ############ GENERAL PARAMETERS #################
 
-<% if os.eql?('Unix') -%>
+<% if $os.eql?('Unix') -%>
 ### Option: PidFile
 #	Name of PID file.
 #
@@ -26,7 +26,7 @@ PidFile=<%= @pid_file %>
 
 ### Option: LogFile
 #	Name of log file.
-<% if os.eql?('Windows') -%>
+<% if $os.eql?('Windows') -%>
 #	If not set, Windows Event Log is used.
 <% else -%>
 #	If not set, syslog is used.
@@ -257,7 +257,7 @@ BufferSize=<%= @buffer_size %>
 
 ### Option: MaxLinesPerSecond
 #	Maximum number of new lines the agent will send per second to Zabbix Server
-<% if os.eql?('Windows') -%>
+<% if $os.eql?('Windows') -%>
 #	or Proxy processing 'log', 'logrt' and 'eventlog' active checks.
 #	The provided value will be overridden by the parameter 'maxlines',
 #	provided in 'log', 'logrt' or 'eventlog' item keys.
@@ -281,7 +281,7 @@ MaxLinesPerSecond=<%= @max_lines_per_second %>
 #	Sets an alias for an item key. It can be used to substitute long and complex item key with a smaller and simpler one.
 #	Multiple Alias parameters may be present. Multiple parameters with the same Alias key are not allowed.
 #	Different Alias keys may reference the same item key.
-<% if os.eql?('Windows') -%>
+<% if $os.eql?('Windows') -%>
 #	For example, to retrieve paging file usage in percents from the server:
 #	Alias=pg_usage:perf_counter[\Paging File(_Total)\% Usage]
 #	Now shorthand key pg_usage may be used to retrieve data.
@@ -313,7 +313,7 @@ Alias=<%= a %>
 Timeout=<%= @timeout %>
 <% end -%>
 
-<% if os.eql?('Windows') -%>
+<% if $os.eql?('Windows') -%>
 ### Option: PerfCounter
 #	Syntax: <parameter_name>,"<perf_counter_path>",<period>
 #	Defines new parameter <parameter_name> which is an average value for system performance counter <perf_counter_path> for the specified time period <period> (in seconds).
@@ -359,7 +359,7 @@ User=<%= @user %>
 <% end -%>
 
 ### Option: Include
-<% if os.eql?('Windows') -%>
+<% if $os.eql?('Windows') -%>
 #	You may include individual files in the configuration file.
 <% else -%>
 #	You may include individual files or all files in a directory in the configuration file.
@@ -369,13 +369,13 @@ User=<%= @user %>
 # Mandatory: no
 # Default:
 # Include=
-<% if @include -%>
-  <% @include.each do |i| -%>
+<% if @include_files -%>
+  <% @include_files.each do |i| -%>
 Include=<%= i %>
   <% end -%>
 <% end -%>
 
-<% if os.eql?('Windows') -%>
+<% if $os.eql?('Windows') -%>
 # Include=c:\zabbix\zabbix_agentd.userparams.conf
 # Include=c:/zabbix/zabbix_agentd.userparams.conf
 <% else -%>
@@ -405,7 +405,7 @@ UnsafeUserParameters=<%= @unsafe_user_parameters %>
 ### Option: UserParameter
 #	User-defined parameter to monitor. There can be several user-defined parameters.
 #	Format: UserParameter=<key>,<shell command>
-<% if os.eql?('Unix') -%>
+<% if $os.eql?('Unix') -%>
 #	See 'zabbix_agentd' directory for examples.
 <% end -%>
 #
@@ -418,7 +418,7 @@ UserParameter=<%= up %>
   <% end -%>
 <% end -%>
 
-<% if os.eql?('Unix') -%>
+<% if $os.eql?('Unix') -%>
 ####### LOADABLE MODULES #######
 
 ### Option: LoadModulePath

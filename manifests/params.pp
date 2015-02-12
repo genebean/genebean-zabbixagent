@@ -8,7 +8,7 @@ class zabbixagent::params {
   $ensure_setting         = 'present'
 
   # config settings
-  $alias                  = undef
+  $item_alias             = undef
   $allow_root             = undef
   $buffer_send            = undef
   $buffer_size            = undef

@@ -1,6 +1,5 @@
 # Manages configuration of the Zabbix agent and associated repos (if enabled)
 class zabbixagent::config (
-  $alias                  = $::zabbixagent::alias,
   $allow_root             = $::zabbixagent::allow_root,
   $buffer_send            = $::zabbixagent::buffer_send,
   $buffer_size            = $::zabbixagent::buffer_size,
@@ -11,6 +10,7 @@ class zabbixagent::config (
   $hostname_item          = $::zabbixagent::hostname_item,
   $hostname               = $::zabbixagent::hostname,
   $include                = $::zabbixagent::include,
+  $item_alias             = $::zabbixagent::item_alias,
   $listen_ip              = $::zabbixagent::listen_ip,
   $listen_port            = $::zabbixagent::listen_port,
   $load_module_path       = $::zabbixagent::load_module_path,
@@ -30,14 +30,14 @@ class zabbixagent::config (
   $unsafe_user_parameters = $::zabbixagent::unsafe_user_parameters,
   $user_parameter         = $::zabbixagent::user_parameter,
   $user                   = $::zabbixagent::user,) {
-  file { "${::zabbixagent::params::config_dir}":
+  file { $::zabbixagent::params::config_dir:
     ensure => directory,
   }
 
   file { "${::zabbixagent::params::config_dir}/zabbix_agentd.conf":
     ensure  => file,
     content => template('zabbixagent/zabbix_agentd.conf.erb'),
-    require => File["${::zabbixagent::params::config_dir}"],
+    require => File[$::zabbixagent::params::config_dir],
     notify  => Service['zabbix-agent'],
   }
 

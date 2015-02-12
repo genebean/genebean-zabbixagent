@@ -61,7 +61,6 @@ class zabbixagent (
   $ensure_setting         = $::zabbixagent::params::ensure_setting,
 
   # config file settings
-  $alias                  = $::zabbixagent::params::alias,
   $allow_root             = $::zabbixagent::params::allow_root,
   $buffer_send            = $::zabbixagent::params::buffer_send,
   $buffer_size            = $::zabbixagent::params::buffer_size,
@@ -72,6 +71,7 @@ class zabbixagent (
   $hostname_item          = $::zabbixagent::params::hostname_item,
   $hostname               = $::zabbixagent::params::hostname,
   $include                = $::zabbixagent::params::include,
+  $item_alias             = $::zabbixagent::params::item_alias,
   $listen_ip              = $::zabbixagent::params::listen_ip,
   $listen_port            = $::zabbixagent::params::listen_port,
   $load_module_path       = $::zabbixagent::params::load_module_path,
@@ -92,27 +92,29 @@ class zabbixagent (
   $user_parameter         = $::zabbixagent::params::user_parameter,
   $user                   = $::zabbixagent::params::user,
 ) inherits ::zabbixagent::params {
+  # lint:ignore:80chars
   # these should not be used as they are pre v2.1
   $depreciation_msg = 'was removed in v2.1. Please update your manifests and/or hiera data.'
+  # lint:endignore
 
-  if defined($include_dir) {
-    fail("\$include_dir #{depreciation_msg}")
+  if ($include_dir) {
+    fail("\$include_dir ${depreciation_msg}")
   }
 
-  if defined($include_file) {
-    fail("\$include_file #{depreciation_msg}")
+  if ($include_file) {
+    fail("\$include_file ${depreciation_msg}")
   }
 
-  if defined($logfile) {
-    fail("\$logfile #{depreciation_msg}")
+  if ($logfile) {
+    fail("\$logfile ${depreciation_msg}")
   }
 
-  if defined($servers) {
-    fail("\$servers #{depreciation_msg}")
+  if ($servers) {
+    fail("\$servers ${depreciation_msg}")
   }
 
-  if defined($servers_active) {
-    fail("\$servers_active #{depreciation_msg}")
+  if ($servers_active) {
+    fail("\$servers_active ${depreciation_msg}")
   }
 
   # validate booleans

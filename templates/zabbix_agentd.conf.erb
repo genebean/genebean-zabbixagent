@@ -5,7 +5,7 @@
 #
 ################################################################
 ################################################################
-<% @kernel.downcase.eql('windows') ? (os = 'Windows') : (os = 'Unix') -%>
+<% @kernel.downcase.eql?('windows') ? (os = 'Windows') : (os = 'Unix') -%>
 
 # This is a config file for the Zabbix agent daemon  <% "(#{os})" -%>
 # To get more information about Zabbix, visit http://www.zabbix.com
@@ -113,7 +113,7 @@ LogRemoteCommands=<%= @log_remote_commands %>
 # Server=
 <% if @server.is_a?(String) -%>
 Server=<%= @server %>
-<% eslif @server.is_a?(Array) -%>
+<% elsif @server.is_a?(Array) -%>
 Server=<%= @server.join(',') %>
 <% end -%>
 
@@ -166,7 +166,7 @@ StartAgents=<%= @start_agents %>
 # ServerActive=
 <% if @server_active.is_a?(String) -%>
 ServerActive=<%= @server_active %>
-<% eslif @server_active.is_a?(Array) -%>
+<% elsif @server_active.is_a?(Array) -%>
 ServerActive=<%= @server_active.join(',') %>
 <% end -%>
 
@@ -296,8 +296,8 @@ MaxLinesPerSecond=<%= @max_lines_per_second %>
 # Mandatory: no
 # Range:
 # Default:
-<% if @alias -%>
-  <% @alias.each do |a| -%>
+<% if @item_alias -%>
+  <% @item_alias.each do |a| -%>
 Alias=<%= a %>
   <% end -%>
 <% end -%>

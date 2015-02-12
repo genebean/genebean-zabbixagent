@@ -69,4 +69,85 @@ describe 'zabbixagent' do
     end
 
   end
+  
+  describe 'post v2.1.0' do
+    let :facts do
+      {
+        :kernel          => 'Linux',
+        :osfamily        => 'RedHat',
+        :operatingsystem => 'RedHat'
+      }
+    end
+    
+    context 'with include_dir set' do
+      let :pre_condition do
+        "class {'zabbixagent':
+          include_dir => 'zabbix_agent.d',
+        }"
+      end
+      
+      it 'should raise error' do
+        expect { 
+          should compile
+        }.to raise_error(/include_dir was removed in v2.1. Please update/)
+      end
+    end
+    
+    context 'with include_file set' do
+      let :pre_condition do
+        "class {'zabbixagent':
+          include_file => 'bar',
+        }"
+      end
+      
+      it 'should raise error' do
+        expect { 
+          should compile
+        }.to raise_error(/include_file was removed in v2.1. Please update/)
+      end
+    end
+    
+    context 'with logfile set' do
+      let :pre_condition do
+        "class {'zabbixagent':
+          logfile => 'somefile',
+        }"
+      end
+      
+      it 'should raise error' do
+        expect { 
+          should compile
+        }.to raise_error(/logfile was removed in v2.1. Please update/)
+      end
+    end
+    
+    context 'with servers set' do
+      let :pre_condition do
+        "class {'zabbixagent':
+          servers => 'bar',
+        }"
+      end
+      
+      it 'should raise error' do
+        expect { 
+          should compile
+        }.to raise_error(/servers was removed in v2.1. Please update/)
+      end
+    end
+    
+    context 'with servers_active set' do
+      let :pre_condition do
+        "class {'zabbixagent':
+          servers_active => 'bar',
+        }"
+      end
+      
+      it 'should raise error' do
+        expect { 
+          should compile
+        }.to raise_error(/servers_active was removed in v2.1. Please update/)
+      end
+    end
+    
+  end
 end

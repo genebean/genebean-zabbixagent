@@ -76,19 +76,10 @@ class zabbixagent (
   }
 
   class { '::zabbixagent::preinstall':
-    manage_repo_epel   => $manage_repo_epel,
-    manage_repo_zabbix => $manage_repo_zabbix,
   } ->
   class { '::zabbixagent::install':
-    ensure_setting => $ensure_setting,
   } ->
   class { '::zabbixagent::config':
-    hostname       => $hostname,
-    include_dir    => $include_dir,
-    include_file   => $include_file,
-    logfile        => $logfile,
-    servers        => $servers,
-    servers_active => $servers_active,
   } ->
   class { '::zabbixagent::service':
   }

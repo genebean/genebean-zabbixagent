@@ -1,13 +1,12 @@
 # Manages configuration of the Zabbix agent and associated repos (if enabled)
 class zabbixagent::config (
   $config_dir     = $::zabbixagent::config_dir,
-  $hostname       = $::zabbixagent::params::hostname,
-  $include_dir    = $::zabbixagent::params::include_dir,
-  $include_file   = $::zabbixagent::params::include_file,
-  $logfile        = $::zabbixagent::params::logfile,
-  $servers        = $::zabbixagent::params::servers,
-  $servers_active = $::zabbixagent::params::servers,
-) inherits ::zabbixagent::params {
+  $hostname       = $::zabbixagent::hostname,
+  $include_dir    = $::zabbixagent::include_dir,
+  $include_file   = $::zabbixagent::include_file,
+  $logfile        = $::zabbixagent::logfile,
+  $servers        = $::zabbixagent::servers,
+  $servers_active = $::zabbixagent::servers,) {
   ini_setting { 'servers setting':
     ensure  => present,
     path    => "${config_dir}/zabbix_agentd.conf",
@@ -66,6 +65,7 @@ class zabbixagent::config (
     }
 
   } # end if / else for $include_file
+
 
 
   ini_setting { 'logfile setting':

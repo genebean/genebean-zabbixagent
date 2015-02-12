@@ -1,8 +1,7 @@
 # Repositories used by Zabbix
 class zabbixagent::preinstall (
-  $manage_repo_epel   = $::zabbixagent::params::manage_repo_epel,
-  $manage_repo_zabbix = $::zabbixagent::params::manage_repo_zabbix,
-) inherits ::zabbixagent::params {
+  $manage_repo_epel   = $::zabbixagent::manage_repo_epel,
+  $manage_repo_zabbix = $::zabbixagent::manage_repo_zabbix,) {
   case $::osfamily {
     RedHat  : {
       # EPEL
@@ -58,6 +57,7 @@ class zabbixagent::preinstall (
         }
 
       } # end case $::operatingsystem
+
 
 
       exec { 'apt-get update':

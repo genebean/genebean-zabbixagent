@@ -1,7 +1,6 @@
 # Installs the zabbix agent
 class zabbixagent::install (
-  $ensure_setting = $::zabbixagent::params::ensure_setting,
-) inherits ::zabbixagent::params {
+  $ensure_setting = $::zabbixagent::ensure_setting,) {
   case $::kernel {
     Linux   : {
       package { 'zabbix-agent':

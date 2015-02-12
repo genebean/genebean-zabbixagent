@@ -24,7 +24,6 @@ class zabbixagent::params {
   $load_module_path       = undef
   $load_module            = undef
   $log_file_size          = undef
-  $log_file               = undef
   $log_remote_commands    = undef
   $max_lines_per_second   = undef
   $perf_counter           = undef
@@ -46,12 +45,12 @@ class zabbixagent::params {
   case $::kernel {
     'Linux'   : {
       $config_dir = '/etc/zabbix'
-      $logfile    = '/var/log/zabbix/zabbix_agentd.log'
+      $log_file   = '/var/log/zabbix/zabbix_agentd.log'
     }
 
     'Windows' : {
       $config_dir = 'C:/Program Files/Zabbix Agent'
-      $logfile    = 'C:/zabbix_agentd.log'
+      $log_file   = 'C:/zabbix_agentd.log'
     }
 
     default   : {

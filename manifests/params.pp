@@ -27,7 +27,7 @@ class zabbixagent::params {
   $log_remote_commands    = undef
   $max_lines_per_second   = undef
   $perf_counter           = undef
-  $pid_file               = undef
+  $pid_file               = '/var/run/zabbix/zabbix_agentd.pid'
   $refresh_active_checks  = undef
   $server                 = '127.0.0.1'
   $server_active          = '127.0.0.1'

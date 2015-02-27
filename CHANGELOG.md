@@ -1,5 +1,9 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2015-02-27 Release 2.1.1  
+- Updated Gemfile to use rspec-puppet v2.0 instead of git master
+- Added default value for PidFile due to Zabbix's default being /run
+
 ## 2015-02-12 Release 2.1.0  
 - Transitioned to a fully templated zabbix_agentd.conf
 - Added code to fail compilation if depreciated variables exists

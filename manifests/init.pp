@@ -21,6 +21,14 @@
 #   $ensure_setting            Passed directly to ensure of package resource
 #                              Default: 'present'
 #
+#   $custom_require_linux      Passed directly to require of package resource
+#                              when on Linux
+#                              Default: undef
+#
+#   $custom_require_windows    Passed directly to require of package resource
+#                              when on Windows
+#                              Default: undef
+#
 #   $allow_root                0 - do not allow, 1 - allow
 #                              Type: integer
 #
@@ -142,6 +150,8 @@ class zabbixagent (
 
   # install setting
   $ensure_setting         = $::zabbixagent::params::ensure_setting,
+  $custom_require_linux   = $::zabbixagent::params::custom_require_linux,
+  $custom_require_windows = $::zabbixagent::params::custom_require_windows,
 
   # config file settings
   $allow_root             = $::zabbixagent::params::allow_root,

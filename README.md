@@ -68,6 +68,14 @@ Type: boolean
 Passed directly to ensure of package resource  
 Default: 'present'
 
+#####`custom_require_linux`  
+Passed directly to require of package resource when on Linux  
+Default: undef
+
+#####`custom_require_windows`  
+Passed directly to require of package resource when on Windows  
+Default: undef
+
 
 #### config.pp settings
 

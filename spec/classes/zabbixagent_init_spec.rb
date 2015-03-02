@@ -107,6 +107,43 @@ describe 'zabbixagent' do
     end
   end
 
+  describe 'with custom require settings' do
+    let :pre_condition do
+      "class { 'zabbixagent':
+        custom_require_linux   => Class['foo'],
+        custom_require_windows => Class['bar'],
+      }"
+    end
+
+    context 'on Linux' do
+      let :facts do
+        {
+            :kernel          => 'Linux',
+            :osfamily        => 'RedHat',
+            :operatingsystem => 'RedHat'
+        }
+      end
+
+      it "should require => Class[Foo]" do
+        should contain_package('zabbix-agent').with_require("Class[Foo]")
+      end
+    end
+
+    context 'on Windows' do
+      let :facts do
+        {
+            :kernel          => 'windows',
+            :osfamily        => 'windows',
+            :operatingsystem => 'windows'
+        }
+      end
+
+      it "should require => Class[Bar]" do
+        should contain_package('zabbix-agent').with_require("Class[Bar]")
+      end
+    end
+  end
+
   describe 'post v2.1.0' do
     let :facts do
       {

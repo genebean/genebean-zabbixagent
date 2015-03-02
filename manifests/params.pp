@@ -6,6 +6,8 @@ class zabbixagent::params {
 
   # install settings
   $ensure_setting         = 'present'
+  $custom_require_linux   = undef
+  $custom_require_windows = undef
 
   # config settings
   $allow_root             = undef

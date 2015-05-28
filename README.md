@@ -91,6 +91,10 @@ Type: integer
 Range: 2-65535  
 Type: integer
 
+#####`config_dir`  
+Defines the directory in which config files live  
+Default: '/etc/zabbix' on Linux, 'C:/ProgramData/zabbix' on Windows  
+
 #####`debug_level`  
 Range: 0-4  
 Type: integer

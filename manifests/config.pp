@@ -3,6 +3,7 @@ class zabbixagent::config (
   $allow_root             = $::zabbixagent::allow_root,
   $buffer_send            = $::zabbixagent::buffer_send,
   $buffer_size            = $::zabbixagent::buffer_size,
+  $config_dir             = $::zabbixagent::config_dir,
   $debug_level            = $::zabbixagent::debug_level,
   $enable_remote_commands = $::zabbixagent::enable_remote_commands,
   $host_metadata_item     = $::zabbixagent::host_metadata_item,
@@ -34,7 +35,7 @@ class zabbixagent::config (
     ensure => directory,
   }
 
-  file { "${::zabbixagent::params::config_dir}/zabbix_agentd.conf":
+  file { "${config_dir}/zabbix_agentd.conf":
     ensure  => file,
     content => template('zabbixagent/zabbix_agentd.conf.erb'),
     require => File[$::zabbixagent::params::config_dir],

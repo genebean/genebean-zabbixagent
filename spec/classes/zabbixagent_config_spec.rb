@@ -43,4 +43,46 @@ describe 'zabbixagent::config' do
     end
 
   end
+
+  describe 'with config_dir set' do
+    context 'on Linux' do
+      let :facts do
+        {
+            :kernel          => 'Linux',
+            :osfamily        => 'RedHat',
+            :operatingsystem => 'RedHat'
+        }
+      end
+
+      let :pre_condition do
+        "class { 'zabbixagent':
+        config_dir   => '/usr/local/etc/zabbix',
+      }"
+      end
+
+      it "should write the config to /usr/local/etc/zabbix/" do
+        should contain_file('/usr/local/etc/zabbix/zabbix_agentd.conf')
+      end
+    end
+
+    context 'on Windows' do
+      let :facts do
+        {
+            :kernel          => 'windows',
+            :osfamily        => 'windows',
+            :operatingsystem => 'windows'
+        }
+      end
+
+      let :pre_condition do
+        "class { 'zabbixagent':
+        config_dir   => 'C:/ProgramData/zabbix',
+      }"
+      end
+
+      it "should write the config to C:/ProgramData/zabbix/" do
+        should contain_file('C:/ProgramData/zabbix/zabbix_agentd.conf')
+      end
+    end
+  end
 end

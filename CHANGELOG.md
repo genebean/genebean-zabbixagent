@@ -1,5 +1,10 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2015-05-28 Release 2.3.0  
+- Updated default configuration directory on Windows to be 'C:/ProgramData/zabbix'
+  as that is the default in the current Chocolatey package.
+- Switched to the new official Chocolatey module
+
 ## 2015-03-02 Release 2.2.0  
 - Added the ability to define a require on the package resource
 

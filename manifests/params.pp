@@ -51,7 +51,7 @@ class zabbixagent::params {
     }
 
     'Windows' : {
-      $config_dir = 'C:/Program Files/Zabbix Agent'
+      $config_dir = 'C:/ProgramData/zabbix'
       $log_file   = 'C:/zabbix_agentd.log'
     }
 

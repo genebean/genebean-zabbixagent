@@ -21,6 +21,9 @@
 #   $ensure_setting            Passed directly to ensure of package resource
 #                              Default: 'present'
 #
+#   $config_dir                Defines the directory in which config files live
+#                              Default: '/etc/zabbix' on Linux, 'C:/ProgramData/zabbix' on Windows
+#
 #   $custom_require_linux      Passed directly to require of package resource
 #                              when on Linux
 #                              Default: undef
@@ -148,6 +151,9 @@ class zabbixagent (
   $manage_repo_epel       = $::zabbixagent::params::manage_repo_epel,
   $manage_repo_zabbix     = $::zabbixagent::params::manage_repo_zabbix,
 
+  # conf settings
+  $config_dir             = $::zabbixagent::params::config_dir,
+
   # install setting
   $ensure_setting         = $::zabbixagent::params::ensure_setting,
   $custom_require_linux   = $::zabbixagent::params::custom_require_linux,
@@ -226,6 +232,8 @@ class zabbixagent (
     fail('$servers_active must be either a string or an array')
   }
 
+  anchor { '::zabbixagent::start':
+  } ->
   class { '::zabbixagent::preinstall':
   } ->
   class { '::zabbixagent::install':
@@ -233,6 +241,8 @@ class zabbixagent (
   class { '::zabbixagent::config':
   } ->
   class { '::zabbixagent::service':
+  } ->
+  anchor { '::zabbixagent::end':
   }
 
 }

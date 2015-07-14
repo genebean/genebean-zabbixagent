@@ -3,7 +3,7 @@ class zabbixagent::preinstall (
   $manage_repo_epel   = $::zabbixagent::manage_repo_epel,
   $manage_repo_zabbix = $::zabbixagent::manage_repo_zabbix,) {
   case $::osfamily {
-    RedHat  : {
+    'RedHat'  : {
       # EPEL
       if ($manage_repo_epel) {
         file { '/etc/yum.repos.d/epel.repo':
@@ -38,9 +38,9 @@ class zabbixagent::preinstall (
 
     } # end RedHat
 
-    Debian  : {
+    'Debian'  : {
       case $::operatingsystem {
-        Ubuntu  : {
+        'Ubuntu'  : {
           # Zabbix
           if ($manage_repo_zabbix) {
             file { '/etc/apt/sources.list.d/zabbix.list':

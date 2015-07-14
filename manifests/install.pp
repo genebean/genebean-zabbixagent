@@ -4,7 +4,7 @@ class zabbixagent::install (
   $custom_require_linux   = $::zabbixagent::custom_require_linux,
   $custom_require_windows = $::zabbixagent::custom_require_windows) {
   case $::kernel {
-    Linux   : {
+    'Linux'   : {
       package { 'zabbix-agent':
         ensure  => $ensure_setting,
         notify  => Service['zabbix-agent'],
@@ -12,7 +12,7 @@ class zabbixagent::install (
       }
     } # end Linux
 
-    Windows : {
+    'Windows' : {
       package { 'zabbix-agent':
         ensure   => $ensure_setting,
         provider => 'chocolatey',

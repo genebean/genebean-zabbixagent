@@ -1,6 +1,6 @@
 {
   "name": "genebean-zabbixagent",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "author": "Gene Liverman",
   "summary": "This module manages the Zabbix Agent on Windows or Linux.",
   "license": "BSD-3-Clause",
@@ -13,7 +13,7 @@
     { "name": "puppetlabs/stdlib",  "version_requirement": ">= 3.0.0" }
   ],
   "requirements": [
-    { "name": "puppet", "version_requirement": ">= 2.7.0 < 4.0.0" }
+    { "name": "puppet", "version_requirement": ">= 2.7.0 < 5.0.0" }
   ],
   "operatingsystem_support": [
     { "operatingsystem": "CentOS",  "operatingsystemrelease": [ "5", "6", "7" ] },

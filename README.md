@@ -33,6 +33,9 @@ This module has been tested against Puppet 3.7.3 on:
 * Windows 7
 * Windows Server 2012 R2
 
+Testing via Travis-CI is also done against Puppet 3.x using future parser and against
+Puppet 4.x using strict variables.
+
 
 ## Parameters:
 
@@ -233,6 +236,7 @@ requests should be filed just like other issues.
 
 * Scott Smerchek (@smerchek) - Author of [softek-zabbixagent][pf-softek-zabbixagent]
 * Martijn Storck (@martijn)  - Added CentOS support
+* Simonas Rupšys (@simonasr) - Changed case syntax to work on Puppet 4.x
 
 
 ## License

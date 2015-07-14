@@ -1,6 +1,6 @@
 fixtures:
   forge_modules:
-    chocolatey:  "rismoney/chocolatey"
+    chocolatey:  "chocolatey/chocolatey"
     inifile:     "puppetlabs/inifile"
     stdlib:      "puppetlabs/stdlib"
   symlinks:

@@ -4,7 +4,7 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 if ENV.key?('PUPPET_VERSION')
   puppetversion = "#{ENV['PUPPET_VERSION']}"
 else
-  puppetversion = ['>= 3.7.3', '< 4.0']
+  puppetversion = ['>= 3.7.3', '< 5.0']
 end
 
 group :development, :unit_tests do

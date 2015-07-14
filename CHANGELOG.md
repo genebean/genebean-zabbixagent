@@ -1,5 +1,8 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2015-07-14 Release 2.4.0  
+- Updates to support Puppet 4
+
 ## 2015-05-28 Release 2.3.0  
 - Updated default configuration directory on Windows to be 'C:/ProgramData/zabbix'
   as that is the default in the current Chocolatey package.

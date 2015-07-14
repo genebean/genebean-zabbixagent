@@ -22,7 +22,8 @@
 #                              Default: 'present'
 #
 #   $config_dir                Defines the directory in which config files live
-#                              Default: '/etc/zabbix' on Linux, 'C:/ProgramData/zabbix' on Windows
+#                              Default on Linux:   '/etc/zabbix'
+#                              Default on Windows: 'C:/ProgramData/zabbix'
 #
 #   $custom_require_linux      Passed directly to require of package resource
 #                              when on Linux

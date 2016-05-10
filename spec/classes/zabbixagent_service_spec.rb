@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'zabbixagent::install' do
+describe 'zabbixagent::service' do
 
   # Running a RedHat OS.
   context 'On a RedHat OS with repo management enabled' do
@@ -19,17 +19,18 @@ describe 'zabbixagent::install' do
       }
     end
 
-    # Make sure package will be installed.
-    it { should contain_package('zabbix-agent').with_ensure('present') }
-    it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
-
+    # Make sure service will be running and enabled.
+    it { should contain_service('zabbix-agent').with_ensure('running') }
+    it { should contain_service('zabbix-agent').with_name('zabbix-agent') }
+    it { should contain_service('zabbix-agent').with_enable('true') }
   end
 
-  # Running Windows.
+  # Running a Windows OS.
   context 'On Windows' do
     let :pre_condition do
       "include zabbixagent"
     end
+
     let :facts do
       {
           :kernel          => 'windows',
@@ -38,20 +39,20 @@ describe 'zabbixagent::install' do
       }
     end
 
-    # Make sure package will be installed.
-    it { should contain_package('zabbix-agent').with_ensure('present') }
-    it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
-    it { should contain_package('zabbix-agent').with_provider('chocolatey') }
-
+    # Make sure service will be running and enabled.
+    it { should contain_service('zabbix-agent').with_ensure('running') }
+    it { should contain_service('zabbix-agent').with_name('Zabbix Agent') }
+    it { should contain_service('zabbix-agent').with_enable('true') }
   end
 
-  # Running SLES
+  # Running a SLES OS.
   context 'On SLES 12.1 OS with repo management enabled' do
     let :pre_condition do
       "class {'zabbixagent':
         manage_repo_zabbix => true,
       }"
     end
+
     let :facts do
       {
           :kernel                 => 'Linux',
@@ -61,9 +62,9 @@ describe 'zabbixagent::install' do
       }
     end
 
-    # Make sure package will be installed.
-    it { should contain_package('zabbix-agent').with_ensure('present') }
-    it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
-
+    # Make sure service will be running and enabled.
+    it { should contain_service('zabbix-agent').with_ensure('running') }
+    it { should contain_service('zabbix-agent').with_name('zabbix-agentd') }
+    it { should contain_service('zabbix-agent').with_enable('true') }
   end
 end

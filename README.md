@@ -236,7 +236,7 @@ requests should be filed just like other issues.
 
 * Scott Smerchek (@smerchek) - Author of [softek-zabbixagent][pf-softek-zabbixagent]
 * Martijn Storck (@martijn)  - Added CentOS support
-* Simonas Rupšys (@simonasr) - Changed case syntax to work on Puppet 4.x
+* Simonas Rupï¿½ys (@simonasr) - Changed case syntax to work on Puppet 4.x
 
 
 ## License

@@ -8,8 +8,14 @@ else
 end
 
 group :development, :unit_tests do
-  gem 'json',                    '1.8.3' if RUBY_VERSION < '2.0'
-  gem 'json_pure',               '1.8.3' if RUBY_VERSION < '2.0'
+  if RUBY_VERSION < '2.0'
+    gem 'json',                  '1.8.3'
+    gem 'json_pure',             '1.8.3'
+  else
+    gem 'json',                  '>= 2.0.2'
+    gem 'json_pure',             '>= 2.0.2'
+  end
+
   gem 'metadata-json-lint',      '~> 0.0.6'
   gem 'puppet',                  puppetversion
   gem 'puppet-lint',             '~> 1.1'

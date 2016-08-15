@@ -1,5 +1,8 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2016-08-15 Release 2.5.0  
+- Added support for SUSE (thanks to Jake Spain)
+
 ## 2015-07-14 Release 2.4.1  
 - Fixed copy/paste fail in .travis.yml
 

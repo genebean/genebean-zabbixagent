@@ -70,6 +70,50 @@ class zabbixagent::preinstall (
 
     } # end Debian
 
+    'Suse' : {
+      case $::operatingsystem {
+
+        'SLES' : {
+          case $::operatingsystemrelease {
+
+            '11.3', '11.4', '12.0', '12.1' : {
+              # Zabbix
+              if ($manage_repo_zabbix) {
+                file { '/etc/zypp/repos.d/server_monitoring.repo':
+                  ensure  => file,
+                  content => template('zabbixagent/server_monitoring.repo.erb'),
+                  notify  => Exec['zypper refresh'],
+                }
+              }
+            }
+
+            default : {
+              # lint:ignore:80chars
+              fail("${::operatingsystem} ${::operatingsystemrelease} is not supported")
+              # lint:endignore
+            }
+
+          } # end case $::operatingsystemrelease
+
+        } # end SLES
+
+        default : {
+        }
+
+      } # end case $::operatingsystem
+
+
+
+      exec { 'zypper refresh':
+        path        => '/usr/bin',
+        user        => 'root',
+        logoutput   => true,
+        refreshonly => true,
+        command     => 'zypper --gpg-auto-import-keys refresh',
+      }
+
+    } # end Suse
+
     default : {
     }
 

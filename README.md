@@ -21,14 +21,16 @@
 This module manages the zabbix agent for a monitored machine. It can
 also, optionally, manage repositories related to Zabbix on Linux. On the Red Hat
 family of OS's, this includes both EPEL and Zabbix. On the Debian family,
-this is just the Zabbix repo.  On Windows this module utilizes the
-[Chocolatey][chocolatey] provider.
+this is just the Zabbix repo. On SUSE this is the "Server Monitoring Software"
+repo. On Windows this module utilizes the [Chocolatey][chocolatey] provider.
 
 
 ## Setup Requirements
 
-This module has been tested against Puppet 3.7.3 on:
-* CentOS 6.6
+This module has been tested against Puppet 3.8.7 on:
+* CentOS 6 & 7
+* Red Hat 5, 6, 7
+* SUSE Linux Enterprise Server 12
 * Ubuntu Server 14.04
 * Windows 7
 * Windows Server 2012 R2
@@ -236,7 +238,8 @@ requests should be filed just like other issues.
 
 * Scott Smerchek (@smerchek) - Author of [softek-zabbixagent][pf-softek-zabbixagent]
 * Martijn Storck (@martijn)  - Added CentOS support
-* Simonas Rupšys (@simonasr) - Changed case syntax to work on Puppet 4.x
+* Simonas Rupï¿½ys (@simonasr) - Changed case syntax to work on Puppet 4.x
+* Jake Spain (@thespain) - Added support for SUSE
 
 
 ## License

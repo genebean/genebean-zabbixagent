@@ -29,6 +29,7 @@ repo. On Windows this module utilizes the [Chocolatey][chocolatey] provider.
 
 This module has been tested against Puppet 3.8.7 on:
 * CentOS 6 & 7
+* OpenSUSE Leap 42.1
 * Red Hat 5, 6, 7
 * SUSE Linux Enterprise Server 12
 * Ubuntu Server 14.04
@@ -239,7 +240,7 @@ requests should be filed just like other issues.
 * Scott Smerchek (@smerchek) - Author of [softek-zabbixagent][pf-softek-zabbixagent]
 * Martijn Storck (@martijn)  - Added CentOS support
 * Simonas Rup�ys (@simonasr) - Changed case syntax to work on Puppet 4.x
-* Jake Spain (@thespain) - Added support for SUSE
+* Jake Spain (@thespain) - Added support for SUSE Enterprise and OpenSUSE Leap
 
 
 ## License

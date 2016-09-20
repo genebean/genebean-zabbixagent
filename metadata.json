@@ -1,6 +1,6 @@
 {
   "name": "genebean-zabbixagent",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "author": "Gene Liverman",
   "summary": "This module manages the Zabbix Agent on Windows or Linux.",
   "license": "BSD-3-Clause",
@@ -16,10 +16,11 @@
     { "name": "puppet", "version_requirement": ">= 2.7.0 < 5.0.0" }
   ],
   "operatingsystem_support": [
-    { "operatingsystem": "CentOS",  "operatingsystemrelease": [ "5", "6", "7" ] },
-    { "operatingsystem": "RedHat",  "operatingsystemrelease": [ "5", "6", "7" ] },
-    { "operatingsystem": "SLES",    "operatingsystemrelease": [ "11 SP3", "11 SP4", "12", "12 SP1" ] },
-    { "operatingsystem": "Ubuntu",  "operatingsystemrelease": [ "14.04" ] },
-    { "operatingsystem": "Windows", "operatingsystemrelease": [ "7", "2012 R2" ] }
+    { "operatingsystem": "CentOS",   "operatingsystemrelease": [ "5", "6", "7" ] },
+    { "operatingsystem": "OpenSuSE", "operatingsystemrelease": [ "42.1" ] },
+    { "operatingsystem": "RedHat",   "operatingsystemrelease": [ "5", "6", "7" ] },
+    { "operatingsystem": "SLES",     "operatingsystemrelease": [ "11 SP3", "11 SP4", "12", "12 SP1" ] },
+    { "operatingsystem": "Ubuntu",   "operatingsystemrelease": [ "14.04" ] },
+    { "operatingsystem": "Windows",  "operatingsystemrelease": [ "7", "2012 R2" ] }
   ]
 }

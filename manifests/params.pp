@@ -62,14 +62,14 @@ class zabbixagent::params {
   } # end case
 
   $service_name = $::operatingsystem ? {
-    'Windows' => 'Zabbix Agent',
-    'SLES'    => 'zabbix-agentd',
-    default   => 'zabbix-agent',
+    'Windows'            => 'Zabbix Agent',
+    /(OpenSuSE|SLES)/    => 'zabbix-agentd',
+    default              => 'zabbix-agent',
   }
 
   $config_name = $::operatingsystem ? {
-    'Windows' => 'zabbix_agentd.conf',
-    'SLES'    => 'zabbix-agentd.conf',
-    default   => 'zabbix_agentd.conf',
+    'Windows'            => 'zabbix_agentd.conf',
+    /(OpenSuSE|SLES)/    => 'zabbix-agentd.conf',
+    default              => 'zabbix_agentd.conf',
   }
 }

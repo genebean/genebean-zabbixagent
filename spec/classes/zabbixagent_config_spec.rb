@@ -44,6 +44,33 @@ describe 'zabbixagent::config' do
 
   end
 
+  describe 'with server params set on OpenSuSE Leap' do
+    let :facts do
+      {
+        :kernel                 => 'Linux',
+        :osfamily               => 'Suse',
+        :operatingsystem        => 'OpenSuSE',
+        :operatingsystemrelease => '42.1',
+        :fqdn                   => 'SOMEHOST.example.com'
+      }
+    end
+
+    context 'to a single server' do
+      let :pre_condition do
+        "class {'zabbixagent':
+          server        => 'zabbix.example.com',
+          server_active => 'zabbix.example.com',
+        }"
+      end
+
+      it 'should set Server and Hostname' do
+        should contain_file('/etc/zabbix/zabbix-agentd.conf').with_content(/Server=zabbix.example.com/)
+        should contain_file('/etc/zabbix/zabbix-agentd.conf').with_content(/Hostname=somehost.example.com/)
+      end
+    end
+
+  end
+
   describe 'with server params set on SLES' do
     let :facts do
       {

@@ -45,6 +45,29 @@ describe 'zabbixagent::service' do
     it { should contain_service('zabbix-agent').with_enable('true') }
   end
 
+  # Running a OpenSuSE OS.
+  context 'On OpenSuSE Leap 42.1 OS with repo management enabled' do
+    let :pre_condition do
+      "class {'zabbixagent':
+        manage_repo_zabbix => true,
+      }"
+    end
+
+    let :facts do
+      {
+          :kernel                 => 'Linux',
+          :osfamily               => 'Suse',
+          :operatingsystem        => 'OpenSuSE',
+          :operatingsystemrelease => '42.1'
+      }
+    end
+
+    # Make sure service will be running and enabled.
+    it { should contain_service('zabbix-agent').with_ensure('running') }
+    it { should contain_service('zabbix-agent').with_name('zabbix-agentd') }
+    it { should contain_service('zabbix-agent').with_enable('true') }
+  end
+
   # Running a SLES OS.
   context 'On SLES 12.1 OS with repo management enabled' do
     let :pre_condition do

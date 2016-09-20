@@ -97,6 +97,16 @@ class zabbixagent::preinstall (
 
         } # end SLES
 
+        'OpenSuSE' : {
+          if ($manage_repo_zabbix) {
+            file { '/etc/zypp/repos.d/server_monitoring.repo':
+              ensure  => file,
+              content => template('zabbixagent/server_monitoring.repo.erb'),
+              notify  => Exec['zypper refresh'],
+            }
+          }
+        } # end OpenSuSE
+
         default : {
         }
 

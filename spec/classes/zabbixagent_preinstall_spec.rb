@@ -30,6 +30,28 @@ describe 'zabbixagent::preinstall' do
 
   end
 
+  # Running an OpenSuSE OS.
+  context 'On a OpenSuSE Leap 42.1 OS with repo management enabled' do
+    let :facts do
+      {
+          :kernel                 => 'Linux',
+          :osfamily               => 'Suse',
+          :operatingsystem        => 'OpenSuSE',
+          :operatingsystemrelease => '42.1'
+      }
+    end
+
+    let :pre_condition do
+      "class {'zabbixagent':
+        manage_repo_zabbix => true,
+      }"
+    end
+
+    it 'should create server_monitoring.repo' do
+      should contain_file('/etc/zypp/repos.d/server_monitoring.repo').with_content(/baseurl=http:\/\/download.opensuse.org\/repositories\/server:\/monitoring\/openSUSE_Leap_42.1\//)
+    end
+  end
+
   # Running an SLES OS.
   context 'On a SLES 12.1 OS with repo management enabled' do
     let :facts do

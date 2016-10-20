@@ -82,6 +82,13 @@ Default: undef
 Passed directly to require of package resource when on Windows  
 Default: undef
 
+#####`windows_package_name`
+If you package name for zabbix agent differs from available in Chocolatey public sources
+Default: 'zabbix-agent'
+
+#####`windows_package_source`
+If you want to provide your own source for Chocolatey package install
+Default:''
 
 #### config.pp settings
 

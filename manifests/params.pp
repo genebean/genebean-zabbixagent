@@ -8,6 +8,8 @@ class zabbixagent::params {
   $ensure_setting         = 'present'
   $custom_require_linux   = undef
   $custom_require_windows = undef
+  $windows_package_name   = 'zabbix-agent'
+  $windows_package_source = ''
 
   # config settings
   $allow_root             = undef

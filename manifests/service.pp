@@ -5,6 +5,6 @@ class zabbixagent::service {
     ensure  => running,
     name    => $::zabbixagent::params::service_name,
     enable  => true,
-    require => Package['zabbix-agent'],
+    require => Package[$windows_package_name],
   }
 }

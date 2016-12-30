@@ -5,10 +5,10 @@ class zabbixagent::params {
   $manage_repo_zabbix     = false
 
   # install settings
-  $ensure_setting         = 'present'
+  $ensure_setting         = 'latest'
   $custom_require_linux   = undef
   $custom_require_windows = undef
-  $windows_package_name   = 'zabbix-agent'
+  $windows_package_name   = 'zabbix-agent3'
   $windows_package_source = ''
 
   # config settings

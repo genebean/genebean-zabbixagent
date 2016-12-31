@@ -159,6 +159,8 @@ class zabbixagent (
   $ensure_setting         = $::zabbixagent::params::ensure_setting,
   $custom_require_linux   = $::zabbixagent::params::custom_require_linux,
   $custom_require_windows = $::zabbixagent::params::custom_require_windows,
+  $windows_package_name   = $::zabbixagent::params::windows_package_name,
+  $windows_package_source = $::zabbixagent::params::windows_package_source,
 
   # config file settings
   $allow_root             = $::zabbixagent::params::allow_root,

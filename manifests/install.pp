@@ -2,7 +2,9 @@
 class zabbixagent::install (
   $ensure_setting         = $::zabbixagent::ensure_setting,
   $custom_require_linux   = $::zabbixagent::custom_require_linux,
-  $custom_require_windows = $::zabbixagent::custom_require_windows) {
+  $custom_require_windows = $::zabbixagent::custom_require_windows,
+  $windows_package_name   = $::zabbixagent::windows_package_name,
+  $windows_package_source = $::zabbixagent::windows_package_source ) {
   case $::kernel {
     'Linux'   : {
 
@@ -15,12 +17,24 @@ class zabbixagent::install (
     } # end Linux
 
     'Windows' : {
-      package { 'zabbix-agent':
-        ensure   => $ensure_setting,
-        provider => 'chocolatey',
-        notify   => Service['zabbix-agent'],
-        require  => $custom_require_windows,
-      }
+        if !empty($windows_package_source) {
+          package { $windows_package_name:
+            ensure   => $ensure_setting,
+            provider => 'chocolatey',
+            source   => $windows_package_source,
+            notify   => Service['zabbix-agent'],
+            require  => $custom_require_windows,
+          }
+        }
+        else {
+          # enter puppet code
+          package { $windows_package_name:
+            ensure   => $ensure_setting,
+            provider => 'chocolatey',
+            notify   => Service['zabbix-agent'],
+            require  => $custom_require_windows,
+          }
+        }
     } # end Windows
 
     default : {

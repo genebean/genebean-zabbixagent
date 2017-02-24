@@ -19,9 +19,28 @@
 # Mandatory: no
 # Default:
 # PidFile=/tmp/zabbix_agentd.pid
-  <% if @pid_file -%>
+  <%- if @pid_file -%>
 PidFile=<%= @pid_file %>
   <% end -%>
+<% end -%>
+
+<% if @version != '2.4' -%>
+### Option: LogType
+# Specifies where log messages are written to:
+<% if $os.eql?('Windows') -%>
+# system  - Windows event log
+<% else -%>
+# system  - syslog
+<% end -%>
+# file    - file specified with LogFile parameter
+# console - standard output
+#
+# Mandatory: no
+# Default:
+# LogType=file
+<% if @log_type -%>
+LogType=<%= @log_type %>
+<% end -%>
 <% end -%>
 
 ### Option: LogFile
@@ -297,9 +316,9 @@ MaxLinesPerSecond=<%= @max_lines_per_second %>
 # Range:
 # Default:
 <% if @item_alias -%>
-  <% @item_alias.each do |a| -%>
+<% @item_alias.each do |a| -%>
 Alias=<%= a %>
-  <% end -%>
+<% end -%>
 <% end -%>
 
 ### Option: Timeout
@@ -326,11 +345,11 @@ Timeout=<%= @timeout %>
 # Mandatory: no
 # Range:
 # Default:
-  <% if @perf_counter -%>
-    <% @perf_counter.each do |pc| -%>
+<% if @perf_counter -%>
+<% @perf_counter.each do |pc| -%>
 PerfCounter=<%= pc %>
-    <% end -%>
-  <% end -%>
+<% end -%>
+<% end -%>
 <% else -%>
 ### Option: AllowRoot
 #	Allow the agent to run as 'root'. If disabled and the agent is started by 'root', the agent
@@ -342,7 +361,7 @@ PerfCounter=<%= pc %>
 # Mandatory: no
 # Default:
 # AllowRoot=0
-  <% if @allow_root -%>
+  <%- if @allow_root -%>
 AllowRoot=<%= @allow_root %>
   <% end -%>
 
@@ -353,7 +372,7 @@ AllowRoot=<%= @allow_root %>
 # Mandatory: no
 # Default:
 # User=zabbix
-  <% if @user -%>
+  <%- if @user -%>
 User=<%= @user %>
   <% end -%>
 <% end -%>
@@ -370,9 +389,9 @@ User=<%= @user %>
 # Default:
 # Include=
 <% if @include_files -%>
-  <% @include_files.each do |i| -%>
+<% @include_files.each do |i| -%>
 Include=<%= i %>
-  <% end -%>
+<% end -%>
 <% end -%>
 
 <% if $os.eql?('Windows') -%>
@@ -413,9 +432,9 @@ UnsafeUserParameters=<%= @unsafe_user_parameters %>
 # Default:
 # UserParameter=
 <% if @user_parameter -%>
-  <% @user_parameter.each do |up| -%>
+<% @user_parameter.each do |up| -%>
 UserParameter=<%= up %>
-  <% end -%>
+<% end -%>
 <% end -%>
 
 <% if $os.eql?('Unix') -%>
@@ -428,7 +447,7 @@ UserParameter=<%= up %>
 # Mandatory: no
 # Default:
 # LoadModulePath=${libdir}/modules
-  <% if @load_module_path -%>
+  <%- if @load_module_path -%>
 LoadModulePath=<%= @load_module_path %>
   <% end -%>
 
@@ -441,9 +460,124 @@ LoadModulePath=<%= @load_module_path %>
 # Mandatory: no
 # Default:
 # LoadModule=
-  <% if @load_module -%>
-    <% @load_module.each do |lm| -%>
+<% if @load_module -%>
+<% @load_module.each do |lm| -%>
 LoadModule=<%= lm %>
-    <% end -%>
-  <% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% if @version != '2.4' -%>
+####### TLS-RELATED PARAMETERS #######
+
+### Option: TLSConnect
+# How the agent should connect to server or proxy. Used for active checks.
+# Only one value can be specified:
+# unencrypted - connect without encryption
+# psk         - connect using TLS and a pre-shared key
+# cert        - connect using TLS and a certificate
+#
+# Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
+# Default:
+# TLSConnect=unencrypted
+<% if @tls_connect -%>
+TLSConnect=<%= @tls_connect %>
+<% end -%>
+
+### Option: TLSAccept
+# What incoming connections to accept.
+# Multiple values can be specified, separated by comma:
+# unencrypted - accept connections without encryption
+# psk         - accept connections secured with TLS and a pre-shared key
+# cert        - accept connections secured with TLS and a certificate
+#
+# Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
+# Default:
+# TLSAccept=unencrypted
+<% if @tls_accept.is_a?(String) -%>
+TLSAccept=<%= @tls_accept %>
+<% elsif @tls_accept.is_a?(Array) -%>
+TLSAccept=<%= @tls_accept.join(',') %>
+<% end -%>
+
+### Option: TLSCAFile
+# Full pathname of a file containing the top-level CA(s) certificates for
+# peer certificate verification.
+#
+# Mandatory: no
+# Default:
+# TLSCAFile=
+<% if @tls_ca_file -%>
+TLSCAFile=<%= @tls_ca_file %>
+<% end -%>
+
+### Option: TLSCRLFile
+# Full pathname of a file containing revoked certificates.
+#
+# Mandatory: no
+# Default:
+# TLSCRLFile=
+<% if @tls_crt_file -%>
+TLSCRLFile=<%= @tls_crt_file %>
+<% end -%>
+
+### Option: TLSServerCertIssuer
+# Allowed server certificate issuer.
+#
+# Mandatory: no
+# Default:
+# TLSServerCertIssuer=
+<% if @tls_server_cert_issuer -%>
+TLSServerCertIssuer=<%= @tls_server_cert_issuer %>
+<% end -%>
+
+### Option: TLSServerCertSubject
+# Allowed server certificate subject.
+#
+# Mandatory: no
+# Default:
+# TLSServerCertSubject=
+<% if @tls_server_cert_subject -%>
+TLSServerCertSubject=<%= @tls_server_cert_subject %>
+<% end -%>
+
+### Option: TLSCertFile
+# Full pathname of a file containing the agent certificate or certificate chain.
+#
+# Mandatory: no
+# Default:
+# TLSCertFile=
+<% if @tls_cert_file -%>
+TLSCertFile=<%= @tls_cert_file %>
+<% end -%>
+
+### Option: TLSKeyFile
+# Full pathname of a file containing the agent private key.
+#
+# Mandatory: no
+# Default:
+# TLSKeyFile=
+<% if @tls_key_file -%>
+TLSKeyFile=<%= @tls_key_file %>
+<% end -%>
+
+### Option: TLSPSKIdentity
+# Unique, case sensitive string used to identify the pre-shared key.
+#
+# Mandatory: no
+# Default:
+# TLSPSKIdentity=
+<% if @tls_psk_identity -%>
+TLSPSKIdentity=<%= @tls_psk_identity %>
+<% end -%>
+
+### Option: TLSPSKFile
+# Full pathname of a file containing the pre-shared key.
+#
+# Mandatory: no
+# Default:
+# TLSPSKFile=
+<% if @tls_psk_file -%>
+TLSPSKFile=<%= @tls_psk_file %>
+<% end -%>
 <% end -%>

@@ -40,33 +40,20 @@ class zabbixagent::preinstall (
     } # end RedHat
 
     'Debian'  : {
-      case $::operatingsystem {
-        'Ubuntu'  : {
-          # Zabbix
-          if ($manage_repo_zabbix) {
-            file { '/etc/apt/sources.list.d/zabbix.list':
-              ensure  => file,
-              content => template('zabbixagent/zabbix.list.erb'),
-              notify  => Exec['apt-get update'],
-            }
-
-          }
-
-        } # end Ubuntu
-
-        default : {
+      if ($manage_repo_zabbix) {
+        file { '/etc/apt/sources.list.d/zabbix.list':
+          ensure  => file,
+          content => template('zabbixagent/zabbix.list.erb'),
+          notify  => Exec['apt-get update'],
         }
 
-      } # end case $::operatingsystem
-
-
-
-      exec { 'apt-get update':
-        path        => '/usr/bin',
-        user        => 'root',
-        logoutput   => true,
-        refreshonly => true,
-        command     => 'apt-get update',
+        exec { 'apt-get update':
+          path        => '/usr/bin',
+          user        => 'root',
+          logoutput   => true,
+          refreshonly => true,
+          command     => 'apt-get update',
+        }
       }
 
     } # end Debian

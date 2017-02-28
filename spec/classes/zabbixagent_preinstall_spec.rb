@@ -62,8 +62,7 @@ describe 'zabbixagent::preinstall' do
 
   end
 
-  # Running an Ubuntu 14.04.
-  context 'On a Ubuntu 14 with repo management enabled' do
+  context 'On Ubuntu 14.04 LTS (Trusty) with repo management enabled' do
     let :facts do
       {
           :kernel                    => 'Linux',
@@ -83,6 +82,75 @@ describe 'zabbixagent::preinstall' do
 
     it 'should create zabbix.list' do
       should contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.2\/ubuntu trusty main/)
+    end
+  end
+
+  context 'On Ubuntu 16.04 (Xenial Xerus) with repo management enabled' do
+    let :facts do
+      {
+          :kernel                    => 'Linux',
+          :osfamily                  => 'Debian',
+          :operatingsystem           => 'Ubuntu',
+          :lsbdistcodename           => 'xenial',
+          :operatingsystemmajrelease => '16.04'
+      }
+    end
+
+    let :pre_condition do
+      "class {'zabbixagent':
+        manage_repo_zabbix => true,
+        version            => '3.2',
+      }"
+    end
+
+    it 'should create zabbix.list' do
+      should contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.2\/ubuntu xenial main/)
+    end
+  end
+
+  context 'On Debian 7 (Wheezy) with repo management enabled' do
+    let :facts do
+      {
+          :kernel                    => 'Linux',
+          :osfamily                  => 'Debian',
+          :operatingsystem           => 'Debian',
+          :lsbdistcodename           => 'wheezy',
+          :operatingsystemmajrelease => '7'
+      }
+    end
+
+    let :pre_condition do
+      "class {'zabbixagent':
+        manage_repo_zabbix => true,
+        version            => '3.2',
+      }"
+    end
+
+    it 'should create zabbix.list' do
+      should contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.2\/debian wheezy main/)
+    end
+  end
+
+  context 'On a Debian 8 (Jessie) with repo management enabled' do
+    let :facts do
+      {
+          :kernel                    => 'Linux',
+          :osfamily                  => 'Debian',
+          :operatingsystem           => 'Debian',
+          :lsbdistcodename           => 'jessie',
+          :operatingsystemmajrelease => '8'
+      }
+    end
+
+    let :pre_condition do
+      "class {'zabbixagent':
+        manage_repo_zabbix => true,
+        version            => '3.2',
+      }"
+    end
+
+    it 'should create zabbix.list' do
+      should contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.2\/debian jessie main/)
     end
   end
 

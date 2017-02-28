@@ -266,13 +266,70 @@ describe 'zabbixagent' do
 
   end
 
-  context 'on Ubuntu 14' do
+  context 'on Ubuntu 14.04 LTS (Trusty)' do
     let :facts do
       {
           :kernel          => 'Linux',
           :osfamily        => 'Debian',
           :operatingsystem => 'Ubuntu',
           :lsbdistcodename => 'trusty'
+      }
+    end
+
+    let(:params) {
+      {
+          :manage_repo_zabbix => true
+      }
+    }
+
+    it { is_expected.to compile.with_all_deps }
+  end
+
+  context 'on Ubuntu 16.04 (Xenial Xerus)' do
+    let :facts do
+      {
+          :kernel          => 'Linux',
+          :osfamily        => 'Debian',
+          :operatingsystem => 'Ubuntu',
+          :lsbdistcodename => 'xenial'
+      }
+    end
+
+    let(:params) {
+      {
+          :manage_repo_zabbix => true
+      }
+    }
+
+    it { is_expected.to compile.with_all_deps }
+  end
+
+  context 'on Debian 7 (Wheezy)' do
+    let :facts do
+      {
+          :kernel          => 'Linux',
+          :osfamily        => 'Debian',
+          :operatingsystem => 'Debian',
+          :lsbdistcodename => 'wheezy'
+      }
+    end
+
+    let(:params) {
+      {
+          :manage_repo_zabbix => true
+      }
+    }
+
+    it { is_expected.to compile.with_all_deps }
+  end
+
+  context 'on Debian 8 (Jessie)' do
+    let :facts do
+      {
+          :kernel          => 'Linux',
+          :osfamily        => 'Debian',
+          :operatingsystem => 'Ubuntu',
+          :lsbdistcodename => 'jessie'
       }
     end
 

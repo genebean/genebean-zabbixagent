@@ -12,5 +12,5 @@
 #
 ##################################################################
 
-deb http://repo.zabbix.com/zabbix/<%= @version %>/ubuntu <%= @lsbdistcodename %> main
-deb-src http://repo.zabbix.com/zabbix/<%= @version %>/ubuntu <%= @lsbdistcodename %> main
+deb http://repo.zabbix.com/zabbix/<%= @version %>/<%= @operatingsystem.downcase %> <%= @lsbdistcodename %> main
+deb-src http://repo.zabbix.com/zabbix/<%= @version %>/<%= @operatingsystem.downcase %> <%= @lsbdistcodename %> main

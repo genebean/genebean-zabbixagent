@@ -1,8 +1,6 @@
 fixtures:
   forge_modules:
-    chocolatey:  "chocolatey/chocolatey"
-    inifile:     "puppetlabs/inifile"
+    chocolatey:  "puppetlabs/chocolatey"
     stdlib:      "puppetlabs/stdlib"
   symlinks:
     zabbixagent: "#{source_dir}"
-

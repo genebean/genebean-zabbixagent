@@ -27,17 +27,18 @@ repo. On Windows this module utilizes the [Chocolatey][chocolatey] provider.
 
 ## Setup Requirements
 
-This module has been tested against Puppet 3.8.7 on:
+This module has been tested against Puppet 4.x on:  
 * CentOS 6 & 7
-* OpenSUSE Leap 42.1
+* Debian 7 & 8
+* OpenSUSE Leap 42.1 & 42.2
 * Red Hat 5, 6, 7
 * SUSE Linux Enterprise Server 12
-* Ubuntu Server 14.04
+* Ubuntu Server 14.04 16.04
 * Windows 7
 * Windows Server 2012 R2
 
-Testing via Travis-CI is also done against Puppet 3.x using future parser and against
-Puppet 4.x using strict variables.
+Testing via Travis-CI is also done against Puppet 3.x with, and without,
+future parser.
 
 
 ## Parameters:
@@ -55,168 +56,228 @@ $servers_active
 ```
 
 
-#### preinstall.pp settings
+#### Preinstall
 
-#####`manage_repo_epel`  
+**manage_repo_epel**  
 Determines if the EPEL repo is managed on the RedHat family of OS's.  
 Default: false  
 Type: boolean
 
-#####`manage_repo_zabbix`  
+**manage_repo_zabbix**  
 Determines if the Zabbix repo is managed on the RedHat family of OS's.  
 Default: false  
 Type: boolean
 
 
-#### install.pp settings
+#### Install
 
-#####`ensure_setting`  
-Passed directly to ensure of package resource  
-Default: 'present'
-
-#####`custom_require_linux`  
+**custom_require_linux**  
 Passed directly to require of package resource when on Linux  
 Default: undef
 
-#####`custom_require_windows`  
+**custom_require_windows**  
 Passed directly to require of package resource when on Windows  
 Default: undef
 
+**ensure_setting**  
+Passed directly to ensure of package resource  
+Default: 'present'
 
-#### config.pp settings
 
-#####`allow_root`  
+#### Config
+
+**allow_root**  
 0 - do not allow, 1 - allow  
 Type: integer
 
-#####`buffer_send`  
+**buffer_send**  
 Range: 1-3600  
 Type: integer
 
-#####`buffer_size`  
+**buffer_size**  
 Range: 2-65535  
 Type: integer
 
-#####`config_dir`  
+**config_dir**  
 Defines the directory in which config files live  
-Default: '/etc/zabbix' on Linux, 'C:/ProgramData/zabbix' on Windows  
+Default on Linux:   '/etc/zabbix'  
+Default on Windows: 'C:/ProgramData/zabbix'
 
-#####`debug_level`  
+**debug_level**  
 Range: 0-4  
 Type: integer
 
-#####`enable_remote_commands`  
+**enable_remote_commands**  
 0 - not allowed, 1 - allowed  
 Type: integer
 
-#####`host_metadata`  
+**host_metadata**  
 Range: 0-255 characters  
 Type: string
 
-#####`host_metadata_item`  
+**host_metadata_item**  
 Parameter that defines an item used for getting host metadata used during host
-auto-registration process. To disable, set to ''.  
+auto-registration process.  
+To disable, set to ''.  
 Default: 'system.uname'
 
-#####`hostname`  
+**hostname**  
 The hostname used in the config file.  
 Default: downcase($::fqdn)
 
-#####`hostname_item`  
-An item to be used for determining a host's name  
+**hostname_item**  
+An item to be used for determining a host's name
 
-#####`include_files`  
-Equates to include in zabbix_agentd.conf. Renamed due to include being special in
-Puppet. An array with one or more files to be included in the config. On non-Windows
-systems, this can be a folder or a path with a wildcard. See zabbix_agentd.conf for details.  
+**include_files**  
+Equates to include in zabbix_agentd.conf. Renamed due to include being special
+in Puppet. An array with one or more files to be included in the config.
+On non-Windows systems, this can be a folder or a path with a wildcard. See
+zabbix_agentd.conf for details.  
 Type: array
 
-#####`item_alias`  
-Equates to alias in zabbix_agentd.conf. Renamed due to `alias` being the name of a
-Puppet metaparameter. Sets an alias for an item key.  
+**item_alias**  
+Equates to alias in zabbix_agentd.conf. Renamed due to alias being the name of
+a Puppet metaparameter. Sets an alias for an item key.  
 Type: array
 
-#####`listen_ip`  
+**listen_ip**  
 List of comma delimited IP addresses that the agent should listen on.  
 Type: string
 
-#####`listen_port`  
+**listen_port**  
 Range: 1024-32767  
 Default: 10050  
 Type: integer
 
-#####`load_module`  
+**load_module**  
 Type: string
 
-#####`load_module_path`  
+**load_module_path**  
 Type: string
 
-#####`log_file_size`  
+**log_file_size**  
 Range: 0-1024  
 Type: integer
 
-#####`log_file`  
+**log_file**  
 The full path to where Zabbix should store it's logs.  
-Default: 'C:\zabbix_agentd.log' OR '/var/log/zabbix/zabbix_agentd.log'  
+Default on Windows: 'C:\zabbix_agentd.log'  
+Default on Linux: '/var/log/zabbix/zabbix_agentd.log'  
 Type: string
 
-#####`log_remote_commands`  
+**log_type**  
+Log output type.  
+Type: string
+
+**log_remote_commands**  
 0 - disabled, 1 - enabled  
 Type: integer
 
-#####`max_lines_per_second`  
+**max_lines_per_second**  
 Range: 1-1000  
 Type: integer
 
-#####`perf_counter`  
-Each item should be formated as follows:  
-`<parameter_name>,"<perf_counter_path>",<period>`  
+**package_name**  
+Name of the Zabbix Agent package.  
+The default values for this can be found in params.pp as it is OS dependent.  
+Type: string
+
+**perf_counter**  
+Each item should be formmated as follows:  
+<parameter_name>,"<perf_counter_path>",<period>  
 Type: array
 
-#####`pid_file`  
+**pid_file**  
 Name of PID file.  
 Type: string
 
-#####`refresh_active_checks`  
+**refresh_active_checks**  
 Range: 60-3600  
 Type: integer
 
-#####`server`  
+**server**  
 Default: '127.0.0.1'  
 Type: String separated by commas OR Array
 
-#####`server_active`  
+**server_active**  
 Default: '127.0.0.1'  
 Type: String separated by commas OR Array
 
-#####`source_ip`  
+**source_ip**  
 Source IP address for outgoing connections.  
 Type: string, formatted as an IP address
 
-#####`start_agents`  
+**start_agents**  
 Range: 0-100  
 Type: integer
 
-#####`timeout`  
+**timeout**  
 Range: 1-30  
 Type: integer
 
-#####`unsafe_user_parameters`  
+**tls_accept**  
+What incoming connections to accept.  
+Type: String separated by commas OR Array
+
+**tls_ca_file**  
+Full pathname of a file containing the top-level CA(s) certificates for peer
+certificate verification.  
+Type: String
+
+**tls_cert_file**  
+Full pathname of a file containing the agent certificate or certificate chain.  
+Type: String
+
+**tls_connect**  
+How the agent should connect to server or proxy.  
+Type: String
+
+**tls_crl_file**  
+Full pathname of a file containing revoked certificates.  
+Type: String
+
+**tls_key_file**  
+Full pathname of a file containing the agent private key.  
+Type: String
+
+**tls_psk_file**  
+Full pathname of a file containing the agent pre-shared key.  
+Type: String
+
+**tls_psk_identity**  
+Pre-shared key identity string.  
+Type: String
+
+**tls_server_cert_issuer**  
+Allowed server (proxy) certificate issuer.  
+Type: String
+
+**tls_server_cert_subject**  
+Allowed server (proxy) certificate subject.  
+Type: String
+
+**unsafe_user_parameters**  
 0 - do not allow, 1 - allow
 
-#####`user_parameter`  
+**user_parameter**  
 User-defined parameter to monitor.  
 Type: array
 
-#####`user`  
+**user**  
 Drop privileges to a specific, existing user on the system.  
+Type: string
+
+**version**  
+Determines what version of the Zabbix Agent to install.  
+Default: '3.2'  
+Allowed values: '3.2', '3.0', or '2.4'  
 Type: string
 
 
 ## Usage
 
 ```puppet
-class { 'zabbixagent':
+class { '::zabbixagent':
   ensure_setting => 'latest',
   include_files  => ['/etc/zabbix_agentd.conf.d/userparams.conf',],
   log_file_size  => 0,
@@ -239,8 +300,9 @@ requests should be filed just like other issues.
 
 * Scott Smerchek (@smerchek) - Author of [softek-zabbixagent][pf-softek-zabbixagent]
 * Martijn Storck (@martijn)  - Added CentOS support
-* Simonas Rup�ys (@simonasr) - Changed case syntax to work on Puppet 4.x
+* Simonas Rupsys (@simonasr) - Changed case syntax to work on Puppet 4.x
 * Jake Spain (@thespain) - Added support for SUSE Enterprise and OpenSUSE Leap
+* Jake Spain (@thespain) - Added support for newer releases of distros & Zabbix
 
 
 ## License

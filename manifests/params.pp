@@ -5,9 +5,9 @@ class zabbixagent::params {
   $manage_repo_zabbix      = false
 
   # install settings
-  $ensure_setting          = 'present'
   $custom_require_linux    = undef
   $custom_require_windows  = undef
+  $ensure_setting          = 'present'
 
   # config settings
   $allow_root              = undef

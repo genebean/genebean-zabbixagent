@@ -46,10 +46,11 @@ describe 'zabbixagent::install' do
   end
 
   # Running OpenSuSE Leap
-  context 'On OpenSuSE Leap 42.1 OS with repo management enabled' do
+  context 'On OpenSuSE Leap 42.1 with repo management enabled' do
     let :pre_condition do
       "class {'zabbixagent':
         manage_repo_zabbix => true,
+        version            => '3.2',
       }"
     end
     let :facts do
@@ -62,16 +63,17 @@ describe 'zabbixagent::install' do
     end
 
     # Make sure package will be installed.
-    it { should contain_package('zabbix-agent').with_ensure('present') }
-    it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
+    it { should contain_package('zabbix32-agent').with_ensure('present') }
+    it { should contain_package('zabbix32-agent').with_name('zabbix32-agent') }
 
   end
 
   # Running SLES
-  context 'On SLES 12.1 OS with repo management enabled' do
+  context 'On SLES 12.1 with repo management enabled' do
     let :pre_condition do
       "class {'zabbixagent':
         manage_repo_zabbix => true,
+        version            => '3.2',
       }"
     end
     let :facts do
@@ -84,8 +86,8 @@ describe 'zabbixagent::install' do
     end
 
     # Make sure package will be installed.
-    it { should contain_package('zabbix-agent').with_ensure('present') }
-    it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
+    it { should contain_package('zabbix32-agent').with_ensure('present') }
+    it { should contain_package('zabbix32-agent').with_name('zabbix32-agent') }
 
   end
 end

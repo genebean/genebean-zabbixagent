@@ -5,10 +5,10 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "genebean/centos6-rvm193-64bit"
+  config.vm.box = "genebean/centos-7-rvm-221"
 
   config.vm.provision "shell", inline: "yum -y install git"
-  config.vm.provision "shell", inline: "su - vagrant -c 'rsync -rv --delete /vagrant/ zabbixagent --exclude bundle; cd zabbixagent; bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-vendor/bundle}'"
+  config.vm.provision "shell", inline: "gem install --no-ri --no-rdoc bundler"
+  config.vm.provision "shell", inline: "su - vagrant -c 'rsync -rv --delete /vagrant/ /home/vagrant/zabbixagent --exclude bundle; cd /home/vagrant/zabbixagent; bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-vendor/bundle}'"
 
 end
-

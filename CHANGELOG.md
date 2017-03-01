@@ -1,5 +1,15 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2017-03-01 Release 3.0.0  
+- This change was brought to you by Jake Spain
+- Introduced selectable versions of the Zabbix agent: now you can pick between
+  2.4, 3.0, & 3.2 and the module will adjust accordingly.
+- Changed SUSE repository to facilitate enabling newer versions of Zabbix
+- Added a parameter for the name of the package to be installed
+- Corrected and expanded compatibility with Debian and Ubuntu
+- Updated the gems used for testing in Travis CI
+- Updated the Vagrantfile to be more current.
+
 ## 2016-09-20 Release 2.6.0  
 - Added support for OpenSUSE Leap (thanks to Jake Spain)
 

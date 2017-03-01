@@ -224,4 +224,121 @@ describe 'zabbixagent' do
     end
 
   end
+
+  describe 'with version set' do
+    let :facts do
+      {
+        :kernel          => 'Linux',
+        :osfamily        => 'RedHat',
+        :operatingsystem => 'RedHat'
+      }
+    end
+
+    context 'to 2.4 with log_type' do
+      let :pre_condition do
+        "class {'zabbixagent':
+          log_type => 'system',
+          version  => '2.4'
+        }"
+      end
+
+      it 'should raise error' do
+        expect {
+          should compile
+        }.to raise_error(/The parameter log_type is only supported since Zabbix 3.0./)
+      end
+    end
+
+    context 'to 2.4 with tls_connect' do
+      let :pre_condition do
+        "class {'zabbixagent':
+          tls_connect => 'cert',
+          version  => '2.4'
+        }"
+      end
+
+      it 'should raise error' do
+        expect {
+          should compile
+        }.to raise_error(/The parameter tls_connect is only supported since Zabbix 3.0./)
+      end
+    end
+
+  end
+
+  context 'on Ubuntu 14.04 LTS (Trusty)' do
+    let :facts do
+      {
+          :kernel          => 'Linux',
+          :osfamily        => 'Debian',
+          :operatingsystem => 'Ubuntu',
+          :lsbdistcodename => 'trusty'
+      }
+    end
+
+    let(:params) {
+      {
+          :manage_repo_zabbix => true
+      }
+    }
+
+    it { is_expected.to compile.with_all_deps }
+  end
+
+  context 'on Ubuntu 16.04 (Xenial Xerus)' do
+    let :facts do
+      {
+          :kernel          => 'Linux',
+          :osfamily        => 'Debian',
+          :operatingsystem => 'Ubuntu',
+          :lsbdistcodename => 'xenial'
+      }
+    end
+
+    let(:params) {
+      {
+          :manage_repo_zabbix => true
+      }
+    }
+
+    it { is_expected.to compile.with_all_deps }
+  end
+
+  context 'on Debian 7 (Wheezy)' do
+    let :facts do
+      {
+          :kernel          => 'Linux',
+          :osfamily        => 'Debian',
+          :operatingsystem => 'Debian',
+          :lsbdistcodename => 'wheezy'
+      }
+    end
+
+    let(:params) {
+      {
+          :manage_repo_zabbix => true
+      }
+    }
+
+    it { is_expected.to compile.with_all_deps }
+  end
+
+  context 'on Debian 8 (Jessie)' do
+    let :facts do
+      {
+          :kernel          => 'Linux',
+          :osfamily        => 'Debian',
+          :operatingsystem => 'Ubuntu',
+          :lsbdistcodename => 'jessie'
+      }
+    end
+
+    let(:params) {
+      {
+          :manage_repo_zabbix => true
+      }
+    }
+
+    it { is_expected.to compile.with_all_deps }
+  end
 end

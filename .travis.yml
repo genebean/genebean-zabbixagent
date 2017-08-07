@@ -3,16 +3,12 @@ cache: bundler
 
 matrix:
   include:
-    - rvm: 1.9.3
-      env: PUPPET_VERSION="~> 3.0"
-    - rvm: 2.0.0
-      env: PUPPET_VERSION="~> 3.0"
-    - rvm: 2.1.5
-      env: PUPPET_VERSION="~> 3.0"
-    - rvm: 2.1.5
-      env: PUPPET_VERSION="~> 3.0" FUTURE_PARSER="yes"
     - rvm: 2.1.6
-      env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes"
+      env: PUPPET_VERSION="~> 4.0"
+    - rvm: 2.4.1
+      env: PUPPET_VERSION="~> 5.0"
+    - rvm: 2.4.1
+      env: PUPPET_VERSION="~> 5.0" STRICT_VARIABLES="yes"
 
 script: 'bundle exec rake tests'
 
@@ -20,3 +16,7 @@ notifications:
   email:
     on_failure: change
     on_success: never
+  slack:
+    rooms:
+      - secure: "DyPNG5cMqBAXNQmFPVjf8hqDZFIPy9e42RNWmuyFmBqIWF4q5iYvekCMoTc4DimOBGAvpu84w5wa1XCIlO+/5yMInOM5u6dFCojzUZ8JNXBAsyhbIY/vD+oMndecaMIMNSZh3bOX9T180IBPaR7MoHPGeoV+itoSWQUrIQKELx4="
+      - secure: "PlV/p9vjCEukGqof4r+ZRH49BeQvUZ8RP5krYLjUVfKGHg8wBIUrXn3aFH6Rdh9VjjSMoBPukVy5Mhd/Q1mmLHwzTl/+w/SE7ttgj6W6tAEjvDw1iH+ZWMrh0K/K+DLcNhWqeP4wDsQ2d5x5KOtQV3KIzs8hvF/R7s/BDZf5UqE="

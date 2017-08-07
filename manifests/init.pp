@@ -382,16 +382,16 @@ class zabbixagent (
   }
 
   anchor { '::zabbixagent::start':
-  } ->
-  class { '::zabbixagent::preinstall':
-  } ->
-  class { '::zabbixagent::install':
-  } ->
-  class { '::zabbixagent::config':
-  } ->
-  class { '::zabbixagent::service':
-  } ->
-  anchor { '::zabbixagent::end':
+  }
+  -> class { '::zabbixagent::preinstall':
+  }
+  -> class { '::zabbixagent::install':
+  }
+  -> class { '::zabbixagent::config':
+  }
+  -> class { '::zabbixagent::service':
+  }
+  -> anchor { '::zabbixagent::end':
   }
 
 }

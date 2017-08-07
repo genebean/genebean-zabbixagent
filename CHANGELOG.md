@@ -1,5 +1,8 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2017-08-06 - Release 3.0.1  
+- First run at using modulesync
+
 ## 2017-03-01 Release 3.0.0  
 - This change was brought to you by Jake Spain
 - Introduced selectable versions of the Zabbix agent: now you can pick between

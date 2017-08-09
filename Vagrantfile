@@ -1,14 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
-VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(2) do |config|
+  config.vm.box = "genebean/centos-7-rvm-multi"
+  config.vm.synced_folder ".", "/vagrant"
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "genebean/centos-7-rvm-221"
-
-  config.vm.provision "shell", inline: "yum -y install git"
+  config.vm.provision "shell", inline: "yum -y install multitail vim nano git"
   config.vm.provision "shell", inline: "gem install --no-ri --no-rdoc bundler"
-  config.vm.provision "shell", inline: "su - vagrant -c 'rsync -rv --delete /vagrant/ /home/vagrant/zabbixagent --exclude bundle; cd /home/vagrant/zabbixagent; bundle install --jobs=3 --retry=3 --path=${BUNDLE_PATH:-vendor/bundle}'"
-
+  config.vm.provision "shell", inline: "su - vagrant -c 'export PUP_MOD= @configs[:puppet_module]; rsync -rv --delete /vagrant/ /home/vagrant/$PUP_MOD --exclude bundle; cd /home/vagrant/$PUP_MOD; bundle install --jobs=3 --retry=3; bundle exec rake spec_prep'"
 end

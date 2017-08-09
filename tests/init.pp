@@ -1,1 +1,1 @@
-include zabbixagent
+include ::zabbixagent

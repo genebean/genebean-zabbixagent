@@ -1,39 +1,46 @@
 # Installs the zabbix agent
-class zabbixagent::install (
-  $ensure_setting         = $::zabbixagent::ensure_setting,
-  $custom_require_linux   = $::zabbixagent::custom_require_linux,
-  $custom_require_windows = $::zabbixagent::custom_require_windows,
-  $package_name           = $::zabbixagent::package_name,
-  $version                = $::zabbixagent::version) {
-  case $::kernel {
+class zabbixagent::install inherits zabbixagent {
+
+  $_package_name = $::osfamily ? {
+    'Suse' => $zabbixagent::version ? {
+      '2.4'   => 'zabbix24-agent',
+      '3.0'   => 'zabbix30-agent',
+      '3.2'   => 'zabbix32-agent',
+      default => 'zabbix32-agent',
+    },
+
+    default => $zabbixagent::package_name,
+  }
+
+  case $facts['kernel'] {
     'Linux'   : {
 
-      if ($package_name != 'zabbix-agent') {
+      if ($_package_name != 'zabbix-agent') {
         package { 'zabbix-agent':
           ensure => absent,
-          before => Package[$package_name],
+          before => Package[$_package_name],
         }
       }
 
-      package { $package_name:
-        ensure  => $ensure_setting,
-        notify  => Service[$::zabbixagent::params::service_name],
-        require => $custom_require_linux,
+      package { $_package_name:
+        ensure  => $zabbixagent::ensure_setting,
+        notify  => Class['::zabbixagent::service'],
+        require => $zabbixagent::custom_require_linux,
       }
 
     } # end Linux
 
     'Windows' : {
-      package { $package_name:
-        ensure   => $ensure_setting,
+      package { $_package_name:
+        ensure   => $zabbixagent::ensure_setting,
         provider => 'chocolatey',
-        notify   => Service['zabbix-agent'],
-        require  => $custom_require_windows,
+        notify   => Class['::zabbixagent::service'],
+        require  => $zabbixagent::custom_require_windows,
       }
     } # end Windows
 
     default : {
-      fail($::zabbixagent::params::fail_message)
+      fail($zabbixagent::fail_message)
     }
   }
 }

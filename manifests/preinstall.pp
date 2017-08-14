@@ -1,12 +1,9 @@
 # Repositories used by Zabbix
-class zabbixagent::preinstall (
-  $manage_repo_epel   = $::zabbixagent::manage_repo_epel,
-  $manage_repo_zabbix = $::zabbixagent::manage_repo_zabbix,
-  $version            = $::zabbixagent::version,) {
+class zabbixagent::preinstall inherits zabbixagent {
   case $::osfamily {
     'RedHat'  : {
       # EPEL
-      if ($manage_repo_epel) {
+      if ($zabbixagent::manage_repo_epel) {
         file { '/etc/yum.repos.d/epel.repo':
           ensure  => file,
           content => template('zabbixagent/epel.repo.erb'),
@@ -21,7 +18,7 @@ class zabbixagent::preinstall (
       }
 
       # Zabbix
-      if ($manage_repo_zabbix) {
+      if ($zabbixagent::manage_repo_zabbix) {
         file { '/etc/yum.repos.d/zabbix.repo':
           ensure  => file,
           content => template('zabbixagent/zabbix.repo.erb'),
@@ -40,7 +37,7 @@ class zabbixagent::preinstall (
     } # end RedHat
 
     'Debian'  : {
-      if ($manage_repo_zabbix) {
+      if ($zabbixagent::manage_repo_zabbix) {
         file { '/etc/apt/sources.list.d/zabbix.list':
           ensure  => file,
           content => template('zabbixagent/zabbix.list.erb'),
@@ -66,7 +63,7 @@ class zabbixagent::preinstall (
 
             '11.3', '11.4', '12.0', '12.1' : {
               # Zabbix
-              if ($manage_repo_zabbix) {
+              if ($zabbixagent::manage_repo_zabbix) {
                 file { '/etc/zypp/repos.d/server_monitoring.repo':
                   ensure  => file,
                   content => template('zabbixagent/server_monitoring.repo.erb'),
@@ -86,7 +83,7 @@ class zabbixagent::preinstall (
         } # end SLES
 
         'OpenSuSE' : {
-          if ($manage_repo_zabbix) {
+          if ($zabbixagent::manage_repo_zabbix) {
             file { '/etc/zypp/repos.d/server_monitoring.repo':
               ensure  => file,
               content => template('zabbixagent/server_monitoring.repo.erb'),

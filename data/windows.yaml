@@ -1,0 +1,6 @@
+---
+zabbixagent::config_dir: 'C:/ProgramData/zabbix'
+zabbixagent::log_file: 'C:/zabbix_agentd.log'
+zabbixagent::package_name: 'zabbix-agent'
+zabbixagent::service_name: 'Zabbix Agent'
+zabbixagent::config_name: 'zabbix_agentd.conf'

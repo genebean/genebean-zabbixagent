@@ -2,29 +2,20 @@ require 'spec_helper'
 
 describe 'zabbixagent' do
 
-  context 'On a RedHat OS with repo management enabled' do
-    let :facts do
-      {
-          :kernel          => 'Linux',
-          :osfamily        => 'RedHat',
-          :operatingsystem => 'RedHat'
-      }
+  on_supported_os.each do |os, facts|
+    context "on #{os} with defaults" do
+      let(:facts) do
+        facts
+      end
+
+      # Check that all classes are present
+      it { is_expected.to compile.with_all_deps }
+      it { is_expected.to contain_class('zabbixagent') }
+      it { is_expected.to contain_class('zabbixagent::install') }
+      it { is_expected.to contain_class('zabbixagent::install') }
+      it { is_expected.to contain_class('zabbixagent::config') }
+      it { is_expected.to contain_class('zabbixagent::service') }
     end
-
-    let(:params) {
-      {
-          :manage_repo_epel   => true,
-          :manage_repo_zabbix => true
-      }
-    }
-
-    # Check that all classes are present
-    it { should contain_class('zabbixagent::params')}
-    it { should contain_class('zabbixagent::preinstall')}
-    it { should contain_class('zabbixagent::install')}
-    it { should contain_class('zabbixagent::config')}
-    it { should contain_class('zabbixagent::service')}
-
   end
 
   describe 'with server and server_active params set' do
@@ -44,8 +35,8 @@ describe 'zabbixagent' do
         }"
       end
 
-      it 'should pass parameters to zabbixagent::config' do
-        should contain_class('zabbixagent::config').with(
+      it 'should pass parameters to zabbixagent' do
+        should contain_class('zabbixagent').with(
           'server'        => 'zabbix.example.com',
           'server_active' => 'zabbix.example.com',
         )
@@ -60,8 +51,8 @@ describe 'zabbixagent' do
         }"
       end
 
-      it 'should pass parameters to zabbixagent::config' do
-        should contain_class('zabbixagent::config').with(
+      it 'should pass parameters to zabbixagent' do
+        should contain_class('zabbixagent').with(
           'server'        => '["zabbix.example.com", "node.example.com"]',
           'server_active' => '["zabbix.example.com", "node.example.com"]',
         )
@@ -109,9 +100,11 @@ describe 'zabbixagent' do
 
   describe 'with custom require settings' do
     let :pre_condition do
-      "class { 'zabbixagent':
-        custom_require_linux   => Class['foo'],
-        custom_require_windows => Class['bar'],
+      "include ::stdlib
+      
+      class { 'zabbixagent':
+        custom_require_linux   => Class['stdlib'],
+        custom_require_windows => Class['stdlib'],
       }"
     end
 
@@ -124,8 +117,8 @@ describe 'zabbixagent' do
         }
       end
 
-      it "should require => Class[Foo]" do
-        should contain_package('zabbix-agent').with_require("Class[Foo]")
+      it "should require => Class[Stdlib]" do
+        should contain_package('zabbix-agent').that_requires("Class[Stdlib]")
       end
     end
 
@@ -138,8 +131,8 @@ describe 'zabbixagent' do
         }
       end
 
-      it "should require => Class[Bar]" do
-        should contain_package('zabbix-agent').with_require("Class[Bar]")
+      it "should require => Class[Stdlib]" do
+        should contain_package('zabbix-agent').that_requires("Class[Stdlib]")
       end
     end
   end

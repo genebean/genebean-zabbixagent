@@ -1,0 +1,3 @@
+---
+zabbixagent::service_name: 'zabbix-agentd'
+zabbixagent::config_name: 'zabbix-agentd.conf'

@@ -198,7 +198,7 @@ ServerActive=<%= @server_active.join(',') %>
 # Default:
 # Hostname=
 <% if @hostname -%>
-Hostname=<%= @hostname %>
+Hostname=<%= @hostname.downcase %>
 <% end -%>
 
 ### Option: HostnameItem

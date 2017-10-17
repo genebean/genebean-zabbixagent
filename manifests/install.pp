@@ -1,7 +1,7 @@
 # Installs the zabbix agent
 class zabbixagent::install inherits zabbixagent {
 
-  $_package_name = $::osfamily ? {
+  $_package_name = $facts['os']['family'] ? {
     'Suse' => $zabbixagent::version ? {
       '2.4'   => 'zabbix24-agent',
       '3.0'   => 'zabbix30-agent',

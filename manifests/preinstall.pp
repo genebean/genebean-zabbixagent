@@ -1,6 +1,6 @@
 # Repositories used by Zabbix
 class zabbixagent::preinstall inherits zabbixagent {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat'  : {
       # EPEL
       if ($zabbixagent::manage_repo_epel) {
@@ -56,10 +56,10 @@ class zabbixagent::preinstall inherits zabbixagent {
     } # end Debian
 
     'Suse' : {
-      case $::operatingsystem {
+      case $facts['os']['name'] {
 
         'SLES' : {
-          case $::operatingsystemrelease {
+          case $facts['os']['release']['full'] {
 
             '11.3', '11.4', '12.0', '12.1' : {
               # Zabbix
@@ -74,11 +74,11 @@ class zabbixagent::preinstall inherits zabbixagent {
 
             default : {
               # lint:ignore:80chars
-              fail("${::operatingsystem} ${::operatingsystemrelease} is not supported")
+              fail("${facts['os']['name']} ${$facts['os']['release']['full']} is not supported")
               # lint:endignore
             }
 
-          } # end case $::operatingsystemrelease
+          } # end case $facts['os']['release']['full']
 
         } # end SLES
 

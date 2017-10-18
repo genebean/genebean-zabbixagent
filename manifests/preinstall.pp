@@ -6,13 +6,13 @@ class zabbixagent::preinstall inherits zabbixagent {
       if ($zabbixagent::manage_repo_epel) {
         file { '/etc/yum.repos.d/epel.repo':
           ensure  => file,
-          content => template('zabbixagent/epel.repo.erb'),
+          content => epp('zabbixagent/epel.repo.epp'),
           notify  => Exec['yum clean all'],
         }
 
         file { '/etc/yum.repos.d/epel-testing.repo':
           ensure  => file,
-          content => template('zabbixagent/epel-testing.repo.erb'),
+          content => epp('zabbixagent/epel-testing.repo.epp'),
           notify  => Exec['yum clean all'],
         }
       }
@@ -21,7 +21,7 @@ class zabbixagent::preinstall inherits zabbixagent {
       if ($zabbixagent::manage_repo_zabbix) {
         file { '/etc/yum.repos.d/zabbix.repo':
           ensure  => file,
-          content => template('zabbixagent/zabbix.repo.erb'),
+          content => epp('zabbixagent/zabbix.repo.epp'),
           notify  => Exec['yum clean all'],
         }
       }
@@ -40,7 +40,7 @@ class zabbixagent::preinstall inherits zabbixagent {
       if ($zabbixagent::manage_repo_zabbix) {
         file { '/etc/apt/sources.list.d/zabbix.list':
           ensure  => file,
-          content => template('zabbixagent/zabbix.list.erb'),
+          content => epp('zabbixagent/zabbix.list.epp'),
           notify  => Exec['apt-get update'],
         }
 
@@ -66,7 +66,7 @@ class zabbixagent::preinstall inherits zabbixagent {
               if ($zabbixagent::manage_repo_zabbix) {
                 file { '/etc/zypp/repos.d/server_monitoring.repo':
                   ensure  => file,
-                  content => template('zabbixagent/server_monitoring.repo.erb'),
+                  content => epp('zabbixagent/server_monitoring.repo.epp'),
                   notify  => Exec['zypper refresh'],
                 }
               }
@@ -86,7 +86,7 @@ class zabbixagent::preinstall inherits zabbixagent {
           if ($zabbixagent::manage_repo_zabbix) {
             file { '/etc/zypp/repos.d/server_monitoring.repo':
               ensure  => file,
-              content => template('zabbixagent/server_monitoring.repo.erb'),
+              content => epp('zabbixagent/server_monitoring.repo.epp'),
               notify  => Exec['zypper refresh'],
             }
           }

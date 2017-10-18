@@ -5,58 +5,57 @@
 #
 ################################################################
 ################################################################
-<% @kernel.downcase.eql?('windows') ? ($os = 'Windows') : ($os = 'Unix') -%>
 
-# This is a config file for the Zabbix agent daemon  <%= "(#{$os})" %>
+# This is a config file for the Zabbix agent daemon  <%= $kernel %>
 # To get more information about Zabbix, visit http://www.zabbix.com
 
 ############ GENERAL PARAMETERS #################
 
-<% if $os.eql?('Unix') -%>
+<% if $kernel != 'windows' { -%>
 ### Option: PidFile
 #	Name of PID file.
 #
 # Mandatory: no
 # Default:
 # PidFile=/tmp/zabbix_agentd.pid
-  <%- if @pid_file -%>
-PidFile=<%= @pid_file %>
-  <% end -%>
-<% end -%>
+  <%- if $zabbixagent::pid_file { -%>
+PidFile=<%= $zabbixagent::pid_file %>
+  <% } -%>
+<% } -%>
 
-<% if @version != '2.4' -%>
+<% if $zabbixagent::version != '2.4' { -%>
 ### Option: LogType
 # Specifies where log messages are written to:
-<% if $os.eql?('Windows') -%>
+<% if $kernel == 'windows' { -%>
 # system  - Windows event log
-<% else -%>
+<% } else { -%>
 # system  - syslog
-<% end -%>
+<% } -%>
 # file    - file specified with LogFile parameter
 # console - standard output
 #
 # Mandatory: no
 # Default:
 # LogType=file
-<% if @log_type -%>
-LogType=<%= @log_type %>
-<% end -%>
-<% end -%>
+<% if $zabbixagent::log_type { -%>
+LogType=<%= $zabbixagent::log_type %>
+<% } -%>
+<% } -%>
 
 ### Option: LogFile
 #	Name of log file.
-<% if $os.eql?('Windows') -%>
+<% if $kernel == 'windows' { -%>
 #	If not set, Windows Event Log is used.
-<% else -%>
+<% } else { -%>
 #	If not set, syslog is used.
-<% end -%>
+<% } -%>
 #
 # Mandatory: no
 # Default:
 # LogFile=
-<% if @log_file -%>
-LogFile=<%= @log_file %>
-<% end -%>
+<% if $zabbixagent::log_file { -%>
+LogFile=<%= $zabbixagent::log_file %>
+<% } -%>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -66,9 +65,9 @@ LogFile=<%= @log_file %>
 # Range: 0-1024
 # Default:
 # LogFileSize=1
-<% if @log_file_size -%>
-LogFileSize=<%= @log_file_size %>
-<% end -%>
+<% if $zabbixagent::log_file_size { -%>
+LogFileSize=<%= $zabbixagent::log_file_size %>
+<% } -%>
 
 ### Option: DebugLevel
 #	Specifies debug level
@@ -82,9 +81,9 @@ LogFileSize=<%= @log_file_size %>
 # Range: 0-4
 # Default:
 # DebugLevel=3
-<% if @debug_level -%>
-DebugLevel=<%= @debug_level %>
-<% end -%>
+<% if $zabbixagent::debug_level { -%>
+DebugLevel=<%= $zabbixagent::debug_level %>
+<% } -%>
 
 ### Option: SourceIP
 #	Source IP address for outgoing connections.
@@ -92,9 +91,9 @@ DebugLevel=<%= @debug_level %>
 # Mandatory: no
 # Default:
 # SourceIP=
-<% if @source_ip -%>
-SourceIP=<%= @source_ip %>
-<% end -%>
+<% if $zabbixagent::source_ip { -%>
+SourceIP=<%= $zabbixagent::source_ip %>
+<% } -%>
 
 ### Option: EnableRemoteCommands
 #	Whether remote commands from Zabbix server are allowed.
@@ -104,9 +103,9 @@ SourceIP=<%= @source_ip %>
 # Mandatory: no
 # Default:
 # EnableRemoteCommands=0
-<% if @enable_remote_commands -%>
-EnableRemoteCommands=<%= @enable_remote_commands %>
-<% end -%>
+<% if $zabbixagent::enable_remote_commands { -%>
+EnableRemoteCommands=<%= $zabbixagent::enable_remote_commands %>
+<% } -%>
 
 ### Option: LogRemoteCommands
 #	Enable logging of executed shell commands as warnings.
@@ -116,9 +115,9 @@ EnableRemoteCommands=<%= @enable_remote_commands %>
 # Mandatory: no
 # Default:
 # LogRemoteCommands=0
-<% if @log_remote_commands -%>
-LogRemoteCommands=<%= @log_remote_commands %>
-<% end -%>
+<% if $zabbixagent::log_remote_commands { -%>
+LogRemoteCommands=<%= $zabbixagent::log_remote_commands %>
+<% } -%>
 
 ##### Passive checks related
 
@@ -130,11 +129,11 @@ LogRemoteCommands=<%= @log_remote_commands %>
 # Mandatory: no
 # Default:
 # Server=
-<% if @server.is_a?(String) -%>
-Server=<%= @server %>
-<% elsif @server.is_a?(Array) -%>
-Server=<%= @server.join(',') %>
-<% end -%>
+<% if $zabbixagent::server =~ String { -%>
+Server=<%= $zabbixagent::server %>
+<% } elsif $zabbixagent::server =~ Array { -%>
+Server=<%= $zabbixagent::server.join(',') %>
+<% } -%>
 
 ### Option: ListenPort
 #	Agent will listen on this port for connections from the server.
@@ -143,9 +142,9 @@ Server=<%= @server.join(',') %>
 # Range: 1024-32767
 # Default:
 # ListenPort=10050
-<% if @listen_port -%>
-ListenPort=<%= @listen_port %>
-<% end -%>
+<% if $zabbixagent::listen_port { -%>
+ListenPort=<%= $zabbixagent::listen_port %>
+<% } -%>
 
 ### Option: ListenIP
 #	List of comma delimited IP addresses that the agent should listen on.
@@ -154,9 +153,9 @@ ListenPort=<%= @listen_port %>
 # Mandatory: no
 # Default:
 # ListenIP=0.0.0.0
-<% if @listen_ip -%>
-ListenIP=<%= @listen_ip %>
-<% end -%>
+<% if $zabbixagent::listen_ip { -%>
+ListenIP=<%= $zabbixagent::listen_ip %>
+<% } -%>
 
 ### Option: StartAgents
 #	Number of pre-forked instances of zabbix_agentd that process passive checks.
@@ -166,9 +165,9 @@ ListenIP=<%= @listen_ip %>
 # Range: 0-100
 # Default:
 # StartAgents=3
-<% if @start_agents -%>
-StartAgents=<%= @start_agents %>
-<% end -%>
+<% if $zabbixagent::start_agents { -%>
+StartAgents=<%= $zabbixagent::start_agents %>
+<% } -%>
 
 ##### Active checks related
 
@@ -183,11 +182,11 @@ StartAgents=<%= @start_agents %>
 # Mandatory: no
 # Default:
 # ServerActive=
-<% if @server_active.is_a?(String) -%>
-ServerActive=<%= @server_active %>
-<% elsif @server_active.is_a?(Array) -%>
-ServerActive=<%= @server_active.join(',') %>
-<% end -%>
+<% if $zabbixagent::server_active =~ String { -%>
+ServerActive=<%= $zabbixagent::server_active %>
+<% } elsif $zabbixagent::server_active =~ Array { -%>
+ServerActive=<%= $zabbixagent::server_active.join(',') %>
+<% } -%>
 
 ### Option: Hostname
 #	Unique, case sensitive hostname.
@@ -197,9 +196,9 @@ ServerActive=<%= @server_active.join(',') %>
 # Mandatory: no
 # Default:
 # Hostname=
-<% if @hostname -%>
-Hostname=<%= @hostname.downcase %>
-<% end -%>
+<% if $zabbixagent::hostname { -%>
+Hostname=<%= $zabbixagent::hostname.downcase %>
+<% } -%>
 
 ### Option: HostnameItem
 #	Item used for generating Hostname if it is undefined. Ignored if Hostname is defined.
@@ -208,9 +207,9 @@ Hostname=<%= @hostname.downcase %>
 # Mandatory: no
 # Default:
 # HostnameItem=system.hostname
-<% if @hostname_item -%>
-HostnameItem=<%= @hostname_item %>
-<% end -%>
+<% if $zabbixagent::hostname_item { -%>
+HostnameItem=<%= $zabbixagent::hostname_item %>
+<% } -%>
 
 ### Option: HostMetadata
 #	Optional parameter that defines host metadata.
@@ -222,9 +221,9 @@ HostnameItem=<%= @hostname_item %>
 # Range: 0-255 characters
 # Default:
 # HostMetadata=
-<% if @host_metadata -%>
-HostMetadata=<%= @host_metadata %>
-<% end -%>
+<% if $zabbixagent::host_metadata { -%>
+HostMetadata=<%= $zabbixagent::host_metadata %>
+<% } -%>
 
 ### Option: HostMetadataItem
 #	Optional parameter that defines an item used for getting host metadata.
@@ -236,9 +235,9 @@ HostMetadata=<%= @host_metadata %>
 # Mandatory: no
 # Default:
 # HostMetadataItem=
-<% if @host_metadata_item -%>
-HostMetadataItem=<%= @host_metadata_item %>
-<% end -%>
+<% if $zabbixagent::host_metadata_item { -%>
+HostMetadataItem=<%= $zabbixagent::host_metadata_item %>
+<% } -%>
 
 ### Option: RefreshActiveChecks
 #	How often list of active checks is refreshed, in seconds.
@@ -247,9 +246,9 @@ HostMetadataItem=<%= @host_metadata_item %>
 # Range: 60-3600
 # Default:
 # RefreshActiveChecks=120
-<% if @refresh_active_checks -%>
-RefreshActiveChecks=<%= @refresh_active_checks %>
-<% end -%>
+<% if $zabbixagent::refresh_active_checks { -%>
+RefreshActiveChecks=<%= $zabbixagent::refresh_active_checks %>
+<% } -%>
 
 ### Option: BufferSend
 #	Do not keep data longer than N seconds in buffer.
@@ -258,9 +257,9 @@ RefreshActiveChecks=<%= @refresh_active_checks %>
 # Range: 1-3600
 # Default:
 # BufferSend=5
-<% if @buffer_send -%>
-BufferSend=<%= @buffer_send %>
-<% end -%>
+<% if $zabbixagent::buffer_send { -%>
+BufferSend=<%= $zabbixagent::buffer_send %>
+<% } -%>
 
 ### Option: BufferSize
 #	Maximum number of values in a memory buffer. The agent will send
@@ -270,29 +269,29 @@ BufferSend=<%= @buffer_send %>
 # Range: 2-65535
 # Default:
 # BufferSize=100
-<% if @buffer_size -%>
-BufferSize=<%= @buffer_size %>
-<% end -%>
+<% if $zabbixagent::buffer_size { -%>
+BufferSize=<%= $zabbixagent::buffer_size %>
+<% } -%>
 
 ### Option: MaxLinesPerSecond
 #	Maximum number of new lines the agent will send per second to Zabbix Server
-<% if $os.eql?('Windows') -%>
+<% if $kernel == 'windows' { -%>
 #	or Proxy processing 'log', 'logrt' and 'eventlog' active checks.
 #	The provided value will be overridden by the parameter 'maxlines',
 #	provided in 'log', 'logrt' or 'eventlog' item keys.
-<% else -%>
+<% } else { -%>
 #	or Proxy processing 'log' and 'logrt' active checks.
 #	The provided value will be overridden by the parameter 'maxlines',
 #	provided in 'log' or 'logrt' item keys.
-<% end -%>
+<% } -%>
 #
 # Mandatory: no
 # Range: 1-1000
 # Default:
 # MaxLinesPerSecond=100
-<% if @max_lines_per_second -%>
-MaxLinesPerSecond=<%= @max_lines_per_second %>
-<% end -%>
+<% if $zabbixagent::max_lines_per_second { -%>
+MaxLinesPerSecond=<%= $zabbixagent::max_lines_per_second %>
+<% } -%>
 
 ############ ADVANCED PARAMETERS #################
 
@@ -300,26 +299,26 @@ MaxLinesPerSecond=<%= @max_lines_per_second %>
 #	Sets an alias for an item key. It can be used to substitute long and complex item key with a smaller and simpler one.
 #	Multiple Alias parameters may be present. Multiple parameters with the same Alias key are not allowed.
 #	Different Alias keys may reference the same item key.
-<% if $os.eql?('Windows') -%>
+<% if $kernel == 'windows' { -%>
 #	For example, to retrieve paging file usage in percents from the server:
 #	Alias=pg_usage:perf_counter[\Paging File(_Total)\% Usage]
 #	Now shorthand key pg_usage may be used to retrieve data.
 #	Aliases can be used in HostMetadataItem but not in HostnameItem or PerfCounter parameters.
-<% else -%>
+<% } else { -%>
 #	For example, to retrieve the ID of user 'zabbix':
 #	Alias=zabbix.userid:vfs.file.regexp[/etc/passwd,^zabbix:.:([0-9]+),,,,\1]
 #	Now shorthand key zabbix.userid may be used to retrieve data.
 #	Aliases can be used in HostMetadataItem but not in HostnameItem parameters.
-<% end -%>
+<% } -%>
 #
 # Mandatory: no
 # Range:
 # Default:
-<% if @item_alias -%>
-<% @item_alias.each do |a| -%>
-Alias=<%= a %>
-<% end -%>
-<% end -%>
+<% if $zabbixagent::item_alias { -%>
+<% $zabbixagent::item_alias.each |$a| { -%>
+Alias=<%= $a %>
+<% } -%>
+<% } -%>
 
 ### Option: Timeout
 #	Spend no more than Timeout seconds on processing
@@ -328,11 +327,11 @@ Alias=<%= a %>
 # Range: 1-30
 # Default:
 # Timeout=3
-<% if @timeout -%>
-Timeout=<%= @timeout %>
-<% end -%>
+<% if $zabbixagent::timeout { -%>
+Timeout=<%= $zabbixagent::timeout %>
+<% } -%>
 
-<% if $os.eql?('Windows') -%>
+<% if $kernel == 'windows' { -%>
 ### Option: PerfCounter
 #	Syntax: <parameter_name>,"<perf_counter_path>",<period>
 #	Defines new parameter <parameter_name> which is an average value for system performance counter <perf_counter_path> for the specified time period <period> (in seconds).
@@ -345,12 +344,12 @@ Timeout=<%= @timeout %>
 # Mandatory: no
 # Range:
 # Default:
-<% if @perf_counter -%>
-<% @perf_counter.each do |pc| -%>
-PerfCounter=<%= pc %>
-<% end -%>
-<% end -%>
-<% else -%>
+<% if $zabbixagent::perf_counter { -%>
+<% $zabbixagent::perf_counter.each |$pc| { -%>
+PerfCounter=<%= $pc %>
+<% } -%>
+<% } -%>
+<% } else { -%>
 ### Option: AllowRoot
 #	Allow the agent to run as 'root'. If disabled and the agent is started by 'root', the agent
 #	will try to switch to the user specified by the User configuration option instead.
@@ -361,9 +360,9 @@ PerfCounter=<%= pc %>
 # Mandatory: no
 # Default:
 # AllowRoot=0
-  <%- if @allow_root -%>
-AllowRoot=<%= @allow_root %>
-  <% end -%>
+  <%- if $zabbixagent::allow_root { -%>
+AllowRoot=<%= $zabbixagent::allow_root %>
+  <% } -%>
 
 ### Option: User
 #	Drop privileges to a specific, existing user on the system.
@@ -372,36 +371,36 @@ AllowRoot=<%= @allow_root %>
 # Mandatory: no
 # Default:
 # User=zabbix
-  <%- if @user -%>
-User=<%= @user %>
-  <% end -%>
-<% end -%>
+  <%- if $zabbixagent::user { -%>
+User=<%= $zabbixagent::user %>
+  <% } -%>
+<% } -%>
 
 ### Option: Include
-<% if $os.eql?('Windows') -%>
+<% if $kernel == 'windows' { -%>
 #	You may include individual files in the configuration file.
-<% else -%>
+<% } else { -%>
 #	You may include individual files or all files in a directory in the configuration file.
 #	Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
-<% end -%>
+<% } -%>
 #
 # Mandatory: no
 # Default:
 # Include=
-<% if @include_files -%>
-<% @include_files.each do |i| -%>
-Include=<%= i %>
-<% end -%>
-<% end -%>
+<% if $zabbixagent::include_files { -%>
+<% $zabbixagent::include_files.each |$i| { -%>
+Include=<%= $i %>
+<% } -%>
+<% } -%>
 
-<% if $os.eql?('Windows') -%>
+<% if $kernel == 'windows' { -%>
 # Include=c:\zabbix\zabbix_agentd.userparams.conf
 # Include=c:/zabbix/zabbix_agentd.userparams.conf
-<% else -%>
+<% } else { -%>
 # Include=/usr/local/etc/zabbix_agentd.userparams.conf
 # Include=/usr/local/etc/zabbix_agentd.conf.d/
 # Include=/usr/local/etc/zabbix_agentd.conf.d/*.conf
-<% end -%>
+<% } -%>
 
 ####### USER-DEFINED MONITORED PARAMETERS #######
 
@@ -417,27 +416,27 @@ Include=<%= i %>
 # Range: 0-1
 # Default:
 # UnsafeUserParameters=0
-<% if @unsafe_user_parameters -%>
-UnsafeUserParameters=<%= @unsafe_user_parameters %>
-<% end -%>
+<% if $zabbixagent::unsafe_user_parameters { -%>
+UnsafeUserParameters=<%= $zabbixagent::unsafe_user_parameters %>
+<% } -%>
 
 ### Option: UserParameter
 #	User-defined parameter to monitor. There can be several user-defined parameters.
 #	Format: UserParameter=<key>,<shell command>
-<% if $os.eql?('Unix') -%>
+<% if $kernel != 'windows' { -%>
 #	See 'zabbix_agentd' directory for examples.
-<% end -%>
+<% } -%>
 #
 # Mandatory: no
 # Default:
 # UserParameter=
-<% if @user_parameter -%>
-<% @user_parameter.each do |up| -%>
-UserParameter=<%= up %>
-<% end -%>
-<% end -%>
+<% if $zabbixagent::user_parameter { -%>
+<% $zabbixagent::user_parameter.each |$up| { -%>
+UserParameter=<%= $up %>
+<% } -%>
+<% } -%>
 
-<% if $os.eql?('Unix') -%>
+<% if $kernel != 'windows' { -%>
 ####### LOADABLE MODULES #######
 
 ### Option: LoadModulePath
@@ -447,9 +446,9 @@ UserParameter=<%= up %>
 # Mandatory: no
 # Default:
 # LoadModulePath=${libdir}/modules
-  <%- if @load_module_path -%>
-LoadModulePath=<%= @load_module_path %>
-  <% end -%>
+  <%- if $zabbixagent::load_module_path { -%>
+LoadModulePath=<%= $zabbixagent::load_module_path %>
+  <% } -%>
 
 ### Option: LoadModule
 #	Module to load at agent startup. Modules are used to extend functionality of the agent.
@@ -460,14 +459,14 @@ LoadModulePath=<%= @load_module_path %>
 # Mandatory: no
 # Default:
 # LoadModule=
-<% if @load_module -%>
-<% @load_module.each do |lm| -%>
-LoadModule=<%= lm %>
-<% end -%>
-<% end -%>
-<% end -%>
+<% if $zabbixagent::load_module { -%>
+<% $zabbixagent::load_module.each |$lm| { -%>
+LoadModule=<%= $lm %>
+<% } -%>
+<% } -%>
+<% } -%>
 
-<% if @version != '2.4' -%>
+<% if $zabbixagent::version != '2.4' { -%>
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSConnect
@@ -480,9 +479,9 @@ LoadModule=<%= lm %>
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSConnect=unencrypted
-<% if @tls_connect -%>
-TLSConnect=<%= @tls_connect %>
-<% end -%>
+<% if $zabbixagent::tls_connect { -%>
+TLSConnect=<%= $zabbixagent::tls_connect %>
+<% } -%>
 
 ### Option: TLSAccept
 # What incoming connections to accept.
@@ -494,11 +493,11 @@ TLSConnect=<%= @tls_connect %>
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSAccept=unencrypted
-<% if @tls_accept.is_a?(String) -%>
-TLSAccept=<%= @tls_accept %>
-<% elsif @tls_accept.is_a?(Array) -%>
-TLSAccept=<%= @tls_accept.join(',') %>
-<% end -%>
+<% if $zabbixagent::tls_accept =~ String { -%>
+TLSAccept=<%= $zabbixagent::tls_accept %>
+<% } elsif $zabbixagent::tls_accept =~ Array { -%>
+TLSAccept=<%= $zabbixagent::tls_accept.join(',') %>
+<% } -%>
 
 ### Option: TLSCAFile
 # Full pathname of a file containing the top-level CA(s) certificates for
@@ -507,9 +506,9 @@ TLSAccept=<%= @tls_accept.join(',') %>
 # Mandatory: no
 # Default:
 # TLSCAFile=
-<% if @tls_ca_file -%>
-TLSCAFile=<%= @tls_ca_file %>
-<% end -%>
+<% if $zabbixagent::tls_ca_file { -%>
+TLSCAFile=<%= $zabbixagent::tls_ca_file %>
+<% } -%>
 
 ### Option: TLSCRLFile
 # Full pathname of a file containing revoked certificates.
@@ -517,9 +516,9 @@ TLSCAFile=<%= @tls_ca_file %>
 # Mandatory: no
 # Default:
 # TLSCRLFile=
-<% if @tls_crt_file -%>
-TLSCRLFile=<%= @tls_crt_file %>
-<% end -%>
+<% if $zabbixagent::tls_crl_file { -%>
+TLSCRLFile=<%= $zabbixagent::tls_crl_file %>
+<% } -%>
 
 ### Option: TLSServerCertIssuer
 # Allowed server certificate issuer.
@@ -527,9 +526,9 @@ TLSCRLFile=<%= @tls_crt_file %>
 # Mandatory: no
 # Default:
 # TLSServerCertIssuer=
-<% if @tls_server_cert_issuer -%>
-TLSServerCertIssuer=<%= @tls_server_cert_issuer %>
-<% end -%>
+<% if $zabbixagent::tls_server_cert_issuer { -%>
+TLSServerCertIssuer=<%= $zabbixagent::tls_server_cert_issuer %>
+<% } -%>
 
 ### Option: TLSServerCertSubject
 # Allowed server certificate subject.
@@ -537,9 +536,9 @@ TLSServerCertIssuer=<%= @tls_server_cert_issuer %>
 # Mandatory: no
 # Default:
 # TLSServerCertSubject=
-<% if @tls_server_cert_subject -%>
-TLSServerCertSubject=<%= @tls_server_cert_subject %>
-<% end -%>
+<% if $zabbixagent::tls_server_cert_subject { -%>
+TLSServerCertSubject=<%= $zabbixagent::tls_server_cert_subject %>
+<% } -%>
 
 ### Option: TLSCertFile
 # Full pathname of a file containing the agent certificate or certificate chain.
@@ -547,9 +546,9 @@ TLSServerCertSubject=<%= @tls_server_cert_subject %>
 # Mandatory: no
 # Default:
 # TLSCertFile=
-<% if @tls_cert_file -%>
-TLSCertFile=<%= @tls_cert_file %>
-<% end -%>
+<% if $zabbixagent::tls_cert_file { -%>
+TLSCertFile=<%= $zabbixagent::tls_cert_file %>
+<% } -%>
 
 ### Option: TLSKeyFile
 # Full pathname of a file containing the agent private key.
@@ -557,9 +556,9 @@ TLSCertFile=<%= @tls_cert_file %>
 # Mandatory: no
 # Default:
 # TLSKeyFile=
-<% if @tls_key_file -%>
-TLSKeyFile=<%= @tls_key_file %>
-<% end -%>
+<% if $zabbixagent::tls_key_file { -%>
+TLSKeyFile=<%= $zabbixagent::tls_key_file %>
+<% } -%>
 
 ### Option: TLSPSKIdentity
 # Unique, case sensitive string used to identify the pre-shared key.
@@ -567,9 +566,9 @@ TLSKeyFile=<%= @tls_key_file %>
 # Mandatory: no
 # Default:
 # TLSPSKIdentity=
-<% if @tls_psk_identity -%>
-TLSPSKIdentity=<%= @tls_psk_identity %>
-<% end -%>
+<% if $zabbixagent::tls_psk_identity { -%>
+TLSPSKIdentity=<%= $zabbixagent::tls_psk_identity %>
+<% } -%>
 
 ### Option: TLSPSKFile
 # Full pathname of a file containing the pre-shared key.
@@ -577,7 +576,7 @@ TLSPSKIdentity=<%= @tls_psk_identity %>
 # Mandatory: no
 # Default:
 # TLSPSKFile=
-<% if @tls_psk_file -%>
-TLSPSKFile=<%= @tls_psk_file %>
-<% end -%>
-<% end -%>
+<% if $zabbixagent::tls_psk_file { -%>
+TLSPSKFile=<%= $zabbixagent::tls_psk_file %>
+<% } -%>
+<% } -%>

@@ -12,7 +12,7 @@
 ####
 #####################################################################
 
-<% if @operatingsystem == 'SLES' and @operatingsystemrelease.split('.')[-1] >= '1' %>
+<% if $operatingsystem == 'SLES' and $operatingsystemrelease.split('.')[-1] >= '1' { -%>
 [server_monitoring]
 name=Server Monitoring Software
 enabled=1
@@ -22,7 +22,7 @@ type=rpm-md
 gpgcheck=1
 gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.2//repodata/repomd.xml.key
 
-<% elsif @operatingsystem == 'SLES' and @operatingsystemrelease.split('.')[-1] == '0' %>
+<% } elsif $operatingsystem == 'SLES' and $operatingsystemrelease.split('.')[-1] == '0' { -%>
 [server_monitoring]
 name=Server Monitoring Software
 enabled=1
@@ -32,12 +32,13 @@ type=rpm-md
 gpgcheck=1
 gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.1//repodata/repomd.xml.key
 
-<% else @operatingsystemmajrelease == 42 %>
+<% } elsif $operatingsystemmajrelease == 42 { -%>
 [server_monitoring]
 name=Server Monitoring Software
 type=rpm-md
-baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= @operatingsystemrelease %>/
+baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= $operatingsystemrelease %>/
 gpgcheck=1
-gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= @operatingsystemrelease %>//repodata/repomd.xml.key
+gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= $operatingsystemrelease %>//repodata/repomd.xml.key
 enabled=1
-<% end %>
+<% } -%>
+

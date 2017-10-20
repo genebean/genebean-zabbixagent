@@ -17,6 +17,16 @@ describe 'zabbixagent::install' do
             }"
           end
 
+          it {should raise_error(/Repository managment for the SUSE family is disabled/)}
+        end
+        context 'with repo management disabled' do
+          let :pre_condition do
+            "class {'zabbixagent':
+              manage_repo_zabbix => false,
+              version            => '3.2',
+            }"
+          end
+
           # Make sure package will be installed.
           it { should contain_package('zabbix32-agent').with_ensure('present') }
           it { should contain_package('zabbix32-agent').with_name('zabbix32-agent') }

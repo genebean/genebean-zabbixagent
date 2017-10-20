@@ -12,33 +12,22 @@
 ####
 #####################################################################
 
-<% if $operatingsystem == 'SLES' and $operatingsystemrelease.split('.')[-1] >= '1' { -%>
+<% if $facts[os][name] == 'SLES' { -%>
 [server_monitoring]
 name=Server Monitoring Software
 enabled=1
 autorefresh=0
-baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.2/
+baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.<%= $facts[os][release][minor] %>/
 type=rpm-md
 gpgcheck=1
-gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.2//repodata/repomd.xml.key
+gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.<%= $facts[os][release][minor] %>//repodata/repomd.xml.key
 
-<% } elsif $operatingsystem == 'SLES' and $operatingsystemrelease.split('.')[-1] == '0' { -%>
-[server_monitoring]
-name=Server Monitoring Software
-enabled=1
-autorefresh=0
-baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.1/
-type=rpm-md
-gpgcheck=1
-gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.1//repodata/repomd.xml.key
-
-<% } elsif $operatingsystemmajrelease == 42 { -%>
+<% } elsif $facts['os']['release']['major'] == 42 { -%>
 [server_monitoring]
 name=Server Monitoring Software
 type=rpm-md
-baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= $operatingsystemrelease %>/
+baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= $facts[os][release][full] %>/
 gpgcheck=1
-gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= $operatingsystemrelease %>//repodata/repomd.xml.key
+gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= $facts[os][release][full] %>//repodata/repomd.xml.key
 enabled=1
 <% } -%>
-

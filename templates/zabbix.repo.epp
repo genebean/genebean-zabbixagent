@@ -14,7 +14,7 @@
 
 [zabbix]
 name=Zabbix Official Repository - $basearch
-baseurl=http://repo.zabbix.com/zabbix/<%= $zabbixagent::version %>/rhel/<%= $operatingsystemmajrelease %>/$basearch/
+baseurl=http://repo.zabbix.com/zabbix/<%= $zabbixagent::version %>/rhel/<%= $facts[os][release][major] %>/$basearch/
 enabled=1
 gpgcheck=1
 <% if $zabbixagent::version == '2.4' { -%>
@@ -22,7 +22,7 @@ gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
 <% } elsif $zabbixagent::version == '3.0' { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4
 <% } elsif $zabbixagent::version == '3.2' { -%>
-<% if $operatingsystemmajrelease == '5' { -%>
+<% if $facts['os']['release']['major'] == '5' { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591-EL5
 <% } else { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591
@@ -31,7 +31,7 @@ gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591
 
 [zabbix-non-supported]
 name=Zabbix Official Repository non-supported - $basearch
-baseurl=http://repo.zabbix.com/non-supported/rhel/<%= $operatingsystemmajrelease %>/$basearch/
+baseurl=http://repo.zabbix.com/non-supported/rhel/<%= $facts[os][release][major] %>/$basearch/
 enabled=1
 gpgcheck=1
 <% if $zabbixagent::version == '2.4' { -%>
@@ -39,7 +39,7 @@ gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
 <% } elsif $zabbixagent::version == '3.0' { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4
 <% } elsif $zabbixagent::version == '3.2' { -%>
-<% if $operatingsystemmajrelease == '5' { -%>
+<% if $facts['os']['release']['major'] == '5' { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591-EL5
 <% } else { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591

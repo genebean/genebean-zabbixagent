@@ -6,14 +6,14 @@
 ################################################################
 ################################################################
 
-# This is a config file for the Zabbix agent daemon  <%= $kernel %>
+# This is a config file for the Zabbix agent daemon  <%= $facts[kernel] %>
 # To get more information about Zabbix, visit http://www.zabbix.com
 
 ############ GENERAL PARAMETERS #################
 
-<% if $kernel != 'windows' { -%>
+<% if $facts[kernel] != 'windows' { -%>
 ### Option: PidFile
-#	Name of PID file.
+# Name of PID file.
 #
 # Mandatory: no
 # Default:
@@ -26,7 +26,7 @@ PidFile=<%= $zabbixagent::pid_file %>
 <% if $zabbixagent::version != '2.4' { -%>
 ### Option: LogType
 # Specifies where log messages are written to:
-<% if $kernel == 'windows' { -%>
+<% if $facts[kernel] == 'windows' { -%>
 # system  - Windows event log
 <% } else { -%>
 # system  - syslog
@@ -43,11 +43,11 @@ LogType=<%= $zabbixagent::log_type %>
 <% } -%>
 
 ### Option: LogFile
-#	Name of log file.
-<% if $kernel == 'windows' { -%>
-#	If not set, Windows Event Log is used.
+# Name of log file.
+<% if $facts[kernel] == 'windows' { -%>
+# If not set, Windows Event Log is used.
 <% } else { -%>
-#	If not set, syslog is used.
+# If not set, syslog is used.
 <% } -%>
 #
 # Mandatory: no
@@ -58,8 +58,8 @@ LogFile=<%= $zabbixagent::log_file %>
 <% } -%>
 
 ### Option: LogFileSize
-#	Maximum size of log file in MB.
-#	0 - disable automatic log rotation.
+# Maximum size of log file in MB.
+# 0 - disable automatic log rotation.
 #
 # Mandatory: no
 # Range: 0-1024
@@ -70,12 +70,12 @@ LogFileSize=<%= $zabbixagent::log_file_size %>
 <% } -%>
 
 ### Option: DebugLevel
-#	Specifies debug level
-#	0 - basic information about starting and stopping of Zabbix processes
-#	1 - critical information
-#	2 - error information
-#	3 - warnings
-#	4 - for debugging (produces lots of information)
+# Specifies debug level
+# 0 - basic information about starting and stopping of Zabbix processes
+# 1 - critical information
+# 2 - error information
+# 3 - warnings
+# 4 - for debugging (produces lots of information)
 #
 # Mandatory: no
 # Range: 0-4
@@ -86,7 +86,7 @@ DebugLevel=<%= $zabbixagent::debug_level %>
 <% } -%>
 
 ### Option: SourceIP
-#	Source IP address for outgoing connections.
+# Source IP address for outgoing connections.
 #
 # Mandatory: no
 # Default:
@@ -96,9 +96,9 @@ SourceIP=<%= $zabbixagent::source_ip %>
 <% } -%>
 
 ### Option: EnableRemoteCommands
-#	Whether remote commands from Zabbix server are allowed.
-#	0 - not allowed
-#	1 - allowed
+# Whether remote commands from Zabbix server are allowed.
+# 0 - not allowed
+# 1 - allowed
 #
 # Mandatory: no
 # Default:
@@ -108,9 +108,9 @@ EnableRemoteCommands=<%= $zabbixagent::enable_remote_commands %>
 <% } -%>
 
 ### Option: LogRemoteCommands
-#	Enable logging of executed shell commands as warnings.
-#	0 - disabled
-#	1 - enabled
+# Enable logging of executed shell commands as warnings.
+# 0 - disabled
+# 1 - enabled
 #
 # Mandatory: no
 # Default:
@@ -122,9 +122,9 @@ LogRemoteCommands=<%= $zabbixagent::log_remote_commands %>
 ##### Passive checks related
 
 ### Option: Server
-#	List of comma delimited IP addresses (or hostnames) of Zabbix servers.
-#	Incoming connections will be accepted only from the hosts listed here.
-#	If IPv6 support is enabled then '127.0.0.1', '::127.0.0.1', '::ffff:127.0.0.1' are treated equally.
+# List of comma delimited IP addresses (or hostnames) of Zabbix servers.
+# Incoming connections will be accepted only from the hosts listed here.
+# If IPv6 support is enabled then '127.0.0.1', '::127.0.0.1', '::ffff:127.0.0.1' are treated equally.
 #
 # Mandatory: no
 # Default:
@@ -136,7 +136,7 @@ Server=<%= $zabbixagent::server.join(',') %>
 <% } -%>
 
 ### Option: ListenPort
-#	Agent will listen on this port for connections from the server.
+# Agent will listen on this port for connections from the server.
 #
 # Mandatory: no
 # Range: 1024-32767
@@ -147,8 +147,8 @@ ListenPort=<%= $zabbixagent::listen_port %>
 <% } -%>
 
 ### Option: ListenIP
-#	List of comma delimited IP addresses that the agent should listen on.
-#	First IP address is sent to Zabbix server if connecting to it to retrieve list of active checks.
+# List of comma delimited IP addresses that the agent should listen on.
+# First IP address is sent to Zabbix server if connecting to it to retrieve list of active checks.
 #
 # Mandatory: no
 # Default:
@@ -158,8 +158,8 @@ ListenIP=<%= $zabbixagent::listen_ip %>
 <% } -%>
 
 ### Option: StartAgents
-#	Number of pre-forked instances of zabbix_agentd that process passive checks.
-#	If set to 0, disables passive checks and the agent will not listen on any TCP port.
+# Number of pre-forked instances of zabbix_agentd that process passive checks.
+# If set to 0, disables passive checks and the agent will not listen on any TCP port.
 #
 # Mandatory: no
 # Range: 0-100
@@ -172,12 +172,12 @@ StartAgents=<%= $zabbixagent::start_agents %>
 ##### Active checks related
 
 ### Option: ServerActive
-#	List of comma delimited IP:port (or hostname:port) pairs of Zabbix servers for active checks.
-#	If port is not specified, default port is used.
-#	IPv6 addresses must be enclosed in square brackets if port for that host is specified.
-#	If port is not specified, square brackets for IPv6 addresses are optional.
-#	If this parameter is not specified, active checks are disabled.
-#	Example: ServerActive=127.0.0.1:20051,zabbix.domain,[::1]:30051,::1,[12fc::1]
+# List of comma delimited IP:port (or hostname:port) pairs of Zabbix servers for active checks.
+# If port is not specified, default port is used.
+# IPv6 addresses must be enclosed in square brackets if port for that host is specified.
+# If port is not specified, square brackets for IPv6 addresses are optional.
+# If this parameter is not specified, active checks are disabled.
+# Example: ServerActive=127.0.0.1:20051,zabbix.domain,[::1]:30051,::1,[12fc::1]
 #
 # Mandatory: no
 # Default:
@@ -189,9 +189,9 @@ ServerActive=<%= $zabbixagent::server_active.join(',') %>
 <% } -%>
 
 ### Option: Hostname
-#	Unique, case sensitive hostname.
-#	Required for active checks and must match hostname as configured on the server.
-#	Value is acquired from HostnameItem if undefined.
+# Unique, case sensitive hostname.
+# Required for active checks and must match hostname as configured on the server.
+# Value is acquired from HostnameItem if undefined.
 #
 # Mandatory: no
 # Default:
@@ -201,8 +201,8 @@ Hostname=<%= $zabbixagent::hostname.downcase %>
 <% } -%>
 
 ### Option: HostnameItem
-#	Item used for generating Hostname if it is undefined. Ignored if Hostname is defined.
-#	Does not support UserParameters or aliases.
+# Item used for generating Hostname if it is undefined. Ignored if Hostname is defined.
+# Does not support UserParameters or aliases.
 #
 # Mandatory: no
 # Default:
@@ -212,10 +212,10 @@ HostnameItem=<%= $zabbixagent::hostname_item %>
 <% } -%>
 
 ### Option: HostMetadata
-#	Optional parameter that defines host metadata.
-#	Host metadata is used at host auto-registration process.
-#	An agent will issue an error and not start if the value is over limit of 255 characters.
-#	If not defined, value will be acquired from HostMetadataItem.
+# Optional parameter that defines host metadata.
+# Host metadata is used at host auto-registration process.
+# An agent will issue an error and not start if the value is over limit of 255 characters.
+# If not defined, value will be acquired from HostMetadataItem.
 #
 # Mandatory: no
 # Range: 0-255 characters
@@ -226,11 +226,11 @@ HostMetadata=<%= $zabbixagent::host_metadata %>
 <% } -%>
 
 ### Option: HostMetadataItem
-#	Optional parameter that defines an item used for getting host metadata.
-#	Host metadata is used at host auto-registration process.
-#	During an auto-registration request an agent will log a warning message if
-#	the value returned by specified item is over limit of 255 characters.
-#	This option is only used when HostMetadata is not defined.
+# Optional parameter that defines an item used for getting host metadata.
+# Host metadata is used at host auto-registration process.
+# During an auto-registration request an agent will log a warning message if
+# the value returned by specified item is over limit of 255 characters.
+# This option is only used when HostMetadata is not defined.
 #
 # Mandatory: no
 # Default:
@@ -240,7 +240,7 @@ HostMetadataItem=<%= $zabbixagent::host_metadata_item %>
 <% } -%>
 
 ### Option: RefreshActiveChecks
-#	How often list of active checks is refreshed, in seconds.
+# How often list of active checks is refreshed, in seconds.
 #
 # Mandatory: no
 # Range: 60-3600
@@ -251,7 +251,7 @@ RefreshActiveChecks=<%= $zabbixagent::refresh_active_checks %>
 <% } -%>
 
 ### Option: BufferSend
-#	Do not keep data longer than N seconds in buffer.
+# Do not keep data longer than N seconds in buffer.
 #
 # Mandatory: no
 # Range: 1-3600
@@ -262,8 +262,8 @@ BufferSend=<%= $zabbixagent::buffer_send %>
 <% } -%>
 
 ### Option: BufferSize
-#	Maximum number of values in a memory buffer. The agent will send
-#	all collected data to Zabbix Server or Proxy if the buffer is full.
+# Maximum number of values in a memory buffer. The agent will send
+# all collected data to Zabbix Server or Proxy if the buffer is full.
 #
 # Mandatory: no
 # Range: 2-65535
@@ -274,15 +274,15 @@ BufferSize=<%= $zabbixagent::buffer_size %>
 <% } -%>
 
 ### Option: MaxLinesPerSecond
-#	Maximum number of new lines the agent will send per second to Zabbix Server
-<% if $kernel == 'windows' { -%>
-#	or Proxy processing 'log', 'logrt' and 'eventlog' active checks.
-#	The provided value will be overridden by the parameter 'maxlines',
-#	provided in 'log', 'logrt' or 'eventlog' item keys.
+# Maximum number of new lines the agent will send per second to Zabbix Server
+<% if $facts[kernel] == 'windows' { -%>
+# or Proxy processing 'log', 'logrt' and 'eventlog' active checks.
+# The provided value will be overridden by the parameter 'maxlines',
+# provided in 'log', 'logrt' or 'eventlog' item keys.
 <% } else { -%>
-#	or Proxy processing 'log' and 'logrt' active checks.
-#	The provided value will be overridden by the parameter 'maxlines',
-#	provided in 'log' or 'logrt' item keys.
+# or Proxy processing 'log' and 'logrt' active checks.
+# The provided value will be overridden by the parameter 'maxlines',
+# provided in 'log' or 'logrt' item keys.
 <% } -%>
 #
 # Mandatory: no
@@ -296,19 +296,19 @@ MaxLinesPerSecond=<%= $zabbixagent::max_lines_per_second %>
 ############ ADVANCED PARAMETERS #################
 
 ### Option: Alias
-#	Sets an alias for an item key. It can be used to substitute long and complex item key with a smaller and simpler one.
-#	Multiple Alias parameters may be present. Multiple parameters with the same Alias key are not allowed.
-#	Different Alias keys may reference the same item key.
-<% if $kernel == 'windows' { -%>
-#	For example, to retrieve paging file usage in percents from the server:
-#	Alias=pg_usage:perf_counter[\Paging File(_Total)\% Usage]
-#	Now shorthand key pg_usage may be used to retrieve data.
-#	Aliases can be used in HostMetadataItem but not in HostnameItem or PerfCounter parameters.
+# Sets an alias for an item key. It can be used to substitute long and complex item key with a smaller and simpler one.
+# Multiple Alias parameters may be present. Multiple parameters with the same Alias key are not allowed.
+# Different Alias keys may reference the same item key.
+<% if $facts[kernel] == 'windows' { -%>
+# For example, to retrieve paging file usage in percents from the server:
+# Alias=pg_usage:perf_counter[\Paging File(_Total)\% Usage]
+# Now shorthand key pg_usage may be used to retrieve data.
+# Aliases can be used in HostMetadataItem but not in HostnameItem or PerfCounter parameters.
 <% } else { -%>
-#	For example, to retrieve the ID of user 'zabbix':
-#	Alias=zabbix.userid:vfs.file.regexp[/etc/passwd,^zabbix:.:([0-9]+),,,,\1]
-#	Now shorthand key zabbix.userid may be used to retrieve data.
-#	Aliases can be used in HostMetadataItem but not in HostnameItem parameters.
+# For example, to retrieve the ID of user 'zabbix':
+# Alias=zabbix.userid:vfs.file.regexp[/etc/passwd,^zabbix:.:([0-9]+),,,,\1]
+# Now shorthand key zabbix.userid may be used to retrieve data.
+# Aliases can be used in HostMetadataItem but not in HostnameItem parameters.
 <% } -%>
 #
 # Mandatory: no
@@ -321,7 +321,7 @@ Alias=<%= $a %>
 <% } -%>
 
 ### Option: Timeout
-#	Spend no more than Timeout seconds on processing
+# Spend no more than Timeout seconds on processing
 #
 # Mandatory: no
 # Range: 1-30
@@ -331,15 +331,15 @@ Alias=<%= $a %>
 Timeout=<%= $zabbixagent::timeout %>
 <% } -%>
 
-<% if $kernel == 'windows' { -%>
+<% if $facts[kernel] == 'windows' { -%>
 ### Option: PerfCounter
-#	Syntax: <parameter_name>,"<perf_counter_path>",<period>
-#	Defines new parameter <parameter_name> which is an average value for system performance counter <perf_counter_path> for the specified time period <period> (in seconds).
-#	For example, if you wish to receive average number of processor interrupts per second for last minute, you can define new parameter "interrupts" as following:
-#	PerfCounter = interrupts,"\Processor(0)\Interrupts/sec",60
-#	Please note double quotes around performance counter path.
-#	Samples for calculating average value will be taken every second.
-#	You may run "typeperf -qx" to get list of all performance counters available in Windows.
+# Syntax: <parameter_name>,"<perf_counter_path>",<period>
+# Defines new parameter <parameter_name> which is an average value for system performance counter <perf_counter_path> for the specified time period <period> (in seconds).
+# For example, if you wish to receive average number of processor interrupts per second for last minute, you can define new parameter "interrupts" as following:
+# PerfCounter = interrupts,"\Processor(0)\Interrupts/sec",60
+# Please note double quotes around performance counter path.
+# Samples for calculating average value will be taken every second.
+# You may run "typeperf -qx" to get list of all performance counters available in Windows.
 #
 # Mandatory: no
 # Range:
@@ -351,11 +351,11 @@ PerfCounter=<%= $pc %>
 <% } -%>
 <% } else { -%>
 ### Option: AllowRoot
-#	Allow the agent to run as 'root'. If disabled and the agent is started by 'root', the agent
-#	will try to switch to the user specified by the User configuration option instead.
-#	Has no effect if started under a regular user.
-#	0 - do not allow
-#	1 - allow
+# Allow the agent to run as 'root'. If disabled and the agent is started by 'root', the agent
+# will try to switch to the user specified by the User configuration option instead.
+# Has no effect if started under a regular user.
+# 0 - do not allow
+# 1 - allow
 #
 # Mandatory: no
 # Default:
@@ -365,8 +365,8 @@ AllowRoot=<%= $zabbixagent::allow_root %>
   <% } -%>
 
 ### Option: User
-#	Drop privileges to a specific, existing user on the system.
-#	Only has effect if run as 'root' and AllowRoot is disabled.
+# Drop privileges to a specific, existing user on the system.
+# Only has effect if run as 'root' and AllowRoot is disabled.
 #
 # Mandatory: no
 # Default:
@@ -377,11 +377,11 @@ User=<%= $zabbixagent::user %>
 <% } -%>
 
 ### Option: Include
-<% if $kernel == 'windows' { -%>
-#	You may include individual files in the configuration file.
+<% if $facts[kernel] == 'windows' { -%>
+# You may include individual files in the configuration file.
 <% } else { -%>
-#	You may include individual files or all files in a directory in the configuration file.
-#	Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
+# You may include individual files or all files in a directory in the configuration file.
+# Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
 <% } -%>
 #
 # Mandatory: no
@@ -393,7 +393,7 @@ Include=<%= $i %>
 <% } -%>
 <% } -%>
 
-<% if $kernel == 'windows' { -%>
+<% if $facts[kernel] == 'windows' { -%>
 # Include=c:\zabbix\zabbix_agentd.userparams.conf
 # Include=c:/zabbix/zabbix_agentd.userparams.conf
 <% } else { -%>
@@ -405,12 +405,12 @@ Include=<%= $i %>
 ####### USER-DEFINED MONITORED PARAMETERS #######
 
 ### Option: UnsafeUserParameters
-#	Allow all characters to be passed in arguments to user-defined parameters.
-#	The following characters are not allowed:
-#	\ ' ” ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @
-#	Additionally, newline characters are not allowed.
-#	0 - do not allow
-#	1 - allow
+# Allow all characters to be passed in arguments to user-defined parameters.
+# The following characters are not allowed:
+# \ ' ” ` * ? [ ] { } ~ $ ! & ; ( ) < > | # @
+# Additionally, newline characters are not allowed.
+# 0 - do not allow
+# 1 - allow
 #
 # Mandatory: no
 # Range: 0-1
@@ -421,10 +421,10 @@ UnsafeUserParameters=<%= $zabbixagent::unsafe_user_parameters %>
 <% } -%>
 
 ### Option: UserParameter
-#	User-defined parameter to monitor. There can be several user-defined parameters.
-#	Format: UserParameter=<key>,<shell command>
-<% if $kernel != 'windows' { -%>
-#	See 'zabbix_agentd' directory for examples.
+# User-defined parameter to monitor. There can be several user-defined parameters.
+# Format: UserParameter=<key>,<shell command>
+<% if $facts[kernel] != 'windows' { -%>
+# See 'zabbix_agentd' directory for examples.
 <% } -%>
 #
 # Mandatory: no
@@ -436,12 +436,12 @@ UserParameter=<%= $up %>
 <% } -%>
 <% } -%>
 
-<% if $kernel != 'windows' { -%>
+<% if $facts[kernel] != 'windows' { -%>
 ####### LOADABLE MODULES #######
 
 ### Option: LoadModulePath
-#	Full path to location of agent modules.
-#	Default depends on compilation options.
+# Full path to location of agent modules.
+# Default depends on compilation options.
 #
 # Mandatory: no
 # Default:
@@ -451,10 +451,10 @@ LoadModulePath=<%= $zabbixagent::load_module_path %>
   <% } -%>
 
 ### Option: LoadModule
-#	Module to load at agent startup. Modules are used to extend functionality of the agent.
-#	Format: LoadModule=<module.so>
-#	The modules must be located in directory specified by LoadModulePath.
-#	It is allowed to include multiple LoadModule parameters.
+# Module to load at agent startup. Modules are used to extend functionality of the agent.
+# Format: LoadModule=<module.so>
+# The modules must be located in directory specified by LoadModulePath.
+# It is allowed to include multiple LoadModule parameters.
 #
 # Mandatory: no
 # Default:

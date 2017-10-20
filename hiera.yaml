@@ -6,13 +6,13 @@ defaults:
 hierarchy:
 
   - name: "Operating System"
-    path: "%{operatingsystem}.yaml"
+    path: "%{facts.os.name}.yaml"
 
   - name: "OS Family"
-    path: "%{osfamily}.yaml"
+    path: "%{facts.os.family}.yaml"
 
   - name: "Kernel"
-    path: "%{kernel}.yaml"
+    path: "%{facts.kernel}.yaml"
 
   - name: "Defaults"
     path: "common.yaml"

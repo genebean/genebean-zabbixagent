@@ -2,33 +2,28 @@ require 'spec_helper'
 
 describe 'zabbixagent::service' do
   on_supported_os.each do |os, facts|
-    context "on #{os}" do
+    context "on #{os} with defaults" do
       let(:facts) do
         facts
       end
 
-      context 'with repo management enabled' do
-        let :pre_condition do
-          "class {'zabbixagent':
-            manage_repo_epel   => true,
-            manage_repo_zabbix => true,
-          }"
-        end
+      let :pre_condition do
+        "include ::zabbixagent"
+      end
 
-        # Make sure service will be running and enabled.
-        it { should contain_service('zabbix-agent').with_ensure('running') }
-        it { should contain_service('zabbix-agent').with_enable('true') }
+      # Make sure service will be running and enabled.
+      it { should contain_service('zabbix-agent').with_ensure('running') }
+      it { should contain_service('zabbix-agent').with_enable('true') }
 
-        case facts[:os]['family']
-        when 'windows'
-          it { should contain_service('zabbix-agent').with_name('Zabbix Agent') }
-        when 'Suse'
-          it { should contain_service('zabbix-agent').with_name('zabbix-agentd') }
-        else
-          it { should contain_service('zabbix-agent').with_name('zabbix-agent') }
-        end
+      case facts[:os]['family']
+      when 'windows'
+        it { should contain_service('zabbix-agent').with_name('Zabbix Agent') }
+      when 'Suse'
+        it { should contain_service('zabbix-agent').with_name('zabbix-agentd') }
+      else
+        it { should contain_service('zabbix-agent').with_name('zabbix-agent') }
       end # ends case facts[:os]['family']
-    end # ends context "on #{os}" do
+    end # ends context "on #{os} with defaults" do
   end # ends on_supported_os.each do |os, facts|
 
   ################################################
@@ -39,11 +34,9 @@ describe 'zabbixagent::service' do
   ################################################
 
   # Running a OpenSuSE.
-  context 'On OpenSuSE Leap 42.1 with repo management enabled' do
+  context 'On OpenSuSE Leap 42.1 with defaults' do
     let :pre_condition do
-      "class {'zabbixagent':
-        manage_repo_zabbix => true,
-      }"
+      "include ::zabbixagent"
     end
 
     let(:facts) do

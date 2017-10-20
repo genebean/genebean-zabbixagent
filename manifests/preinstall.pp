@@ -56,56 +56,59 @@ class zabbixagent::preinstall inherits zabbixagent {
     } # end Debian
 
     'Suse' : {
-      case $facts['os']['name'] {
-
-        'SLES' : {
-          case $facts['os']['release']['full'] {
-
-            '11.3', '11.4', '12.0', '12.1' : {
-              # Zabbix
-              if ($zabbixagent::manage_repo_zabbix) {
-                file { '/etc/zypp/repos.d/server_monitoring.repo':
-                  ensure  => file,
-                  content => epp('zabbixagent/server_monitoring.repo.epp'),
-                  notify  => Exec['zypper refresh'],
-                }
-              }
-            }
-
-            default : {
-              # lint:ignore:80chars
-              fail("${facts['os']['name']} ${$facts['os']['release']['full']} is not supported")
-              # lint:endignore
-            }
-
-          } # end case $facts['os']['release']['full']
-
-        } # end SLES
-
-        'OpenSuSE' : {
-          if ($zabbixagent::manage_repo_zabbix) {
-            file { '/etc/zypp/repos.d/server_monitoring.repo':
-              ensure  => file,
-              content => epp('zabbixagent/server_monitoring.repo.epp'),
-              notify  => Exec['zypper refresh'],
-            }
-          }
-        } # end OpenSuSE
-
-        default : {
-        }
-
-      } # end case $::operatingsystem
-
-
-
-      exec { 'zypper refresh':
-        path        => '/usr/bin',
-        user        => 'root',
-        logoutput   => true,
-        refreshonly => true,
-        command     => 'zypper --gpg-auto-import-keys refresh',
+      if ($zabbixagent::manage_repo_zabbix) {
+        fail('Repository managment for the SUSE family is disabled until we can find reliable repos to use.')
       }
+      # case $facts['os']['name'] {
+
+      #   'SLES' : {
+      #     case $facts['os']['release']['full'] {
+
+      #       '11.3', '11.4', '12.0', '12.1' : {
+      #         # Zabbix
+      #         if ($zabbixagent::manage_repo_zabbix) {
+      #           file { '/etc/zypp/repos.d/server_monitoring.repo':
+      #             ensure  => file,
+      #             content => epp('zabbixagent/server_monitoring.repo.epp'),
+      #             notify  => Exec['zypper refresh'],
+      #           }
+      #         }
+      #       }
+
+      #       default : {
+      #         # lint:ignore:80chars
+      #         fail("${facts['os']['name']} ${$facts['os']['release']['full']} is not supported")
+      #         # lint:endignore
+      #       }
+
+      #     } # end case $facts['os']['release']['full']
+
+      #   } # end SLES
+
+      #   'OpenSuSE' : {
+      #     if ($zabbixagent::manage_repo_zabbix) {
+      #       file { '/etc/zypp/repos.d/server_monitoring.repo':
+      #         ensure  => file,
+      #         content => epp('zabbixagent/server_monitoring.repo.epp'),
+      #         notify  => Exec['zypper refresh'],
+      #       }
+      #     }
+      #   } # end OpenSuSE
+
+      #   default : {
+      #   }
+
+      # } # end case $facts['os']['name']
+
+
+
+      # exec { 'zypper refresh':
+      #   path        => '/usr/bin',
+      #   user        => 'root',
+      #   logoutput   => true,
+      #   refreshonly => true,
+      #   command     => 'zypper --gpg-auto-import-keys refresh',
+      # }
 
     } # end Suse
 

@@ -8,20 +8,20 @@ describe 'zabbixagent::service' do
       end
 
       let :pre_condition do
-        "include ::zabbixagent"
+        'include ::zabbixagent'
       end
 
       # Make sure service will be running and enabled.
-      it { should contain_service('zabbix-agent').with_ensure('running') }
-      it { should contain_service('zabbix-agent').with_enable('true') }
+      it { is_expected.to contain_service('zabbix-agent').with_ensure('running') }
+      it { is_expected.to contain_service('zabbix-agent').with_enable('true') }
 
       case facts[:os]['family']
       when 'windows'
-        it { should contain_service('zabbix-agent').with_name('Zabbix Agent') }
+        it { is_expected.to contain_service('zabbix-agent').with_name('Zabbix Agent') }
       when 'Suse'
-        it { should contain_service('zabbix-agent').with_name('zabbix-agentd') }
+        it { is_expected.to contain_service('zabbix-agent').with_name('zabbix-agentd') }
       else
-        it { should contain_service('zabbix-agent').with_name('zabbix-agent') }
+        it { is_expected.to contain_service('zabbix-agent').with_name('zabbix-agent') }
       end # ends case facts[:os]['family']
     end # ends context "on #{os} with defaults" do
   end # ends on_supported_os.each do |os, facts|
@@ -36,25 +36,25 @@ describe 'zabbixagent::service' do
   # Running a OpenSuSE.
   context 'On OpenSuSE Leap 42.1 with defaults' do
     let :pre_condition do
-      "include ::zabbixagent"
+      'include ::zabbixagent'
     end
 
     let(:facts) do
       {
-          'kernel' => 'Linux',
-          'os'     => {
-            'family'  => 'Suse',
-            'name'    => 'OpenSuSE',
-            'release' => {
-              'full' => '42.1'
-            },
+        'kernel' => 'Linux',
+        'os'     => {
+          'family'  => 'Suse',
+          'name'    => 'OpenSuSE',
+          'release' => {
+            'full' => '42.1',
           },
+        },
       }
     end
 
     # Make sure service will be running and enabled.
-    it { should contain_service('zabbix-agent').with_ensure('running') }
-    it { should contain_service('zabbix-agent').with_name('zabbix-agentd') }
-    it { should contain_service('zabbix-agent').with_enable('true') }
+    it { is_expected.to contain_service('zabbix-agent').with_ensure('running') }
+    it { is_expected.to contain_service('zabbix-agent').with_name('zabbix-agentd') }
+    it { is_expected.to contain_service('zabbix-agent').with_enable('true') }
   end
 end

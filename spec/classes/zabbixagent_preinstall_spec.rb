@@ -17,39 +17,39 @@ describe 'zabbixagent::preinstall' do
       case facts[:os]['family']
       when 'RedHat'
         it 'should create epel.repo' do
-          should contain_file('/etc/yum.repos.d/epel.repo').with_content(/mirrorlist=https:\/\/mirrors.fedoraproject.org\/.*epel-#{facts[:os]['release']['major']}/)
+          is_expected.to contain_file('/etc/yum.repos.d/epel.repo').with_content(/mirrorlist=https:\/\/mirrors.fedoraproject.org\/.*epel-#{facts[:os]['release']['major']}/)
         end
 
         it 'should create epel-testing.repo' do
-          should contain_file('/etc/yum.repos.d/epel-testing.repo').with_content(/mirrorlist=https:\/\/mirrors.fedoraproject.org\/.*testing-epel#{facts[:os]['release']['major']}/)
+          is_expected.to contain_file('/etc/yum.repos.d/epel-testing.repo').with_content(/mirrorlist=https:\/\/mirrors.fedoraproject.org\/.*testing-epel#{facts[:os]['release']['major']}/)
         end
 
-        it {should contain_exec('yum clean all')}
-        it {should contain_file('/etc/yum.repos.d/epel.repo').that_notifies('Exec[yum clean all]')}
-        it {should contain_file('/etc/yum.repos.d/epel-testing.repo').that_notifies('Exec[yum clean all]')}
-        it {should contain_file('/etc/yum.repos.d/zabbix.repo').that_notifies('Exec[yum clean all]')}
+        it { is_expected.to contain_exec('yum clean all') }
+        it { is_expected.to contain_file('/etc/yum.repos.d/epel.repo').that_notifies('Exec[yum clean all]') }
+        it { is_expected.to contain_file('/etc/yum.repos.d/epel-testing.repo').that_notifies('Exec[yum clean all]') }
+        it { is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').that_notifies('Exec[yum clean all]') }
 
         case facts[:os]['release']['major']
         when '5'
           it 'should create zabbix.repo' do
-            should contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/baseurl=http:\/\/repo.zabbix.com\/zabbix\/3.2\/rhel\/#{facts[:os]['release']['major']}\/\$basearch\//)
-            should contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/gpgkey=http:\/\/repo.zabbix.com\/RPM-GPG-KEY-ZABBIX-A14FE591-EL5/)
+            is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/baseurl=http:\/\/repo.zabbix.com\/zabbix\/3.2\/rhel\/#{facts[:os]['release']['major']}\/\$basearch\//)
+            is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/gpgkey=http:\/\/repo.zabbix.com\/RPM-GPG-KEY-ZABBIX-A14FE591-EL5/)
           end
         else
           it 'should create zabbix.repo' do
-            should contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/baseurl=http:\/\/repo.zabbix.com\/zabbix\/3.2\/rhel\/#{facts[:os]['release']['major']}\/\$basearch\//)
-            should contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/gpgkey=http:\/\/repo.zabbix.com\/RPM-GPG-KEY-ZABBIX-A14FE591/)
+            is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/baseurl=http:\/\/repo.zabbix.com\/zabbix\/3.2\/rhel\/#{facts[:os]['release']['major']}\/\$basearch\//)
+            is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/gpgkey=http:\/\/repo.zabbix.com\/RPM-GPG-KEY-ZABBIX-A14FE591/)
           end
         end # ends case facts[:operatingsystemmajrelease]
       when 'Debian'
         it 'should create zabbix.list' do
-          should contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.2\/#{facts[:os]['name'].downcase} #{facts[:os]['lsb']['distcodename']} main/)
+          is_expected.to contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.2\/#{facts[:os]['name'].downcase} #{facts[:os]['lsb']['distcodename']} main/)
         end
 
-        it {should contain_exec('apt-get update')}
-        it {should contain_file('/etc/apt/sources.list.d/zabbix.list').that_notifies('Exec[apt-get update]')}
+        it { is_expected.to contain_exec('apt-get update') }
+        it { is_expected.to contain_file('/etc/apt/sources.list.d/zabbix.list').that_notifies('Exec[apt-get update]') }
       when 'Suse'
-        it {should raise_error(/Repository managment for the SUSE family is disabled/)}
+        it { is_expected.to raise_error(/Repository managment for the SUSE family is disabled/) }
       else
         it { is_expected.to compile.with_all_deps }
       end # ends case facts[:os]['family']
@@ -84,6 +84,6 @@ describe 'zabbixagent::preinstall' do
       }"
     end
 
-    it {should raise_error(/Repository managment for the SUSE family is disabled/)}
+    it { is_expected.to raise_error(/Repository managment for the SUSE family is disabled/) }
   end # ens context 'On a OpenSuSE Leap 42.1 with repo management enabled'
 end

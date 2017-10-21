@@ -32,8 +32,8 @@ describe 'zabbixagent::config' do
         }"
         end
 
-        it {should contain_file("#{@custompath}").with_ensure('directory')}
-        it {should contain_file("#{@custompath}/#{@configfile}")}
+        it { is_expected.to contain_file("#{@custompath}").with_ensure('directory') }
+        it { is_expected.to contain_file("#{@custompath}/#{@configfile}") }
       end
 
       describe 'with server and server_active params set' do
@@ -45,13 +45,13 @@ describe 'zabbixagent::config' do
             }"
           end
 
-          it {should contain_file("#{@configdir}").with_ensure('directory')}
-          it {should contain_file("#{@configdir}/#{@configfile}")}
-          
+          it { is_expected.to contain_file("#{@configdir}").with_ensure('directory') }
+          it { is_expected.to contain_file("#{@configdir}/#{@configfile}") }
+
           it 'should set Server and ServerActive' do
-            should contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com/)
-            should contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com/)
-            should contain_file("#{@configdir}/#{@configfile}").with_content(/Hostname=somehost.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Hostname=somehost.example.com/)
           end
         end # ends context 'to a single server'
 
@@ -64,9 +64,9 @@ describe 'zabbixagent::config' do
           end
 
           it 'should set Servers and ServersActive' do
-            should contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com,node.example.com/)
-            should contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com,node.example.com/)
-            should contain_file("#{@configdir}/#{@configfile}").with_content(/Hostname=somehost.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com,node.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com,node.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Hostname=somehost.example.com/)
           end
         end # ends context 'to an array of servers'
       end # ends describe 'with server and server_active params set'

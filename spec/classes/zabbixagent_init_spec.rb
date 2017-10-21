@@ -38,9 +38,10 @@ describe 'zabbixagent' do
             manage_repo_zabbix => true,
           }"
         end
+
         case facts[:os]['family']
         when 'Suse'
-          it {should raise_error(/Repository managment for the SUSE family is disabled/)}
+          it { is_expected.to raise_error(/Repository managment for the SUSE family is disabled/) }
         else
           it { is_expected.to compile.with_all_deps }
         end
@@ -56,7 +57,7 @@ describe 'zabbixagent' do
           end
 
           it 'should pass parameters to zabbixagent' do
-            should contain_class('zabbixagent').with(
+            is_expected.to contain_class('zabbixagent').with(
               'server'        => 'zabbix.example.com',
               'server_active' => 'zabbix.example.com',
             )
@@ -72,7 +73,7 @@ describe 'zabbixagent' do
           end
 
           it 'should pass parameters to zabbixagent' do
-            should contain_class('zabbixagent').with(
+            is_expected.to contain_class('zabbixagent').with(
               'server'        => '["zabbix.example.com", "node.example.com"]',
               'server_active' => '["zabbix.example.com", "node.example.com"]',
             )
@@ -90,8 +91,8 @@ describe 'zabbixagent' do
           }"
         end
 
-        it "should require => Class[Stdlib]" do
-          should contain_package('zabbix-agent').that_requires("Class[Stdlib]")
+        it 'should require => Class[Stdlib]' do
+          is_expected.to contain_package('zabbix-agent').that_requires('Class[Stdlib]')
         end
       end # ends context 'with custom require settings'
 
@@ -107,18 +108,18 @@ describe 'zabbixagent' do
         end
 
         it 'should ensure => latest' do
-          should contain_package('zabbix-agent').with_ensure('latest')
+          is_expected.to contain_package('zabbix-agent').with_ensure('latest')
         end
 
-        it {should contain_file("#{@configdir}/#{@configfile}").with_content(/Include=#{@includesdir}\/userparams.conf/)}
+        it { is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Include=#{@includesdir}\/userparams.conf/) }
 
         it 'should set LogFileSize=0' do
-          should contain_file("#{@configdir}/#{@configfile}").with_content(/LogFileSize=0/)
+          is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/LogFileSize=0/)
         end
 
         it 'should set Server and ServerActive to zabbix.example.com,offsite.example.com' do
-          should contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com,offsite.example.com/)
-          should contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com,offiste.example.com/)
+          is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com,offsite.example.com/)
+          is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com,offiste.example.com/)
         end
       end # ends describe 'with exmaple settings from README.md'
 
@@ -132,7 +133,7 @@ describe 'zabbixagent' do
 
           it 'should raise error' do
             expect {
-              should compile
+              is_expected.to compile
             }.to raise_error(/include_dir was removed in v2.1. Please update/)
           end
         end
@@ -146,7 +147,7 @@ describe 'zabbixagent' do
 
           it 'should raise error' do
             expect {
-              should compile
+              is_expected.to compile
             }.to raise_error(/include_file was removed in v2.1. Please update/)
           end
         end
@@ -160,7 +161,7 @@ describe 'zabbixagent' do
 
           it 'should raise error' do
             expect {
-              should compile
+              is_expected.to compile
             }.to raise_error(/logfile was removed in v2.1. Please update/)
           end
         end
@@ -174,7 +175,7 @@ describe 'zabbixagent' do
 
           it 'should raise error' do
             expect {
-              should compile
+              is_expected.to compile
             }.to raise_error(/servers was removed in v2.1. Please update/)
           end
         end
@@ -188,7 +189,7 @@ describe 'zabbixagent' do
 
           it 'should raise error' do
             expect {
-              should compile
+              is_expected.to compile
             }.to raise_error(/servers_active was removed in v2.1. Please update/)
           end
         end
@@ -205,7 +206,7 @@ describe 'zabbixagent' do
 
           it 'should raise error' do
             expect {
-              should compile
+              is_expected.to compile
             }.to raise_error(/The parameter log_type is only supported since Zabbix 3.0./)
           end
         end
@@ -220,7 +221,7 @@ describe 'zabbixagent' do
 
           it 'should raise error' do
             expect {
-              should compile
+              is_expected.to compile
             }.to raise_error(/The parameter tls_connect is only supported since Zabbix 3.0./)
           end
         end

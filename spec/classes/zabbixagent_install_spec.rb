@@ -17,7 +17,7 @@ describe 'zabbixagent::install' do
             }"
           end
 
-          it {should raise_error(/Repository managment for the SUSE family is disabled/)}
+          it { is_expected.to raise_error(/Repository managment for the SUSE family is disabled/) }
         end
         context 'with repo management disabled' do
           let :pre_condition do
@@ -28,19 +28,19 @@ describe 'zabbixagent::install' do
           end
 
           # Make sure package will be installed.
-          it { should contain_package('zabbix-agent').with_ensure('present') }
-          it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
+          it { is_expected.to contain_package('zabbix-agent').with_ensure('present') }
+          it { is_expected.to contain_package('zabbix-agent').with_name('zabbix-agent') }
         end
       when 'windows'
         context 'with defaults' do
           let :pre_condition do
-            "include zabbixagent"
+            'include ::zabbixagent'
           end
 
           # Make sure package will be installed.
-          it { should contain_package('zabbix-agent').with_ensure('present') }
-          it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
-          it { should contain_package('zabbix-agent').with_provider('chocolatey') }
+          it { is_expected.to contain_package('zabbix-agent').with_ensure('present') }
+          it { is_expected.to contain_package('zabbix-agent').with_name('zabbix-agent') }
+          it { is_expected.to contain_package('zabbix-agent').with_provider('chocolatey') }
         end
       else
         context 'with repo management enabled' do
@@ -52,8 +52,8 @@ describe 'zabbixagent::install' do
           end
 
           # Make sure package will be installed.
-          it { should contain_package('zabbix-agent').with_ensure('present') }
-          it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
+          it { is_expected.to contain_package('zabbix-agent').with_ensure('present') }
+          it { is_expected.to contain_package('zabbix-agent').with_name('zabbix-agent') }
         end # ends context 'with repo management enabled'
       end # ends case facts[:osfamily]
     end

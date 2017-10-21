@@ -1,29 +1,22 @@
 # Installs the zabbix agent
 class zabbixagent::install inherits zabbixagent {
 
-  $_package_name = $facts['os']['family'] ? {
-    'Suse' => $zabbixagent::version ? {
-      '2.4'   => 'zabbix24-agent',
-      '3.0'   => 'zabbix30-agent',
-      '3.2'   => 'zabbix32-agent',
-      default => 'zabbix32-agent',
-    },
-
-    default => $zabbixagent::package_name,
-  }
+  $_package_name = $zabbixagent::package_name
 
   case $facts['kernel'] {
     'Linux'   : {
 
       if ($_package_name != 'zabbix-agent') {
-        package { 'zabbix-agent':
+        package { 'standard zabbix-agent':
           ensure => absent,
-          before => Package[$_package_name],
+          name   => 'zabbix-agent',
+          before => Package['zabbix-agent'],
         }
       }
 
-      package { $_package_name:
+      package { 'zabbix-agent':
         ensure  => $zabbixagent::ensure_setting,
+        name    => $_package_name,
         notify  => Class['::zabbixagent::service'],
         require => $zabbixagent::custom_require_linux,
       }

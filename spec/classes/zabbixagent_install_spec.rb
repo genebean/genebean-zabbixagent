@@ -28,8 +28,8 @@ describe 'zabbixagent::install' do
           end
 
           # Make sure package will be installed.
-          it { should contain_package('zabbix32-agent').with_ensure('present') }
-          it { should contain_package('zabbix32-agent').with_name('zabbix32-agent') }
+          it { should contain_package('zabbix-agent').with_ensure('present') }
+          it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
         end
       when 'windows'
         context 'with defaults' do

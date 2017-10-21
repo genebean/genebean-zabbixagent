@@ -20,6 +20,15 @@ describe 'zabbixagent::preinstall' do
           should contain_file('/etc/yum.repos.d/epel.repo').with_content(/mirrorlist=https:\/\/mirrors.fedoraproject.org\/.*epel-#{facts[:os]['release']['major']}/)
         end
 
+        it 'should create epel-testing.repo' do
+          should contain_file('/etc/yum.repos.d/epel-testing.repo').with_content(/mirrorlist=https:\/\/mirrors.fedoraproject.org\/.*testing-epel#{facts[:os]['release']['major']}/)
+        end
+
+        it {should contain_exec('yum clean all')}
+        it {should contain_file('/etc/yum.repos.d/epel.repo').that_notifies('Exec[yum clean all]')}
+        it {should contain_file('/etc/yum.repos.d/epel-testing.repo').that_notifies('Exec[yum clean all]')}
+        it {should contain_file('/etc/yum.repos.d/zabbix.repo').that_notifies('Exec[yum clean all]')}
+
         case facts[:os]['release']['major']
         when '5'
           it 'should create zabbix.repo' do
@@ -36,9 +45,14 @@ describe 'zabbixagent::preinstall' do
         it 'should create zabbix.list' do
           should contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.2\/#{facts[:os]['name'].downcase} #{facts[:os]['lsb']['distcodename']} main/)
         end
+
+        it {should contain_exec('apt-get update')}
+        it {should contain_file('/etc/apt/sources.list.d/zabbix.list').that_notifies('Exec[apt-get update]')}
       when 'Suse'
         it {should raise_error(/Repository managment for the SUSE family is disabled/)}
-      end # ends case facts[:osfamily]
+      else
+        it { is_expected.to compile.with_all_deps }
+      end # ends case facts[:os]['family']
     end # ends context "on #{os} with repo management enabled"
   end # ends on_supported_os.each do |os, facts|
 

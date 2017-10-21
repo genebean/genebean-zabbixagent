@@ -32,6 +32,7 @@ describe 'zabbixagent::config' do
         }"
         end
 
+        it {should contain_file("#{@custompath}").with_ensure('directory')}
         it {should contain_file("#{@custompath}/#{@configfile}")}
       end
 
@@ -44,6 +45,9 @@ describe 'zabbixagent::config' do
             }"
           end
 
+          it {should contain_file("#{@configdir}").with_ensure('directory')}
+          it {should contain_file("#{@configdir}/#{@configfile}")}
+          
           it 'should set Server and ServerActive' do
             should contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com/)
             should contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com/)

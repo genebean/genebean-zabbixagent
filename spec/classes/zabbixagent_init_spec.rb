@@ -27,7 +27,7 @@ describe 'zabbixagent' do
       # Check that all classes are present
       it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_class('zabbixagent') }
-      it { is_expected.to contain_class('zabbixagent::install') }
+      it { is_expected.to contain_class('zabbixagent::preinstall') }
       it { is_expected.to contain_class('zabbixagent::install') }
       it { is_expected.to contain_class('zabbixagent::config') }
       it { is_expected.to contain_class('zabbixagent::service') }
@@ -38,8 +38,12 @@ describe 'zabbixagent' do
             manage_repo_zabbix => true,
           }"
         end
-
-        it { is_expected.to compile.with_all_deps }
+        case facts[:os]['family']
+        when 'Suse'
+          it {should raise_error(/Repository managment for the SUSE family is disabled/)}
+        else
+          it { is_expected.to compile.with_all_deps }
+        end
       end # ends context 'with manage_repo_zabbix => true'
 
       describe 'with server and server_active params set' do

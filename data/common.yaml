@@ -1,0 +1,65 @@
+---
+# depreciated vars
+zabbixagent::include_dir:
+zabbixagent::include_file:
+zabbixagent::logfile:
+zabbixagent::servers:
+zabbixagent::servers_active:
+
+# perinstall settings
+zabbixagent::manage_repo_epel: false
+zabbixagent::manage_repo_zabbix: false
+
+# install settings
+zabbixagent::custom_require_linux:
+zabbixagent::custom_require_windows:
+zabbixagent::ensure_setting: 'present'
+
+# config settings
+zabbixagent::allow_root:
+zabbixagent::buffer_send:
+zabbixagent::buffer_size:
+zabbixagent::debug_level:
+zabbixagent::enable_remote_commands:
+zabbixagent::host_metadata:
+zabbixagent::host_metadata_item: 'system.uname'
+zabbixagent::hostname: "%{::fqdn}"
+zabbixagent::hostname_item:
+zabbixagent::include_files:
+zabbixagent::item_alias:
+zabbixagent::listen_ip:
+zabbixagent::listen_port:
+zabbixagent::load_module:
+zabbixagent::load_module_path:
+zabbixagent::log_file_size:
+zabbixagent::log_remote_commands:
+zabbixagent::log_type:
+zabbixagent::max_lines_per_second:
+zabbixagent::perf_counter:
+zabbixagent::pid_file: '/var/run/zabbix/zabbix_agentd.pid'
+zabbixagent::refresh_active_checks:
+zabbixagent::server: '127.0.0.1'
+zabbixagent::server_active: '127.0.0.1'
+zabbixagent::source_ip:
+zabbixagent::start_agents:
+zabbixagent::timeout:
+zabbixagent::tls_accept:
+zabbixagent::tls_ca_file:
+zabbixagent::tls_cert_file:
+zabbixagent::tls_connect:
+zabbixagent::tls_crl_file:
+zabbixagent::tls_key_file:
+zabbixagent::tls_psk_file:
+zabbixagent::tls_psk_identity:
+zabbixagent::tls_server_cert_issuer:
+zabbixagent::tls_server_cert_subject:
+zabbixagent::unsafe_user_parameters:
+zabbixagent::user_parameter:
+zabbixagent::user:
+zabbixagent::version: '3.2'
+zabbixagent::config_dir: fail($fail_message)
+zabbixagent::log_file: fail($fail_message)
+zabbixagent::fail_message: "${::kernel} is not yet supported by this module."
+zabbixagent::package_name: 'zabbix-agent'
+zabbixagent::service_name: 'zabbix-agent'
+zabbixagent::config_name: 'zabbix_agentd.conf'

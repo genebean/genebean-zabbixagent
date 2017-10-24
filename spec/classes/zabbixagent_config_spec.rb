@@ -1,142 +1,75 @@
 require 'spec_helper'
 
 describe 'zabbixagent::config' do
+  on_supported_os.each do |os, facts|
+    context "on #{os}" do
+      let(:facts) do
+        facts
+      end
 
-  describe 'with server and server_active params set' do
-    let :facts do
-      {
-        :kernel          => 'Linux',
-        :osfamily        => 'RedHat',
-        :operatingsystem => 'RedHat',
-        :fqdn            => 'SOMEHOST.example.com'
-      }
-    end
+      let(:node) { 'SOMEHOST.example.com' }
+      before(:each) do
+        case facts[:os]['family']
+        when 'Suse'
+          @configdir  = '/etc/zabbix'
+          @configfile = 'zabbix-agentd.conf'
+          @custompath = '/usr/local/etc/zabbix'
+        when 'windows'
+          @configdir  = 'C:/ProgramData/zabbix'
+          @configfile = 'zabbix_agentd.conf'
+          @custompath = 'C:/custompath/zabbix'
+        else
+          @configdir  = '/etc/zabbix'
+          @configfile = 'zabbix_agentd.conf'
+          @custompath = '/usr/local/etc/zabbix'
+        end
+      end
 
-    context 'to a single server' do
-      let :pre_condition do
-        "class {'zabbixagent':
-          server        => 'zabbix.example.com',
-          server_active => 'zabbix.example.com',
+      context 'with config_dir set' do
+        let :pre_condition do
+          "class { 'zabbixagent':
+          config_dir   => '#{@custompath}',
         }"
+        end
+
+        it { is_expected.to contain_file("#{@custompath}").with_ensure('directory') }
+        it { is_expected.to contain_file("#{@custompath}/#{@configfile}") }
       end
 
-      it 'should set Server and ServerActive' do
-        should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content(/Server=zabbix.example.com/)
-        should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content(/ServerActive=zabbix.example.com/)
-        should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content(/Hostname=somehost.example.com/)
-      end
-    end
+      describe 'with server and server_active params set' do
+        context 'to a single server' do
+          let :pre_condition do
+            "class {'zabbixagent':
+              server        => 'zabbix.example.com',
+              server_active => 'zabbix.example.com',
+            }"
+          end
 
-    context 'to an array of servers' do
-      let :pre_condition do
-        "class {'zabbixagent':
-          server        => ['zabbix.example.com', 'node.example.com'],
-          server_active => ['zabbix.example.com', 'node.example.com'],
-        }"
-      end
+          it { is_expected.to contain_file("#{@configdir}").with_ensure('directory') }
+          it { is_expected.to contain_file("#{@configdir}/#{@configfile}") }
 
-      it 'should set Servers and ServersActive' do
-        should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content(/Server=zabbix.example.com,node.example.com/)
-        should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content(/ServerActive=zabbix.example.com,node.example.com/)
-        should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content(/Hostname=somehost.example.com/)
-      end
-    end
+          it 'should set Server and ServerActive' do
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Hostname=somehost.example.com/)
+          end
+        end # ends context 'to a single server'
 
-  end
+        context 'to an array of servers' do
+          let :pre_condition do
+            "class {'zabbixagent':
+              server        => ['zabbix.example.com', 'node.example.com'],
+              server_active => ['zabbix.example.com', 'node.example.com'],
+            }"
+          end
 
-  describe 'with server params set on OpenSuSE Leap' do
-    let :facts do
-      {
-        :kernel                 => 'Linux',
-        :osfamily               => 'Suse',
-        :operatingsystem        => 'OpenSuSE',
-        :operatingsystemrelease => '42.1',
-        :fqdn                   => 'SOMEHOST.example.com'
-      }
-    end
-
-    context 'to a single server' do
-      let :pre_condition do
-        "class {'zabbixagent':
-          server        => 'zabbix.example.com',
-          server_active => 'zabbix.example.com',
-        }"
-      end
-
-      it 'should set Server and Hostname' do
-        should contain_file('/etc/zabbix/zabbix-agentd.conf').with_content(/Server=zabbix.example.com/)
-        should contain_file('/etc/zabbix/zabbix-agentd.conf').with_content(/Hostname=somehost.example.com/)
-      end
-    end
-
-  end
-
-  describe 'with server params set on SLES' do
-    let :facts do
-      {
-        :kernel                 => 'Linux',
-        :osfamily               => 'Suse',
-        :operatingsystem        => 'SLES',
-        :operatingsystemrelease => '12.1',
-        :fqdn                   => 'SOMEHOST.example.com'
-      }
-    end
-
-    context 'to a single server' do
-      let :pre_condition do
-        "class {'zabbixagent':
-          server        => 'zabbix.example.com',
-          server_active => 'zabbix.example.com',
-        }"
-      end
-
-      it 'should set Server and Hostname' do
-        should contain_file('/etc/zabbix/zabbix-agentd.conf').with_content(/Server=zabbix.example.com/)
-        should contain_file('/etc/zabbix/zabbix-agentd.conf').with_content(/Hostname=somehost.example.com/)
-      end
-    end
-
-  end
-
-  describe 'with config_dir set' do
-    context 'on Linux' do
-      let :facts do
-        {
-            :kernel          => 'Linux',
-            :osfamily        => 'RedHat',
-            :operatingsystem => 'RedHat'
-        }
-      end
-
-      let :pre_condition do
-        "class { 'zabbixagent':
-        config_dir   => '/usr/local/etc/zabbix',
-      }"
-      end
-
-      it "should write the config to /usr/local/etc/zabbix/" do
-        should contain_file('/usr/local/etc/zabbix/zabbix_agentd.conf')
-      end
-    end
-
-    context 'on Windows' do
-      let :facts do
-        {
-            :kernel          => 'windows',
-            :osfamily        => 'windows',
-            :operatingsystem => 'windows'
-        }
-      end
-
-      let :pre_condition do
-        "class { 'zabbixagent':
-        config_dir   => 'C:/ProgramData/zabbix',
-      }"
-      end
-
-      it "should write the config to C:/ProgramData/zabbix/" do
-        should contain_file('C:/ProgramData/zabbix/zabbix_agentd.conf')
-      end
+          it 'should set Servers and ServersActive' do
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Server=zabbix.example.com,node.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/ServerActive=zabbix.example.com,node.example.com/)
+            is_expected.to contain_file("#{@configdir}/#{@configfile}").with_content(/Hostname=somehost.example.com/)
+          end
+        end # ends context 'to an array of servers'
+      end # ends describe 'with server and server_active params set'
     end
   end
 end

@@ -1,93 +1,60 @@
 require 'spec_helper'
 
 describe 'zabbixagent::service' do
+  on_supported_os.each do |os, facts|
+    context "on #{os} with defaults" do
+      let(:facts) do
+        facts
+      end
 
-  # Running a RedHat OS.
-  context 'On a RedHat OS with repo management enabled' do
-    let :pre_condition do
-      "class {'zabbixagent':
-        manage_repo_epel   => true,
-        manage_repo_zabbix => true,
-      }"
-    end
+      let :pre_condition do
+        'include ::zabbixagent'
+      end
 
-    let :facts do
-      {
-          :kernel          => 'Linux',
-          :osfamily        => 'RedHat',
-          :operatingsystem => 'RedHat'
-      }
-    end
+      # Make sure service will be running and enabled.
+      it { is_expected.to contain_service('zabbix-agent').with_ensure('running') }
+      it { is_expected.to contain_service('zabbix-agent').with_enable('true') }
 
-    # Make sure service will be running and enabled.
-    it { should contain_service('zabbix-agent').with_ensure('running') }
-    it { should contain_service('zabbix-agent').with_name('zabbix-agent') }
-    it { should contain_service('zabbix-agent').with_enable('true') }
-  end
+      case facts[:os]['family']
+      when 'windows'
+        it { is_expected.to contain_service('zabbix-agent').with_name('Zabbix Agent') }
+      when 'Suse'
+        it { is_expected.to contain_service('zabbix-agent').with_name('zabbix-agentd') }
+      else
+        it { is_expected.to contain_service('zabbix-agent').with_name('zabbix-agent') }
+      end # ends case facts[:os]['family']
+    end # ends context "on #{os} with defaults" do
+  end # ends on_supported_os.each do |os, facts|
 
-  # Running a Windows OS.
-  context 'On Windows' do
-    let :pre_condition do
-      "include zabbixagent"
-    end
-
-    let :facts do
-      {
-          :kernel          => 'windows',
-          :osfamily        => 'windows',
-          :operatingsystem => 'windows'
-      }
-    end
-
-    # Make sure service will be running and enabled.
-    it { should contain_service('zabbix-agent').with_ensure('running') }
-    it { should contain_service('zabbix-agent').with_name('Zabbix Agent') }
-    it { should contain_service('zabbix-agent').with_enable('true') }
-  end
+  ################################################
+  #
+  #    These are not yet supported by facterdb
+  #    Once they are, migrate settings to above
+  #
+  ################################################
 
   # Running a OpenSuSE.
-  context 'On OpenSuSE Leap 42.1 with repo management enabled' do
+  context 'On OpenSuSE Leap 42.1 with defaults' do
     let :pre_condition do
-      "class {'zabbixagent':
-        manage_repo_zabbix => true,
-      }"
+      'include ::zabbixagent'
     end
 
-    let :facts do
+    let(:facts) do
       {
-          :kernel                 => 'Linux',
-          :osfamily               => 'Suse',
-          :operatingsystem        => 'OpenSuSE',
-          :operatingsystemrelease => '42.1'
+        'kernel' => 'Linux',
+        'os'     => {
+          'family'  => 'Suse',
+          'name'    => 'OpenSuSE',
+          'release' => {
+            'full' => '42.1',
+          },
+        },
       }
     end
 
     # Make sure service will be running and enabled.
-    it { should contain_service('zabbix-agent').with_ensure('running') }
-    it { should contain_service('zabbix-agent').with_name('zabbix-agentd') }
-    it { should contain_service('zabbix-agent').with_enable('true') }
-  end
-
-  # Running a SLES.
-  context 'On SLES 12.1 with repo management enabled' do
-    let :pre_condition do
-      "class {'zabbixagent':
-        manage_repo_zabbix => true,
-      }"
-    end
-
-    let :facts do
-      {
-          :kernel                 => 'Linux',
-          :osfamily               => 'Suse',
-          :operatingsystem        => 'SLES',
-          :operatingsystemrelease => '12.1'
-      }
-    end
-
-    # Make sure service will be running and enabled.
-    it { should contain_service('zabbix-agent').with_ensure('running') }
-    it { should contain_service('zabbix-agent').with_name('zabbix-agentd') }
-    it { should contain_service('zabbix-agent').with_enable('true') }
+    it { is_expected.to contain_service('zabbix-agent').with_ensure('running') }
+    it { is_expected.to contain_service('zabbix-agent').with_name('zabbix-agentd') }
+    it { is_expected.to contain_service('zabbix-agent').with_enable('true') }
   end
 end

@@ -1,0 +1,42 @@
+################################################################
+################################################################
+#
+#        This file is managed by Puppet
+#
+################################################################
+################################################################
+
+################################################################
+#
+#   This section replaces /etc/yum.repos.d/epel.repo
+#
+################################################################
+
+[epel]
+name=Extra Packages for Enterprise Linux <%= $facts[os][release][major] %> - $basearch
+#baseurl=http://download.fedoraproject.org/pub/epel/<%= $facts[os][release][major] %>/$basearch
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-<%= $facts[os][release][major] %>&arch=$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=1
+gpgkey=http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-<%= $facts[os][release][major] %>
+
+<% if $facts['os']['release']['major'] == '7' { -%>
+[epel-debuginfo]
+name=Extra Packages for Enterprise Linux <%= $facts[os][release][major] %> - $basearch - Debug
+#baseurl=http://download.fedoraproject.org/pub/epel/<%= $facts[os][release][major] %>/$basearch/debug
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-debug-<%= $facts[os][release][major] %>&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-<%= $facts[os][release][major] %>
+gpgcheck=1
+
+[epel-source]
+name=Extra Packages for Enterprise Linux <%= $facts[os][release][major] %> - $basearch - Source
+#baseurl=http://download.fedoraproject.org/pub/epel/<%= $facts[os][release][major] %>/SRPMS
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-source-<%= $facts[os][release][major] %>&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-<%= $facts[os][release][major] %>
+gpgcheck=1
+<% } -%>

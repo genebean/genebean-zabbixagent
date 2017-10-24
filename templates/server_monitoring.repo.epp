@@ -1,0 +1,33 @@
+##################################################################
+###################################################################
+####
+####        This file is managed by Puppet
+####
+####################################################################
+####################################################################
+###
+#####################################################################
+####
+####   This section replaces /etc/zypp/repos.d/server_monitoring.repo
+####
+#####################################################################
+
+<% if $facts[os][name] == 'SLES' { -%>
+[server_monitoring]
+name=Server Monitoring Software
+enabled=1
+autorefresh=0
+baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.<%= $facts[os][release][minor] %>/
+type=rpm-md
+gpgcheck=1
+gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_42.<%= $facts[os][release][minor] %>//repodata/repomd.xml.key
+
+<% } elsif $facts['os']['release']['major'] == 42 { -%>
+[server_monitoring]
+name=Server Monitoring Software
+type=rpm-md
+baseurl=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= $facts[os][release][full] %>/
+gpgcheck=1
+gpgkey=http://download.opensuse.org/repositories/home:/ecsos:/monitoring/openSUSE_Leap_<%= $facts[os][release][full] %>//repodata/repomd.xml.key
+enabled=1
+<% } -%>

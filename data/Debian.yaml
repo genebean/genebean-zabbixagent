@@ -1,0 +1,2 @@
+---
+zabbixagent::package_name: 'zabbix-agent'

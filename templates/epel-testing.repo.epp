@@ -1,0 +1,40 @@
+################################################################
+################################################################
+#
+#        This file is managed by Puppet
+#
+################################################################
+################################################################
+
+################################################################
+#
+#   This section replaces /etc/yum.repos.d/epel-testing.repo
+#
+################################################################
+
+[epel-testing]
+name=Extra Packages for Enterprise Linux <%= $facts[os][release][major] %> - Testing - $basearch
+#baseurl=http://download.fedoraproject.org/pub/epel/testing/<%= $facts['os']['release']['major'] %>/$basearch
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=testing-epel<%= $facts[os][release][major] %>&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgcheck=1
+gpgkey=http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-<%= $facts[os][release][major] %>
+
+[epel-testing-debuginfo]
+name=Extra Packages for Enterprise Linux <%= $facts[os][release][major] %> - Testing - $basearch - Debug
+#baseurl=http://download.fedoraproject.org/pub/epel/testing/<%= $facts[os][release][major] %>/$basearch/debug
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=testing-debug-epel<%= $facts[os][release][major] %>&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-<%= $facts[os][release][major] %>
+gpgcheck=1
+
+[epel-testing-source]
+name=Extra Packages for Enterprise Linux <%= $facts[os][release][major] %> - Testing - $basearch - Source
+#baseurl=http://download.fedoraproject.org/pub/epel/testing/<%= $facts[os][release][major] %>/SRPMS
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=testing-source-epel<%= $facts[os][release][major] %>&arch=$basearch
+failovermethod=priority
+enabled=0
+gpgkey=http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-<%= $facts[os][release][major] %>
+gpgcheck=1

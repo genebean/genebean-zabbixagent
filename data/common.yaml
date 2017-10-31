@@ -56,7 +56,7 @@ zabbixagent::tls_server_cert_subject:
 zabbixagent::unsafe_user_parameters:
 zabbixagent::user_parameter:
 zabbixagent::user:
-zabbixagent::version: '3.2'
+zabbixagent::version: '3.4'
 zabbixagent::config_dir: fail($fail_message)
 zabbixagent::log_file: fail($fail_message)
 zabbixagent::fail_message: "${::kernel} is not yet supported by this module."

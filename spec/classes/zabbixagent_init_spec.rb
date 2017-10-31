@@ -39,12 +39,7 @@ describe 'zabbixagent' do
           }"
         end
 
-        case facts[:os]['family']
-        when 'Suse'
-          it { is_expected.to raise_error(/Repository managment for the SUSE family is disabled/) }
-        else
-          it { is_expected.to compile.with_all_deps }
-        end
+        it { is_expected.to compile.with_all_deps }
       end # ends context 'with manage_repo_zabbix => true'
 
       describe 'with server and server_active params set' do

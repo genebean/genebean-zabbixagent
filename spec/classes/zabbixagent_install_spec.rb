@@ -17,7 +17,9 @@ describe 'zabbixagent::install' do
             }"
           end
 
-          it { is_expected.to raise_error(/Repository managment for the SUSE family is disabled/) }
+          # Make sure package will be installed.
+          it { is_expected.to contain_package('zabbix-agent').with_ensure('present') }
+          it { is_expected.to contain_package('zabbix-agent').with_name('zabbix32-agent') }
         end
         context 'with repo management disabled' do
           let :pre_condition do
@@ -29,7 +31,7 @@ describe 'zabbixagent::install' do
 
           # Make sure package will be installed.
           it { is_expected.to contain_package('zabbix-agent').with_ensure('present') }
-          it { is_expected.to contain_package('zabbix-agent').with_name('zabbix-agent') }
+          it { is_expected.to contain_package('zabbix-agent').with_name('zabbix32-agent') }
         end
       when 'windows'
         context 'with defaults' do

@@ -1,0 +1,26 @@
+##################################################################
+###################################################################
+####
+####        This file is managed by Puppet
+####
+####################################################################
+####################################################################
+###
+#####################################################################
+####
+#### This section replaces /etc/zypp/repos.d/home_pclo_monitoring.repo
+####
+#####################################################################
+
+[home_pclo_monitoring]
+name=home:pclo:monitoring (<%= $facts[os][name] %>_<%= $facts[os][release][full] %>)
+type=rpm-md
+<% if $facts[os][name] == 'OpenSuSE' { -%>
+baseurl=http://download.opensuse.org/repositories/home:/pclo:/monitoring/openSUSE_Leap_<%= $facts[os][release][full] %>/
+gpgkey=http://download.opensuse.org/repositories/home:/pclo:/monitoring/openSUSE_Leap_<%= $facts[os][release][full] %>/repodata/repomd.xml.key
+<% } else { -%>
+baseurl=http://download.opensuse.org/repositories/home:/pclo:/monitoring/SLE_<%= $facts[os][release][major] %>_SP<%= $facts[os][release][minor] %>/
+gpgkey=http://download.opensuse.org/repositories/home:/pclo:/monitoring/SLE_<%= $facts[os][release][major] %>_SP<%= $facts[os][release][minor] %>/repodata/repomd.xml.key
+<% } -%>
+gpgcheck=1
+enabled=1

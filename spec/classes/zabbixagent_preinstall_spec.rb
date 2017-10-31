@@ -48,8 +48,6 @@ describe 'zabbixagent::preinstall' do
 
         it { is_expected.to contain_exec('apt-get update') }
         it { is_expected.to contain_file('/etc/apt/sources.list.d/zabbix.list').that_notifies('Exec[apt-get update]') }
-      when 'Suse'
-        it { is_expected.to raise_error(/Repository managment for the SUSE family is disabled/) }
       else
         it { is_expected.to compile.with_all_deps }
       end # ends case facts[:os]['family']
@@ -64,7 +62,7 @@ describe 'zabbixagent::preinstall' do
   ################################################
 
   # Running an OpenSuSE OS.
-  context 'On a OpenSuSE Leap 42.1 with repo management enabled' do
+  context 'On a OpenSuSE Leap 42.3 with repo management enabled' do
     let(:facts) do
       {
           'kernel' => 'Linux',
@@ -72,7 +70,7 @@ describe 'zabbixagent::preinstall' do
             'family'  => 'Suse',
             'name'    => 'OpenSuSE',
             'release' => {
-              'full' => '42.1'
+              'full' => '42.3'
             },
           },
       }
@@ -84,6 +82,11 @@ describe 'zabbixagent::preinstall' do
       }"
     end
 
-    it { is_expected.to raise_error(/Repository managment for the SUSE family is disabled/) }
-  end # ens context 'On a OpenSuSE Leap 42.1 with repo management enabled'
+    it 'should create home_pclo_monitoring.repo' do
+      is_expected.to contain_file('/etc/zypp/repos.d/home_pclo_monitoring.repo').with_content(/baseurl=http:\/\/download.opensuse.org\/repositories\/home:\/pclo:\/monitoring\/openSUSE_Leap_42.3\//)
+      is_expected.to contain_file('/etc/zypp/repos.d/home_pclo_monitoring.repo').with_content(/gpgkey=http:\/\/download.opensuse.org\/repositories\/home:\/pclo:\/monitoring\/openSUSE_Leap_42.3\/repodata\/repomd.xml.key/)
+    end
+    it { is_expected.to contain_exec('zypper refresh') }
+    it { is_expected.to contain_file('/etc/zypp/repos.d/home_pclo_monitoring.repo').that_notifies('Exec[zypper refresh]') }
+  end # ens context 'On a OpenSuSE Leap 42.3 with repo management enabled'
 end

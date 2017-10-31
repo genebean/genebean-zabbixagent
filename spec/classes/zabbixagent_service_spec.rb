@@ -34,7 +34,7 @@ describe 'zabbixagent::service' do
   ################################################
 
   # Running a OpenSuSE.
-  context 'On OpenSuSE Leap 42.1 with defaults' do
+  context 'On OpenSuSE Leap 42.3 with defaults' do
     let :pre_condition do
       'include ::zabbixagent'
     end
@@ -46,7 +46,7 @@ describe 'zabbixagent::service' do
           'family'  => 'Suse',
           'name'    => 'OpenSuSE',
           'release' => {
-            'full' => '42.1',
+            'full' => '42.3',
           },
         },
       }

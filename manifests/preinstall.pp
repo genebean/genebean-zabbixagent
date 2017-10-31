@@ -57,63 +57,23 @@ class zabbixagent::preinstall inherits zabbixagent {
 
     'Suse' : {
       if ($zabbixagent::manage_repo_zabbix) {
-        fail('Repository managment for the SUSE family is disabled until we can find reliable repos to use.')
+        file { '/etc/zypp/repos.d/home_pclo_monitoring.repo':
+          ensure  => file,
+          content => epp('zabbixagent/home_pclo_monitoring.repo.epp'),
+          notify  => Exec['zypper refresh'],
+        }
       }
-      # case $facts['os']['name'] {
 
-      #   'SLES' : {
-      #     case $facts['os']['release']['full'] {
-
-      #       '11.3', '11.4', '12.0', '12.1' : {
-      #         # Zabbix
-      #         if ($zabbixagent::manage_repo_zabbix) {
-      #           file { '/etc/zypp/repos.d/server_monitoring.repo':
-      #             ensure  => file,
-      #             content => epp('zabbixagent/server_monitoring.repo.epp'),
-      #             notify  => Exec['zypper refresh'],
-      #           }
-      #         }
-      #       }
-
-      #       default : {
-      #         # lint:ignore:80chars
-      #         fail("${facts['os']['name']} ${$facts['os']['release']['full']} is not supported")
-      #         # lint:endignore
-      #       }
-
-      #     } # end case $facts['os']['release']['full']
-
-      #   } # end SLES
-
-      #   'OpenSuSE' : {
-      #     if ($zabbixagent::manage_repo_zabbix) {
-      #       file { '/etc/zypp/repos.d/server_monitoring.repo':
-      #         ensure  => file,
-      #         content => epp('zabbixagent/server_monitoring.repo.epp'),
-      #         notify  => Exec['zypper refresh'],
-      #       }
-      #     }
-      #   } # end OpenSuSE
-
-      #   default : {
-      #   }
-
-      # } # end case $facts['os']['name']
-
-
-
-      # exec { 'zypper refresh':
-      #   path        => '/usr/bin',
-      #   user        => 'root',
-      #   logoutput   => true,
-      #   refreshonly => true,
-      #   command     => 'zypper --gpg-auto-import-keys refresh',
-      # }
-
+      exec { 'zypper refresh':
+        path        => '/usr/bin',
+        user        => 'root',
+        logoutput   => true,
+        refreshonly => true,
+        command     => 'zypper --gpg-auto-import-keys refresh',
+      }
     } # end Suse
 
     default : {
     }
-
   } # end case $::osfamily
 } # end class

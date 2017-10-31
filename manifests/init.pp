@@ -335,7 +335,7 @@ class zabbixagent (
     fail('$servers_active must be either a string or an array')
   }
 
-  if !($version in [ '2.4', '3.0', '3.2' ]) {
+  if !($version in [ '2.4', '3.0', '3.2', '3.4' ]) {
     fail("Zabbix ${version} is not supported but PR's are welcome.")
   }
 

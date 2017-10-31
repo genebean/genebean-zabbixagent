@@ -11,7 +11,7 @@ describe 'zabbixagent::preinstall' do
         "class {'zabbixagent':
           manage_repo_zabbix => true,
           manage_repo_epel   => true,
-          version            => '3.2',
+          version            => '3.4',
         }"
       end
       case facts[:os]['family']
@@ -32,18 +32,18 @@ describe 'zabbixagent::preinstall' do
         case facts[:os]['release']['major']
         when '5'
           it 'should create zabbix.repo' do
-            is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/baseurl=http:\/\/repo.zabbix.com\/zabbix\/3.2\/rhel\/#{facts[:os]['release']['major']}\/\$basearch\//)
+            is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/baseurl=http:\/\/repo.zabbix.com\/zabbix\/3.4\/rhel\/#{facts[:os]['release']['major']}\/\$basearch\//)
             is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/gpgkey=http:\/\/repo.zabbix.com\/RPM-GPG-KEY-ZABBIX-A14FE591-EL5/)
           end
         else
           it 'should create zabbix.repo' do
-            is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/baseurl=http:\/\/repo.zabbix.com\/zabbix\/3.2\/rhel\/#{facts[:os]['release']['major']}\/\$basearch\//)
+            is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/baseurl=http:\/\/repo.zabbix.com\/zabbix\/3.4\/rhel\/#{facts[:os]['release']['major']}\/\$basearch\//)
             is_expected.to contain_file('/etc/yum.repos.d/zabbix.repo').with_content(/gpgkey=http:\/\/repo.zabbix.com\/RPM-GPG-KEY-ZABBIX-A14FE591/)
           end
         end # ends case facts[:operatingsystemmajrelease]
       when 'Debian'
         it 'should create zabbix.list' do
-          is_expected.to contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.2\/#{facts[:os]['name'].downcase} #{facts[:os]['lsb']['distcodename']} main/)
+          is_expected.to contain_file('/etc/apt/sources.list.d/zabbix.list').with_content(/deb http:\/\/repo.zabbix.com\/zabbix\/3.4\/#{facts[:os]['name'].downcase} #{facts[:os]['lsb']['distcodename']} main/)
         end
 
         it { is_expected.to contain_exec('apt-get update') }

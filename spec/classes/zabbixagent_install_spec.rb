@@ -13,7 +13,7 @@ describe 'zabbixagent::install' do
           let :pre_condition do
             "class {'zabbixagent':
               manage_repo_zabbix => true,
-              version            => '3.2',
+              version            => '3.4',
             }"
           end
 
@@ -23,7 +23,7 @@ describe 'zabbixagent::install' do
           let :pre_condition do
             "class {'zabbixagent':
               manage_repo_zabbix => false,
-              version            => '3.2',
+              version            => '3.4',
             }"
           end
 

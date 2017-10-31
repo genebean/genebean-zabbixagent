@@ -21,7 +21,7 @@ gpgcheck=1
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
 <% } elsif $zabbixagent::version == '3.0' { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4
-<% } elsif $zabbixagent::version == '3.2' { -%>
+<% } elsif $zabbixagent::version =~ /^3\.2|4/ { -%>
 <% if $facts['os']['release']['major'] == '5' { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591-EL5
 <% } else { -%>
@@ -38,7 +38,7 @@ gpgcheck=1
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX
 <% } elsif $zabbixagent::version == '3.0' { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4
-<% } elsif $zabbixagent::version == '3.2' { -%>
+<% } elsif $zabbixagent::version =~ /^3\.2|4/  { -%>
 <% if $facts['os']['release']['major'] == '5' { -%>
 gpgkey=http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591-EL5
 <% } else { -%>

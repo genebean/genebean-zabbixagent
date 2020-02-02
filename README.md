@@ -123,7 +123,7 @@ Default: 'system.uname'
 
 **hostname**  
 The hostname used in the config file.  
-Default: downcase($::fqdn)
+Default: downcase($fqdn)
 
 **hostname_item**  
 An item to be used for determining a host's name
@@ -277,7 +277,7 @@ Type: string
 ## Usage
 
 ```puppet
-class { '::zabbixagent':
+class { 'zabbixagent':
   ensure_setting => 'latest',
   include_files  => ['/etc/zabbix_agentd.conf.d/userparams.conf',],
   log_file_size  => 0,

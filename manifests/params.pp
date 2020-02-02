@@ -17,7 +17,7 @@ class zabbixagent::params {
   $enable_remote_commands  = undef
   $host_metadata           = undef
   $host_metadata_item      = 'system.uname'
-  $hostname                = downcase($::fqdn)
+  $hostname                = downcase($facts['networking']['fqdn'])
   $hostname_item           = undef
   $include_files           = undef
   $item_alias              = undef
@@ -54,15 +54,15 @@ class zabbixagent::params {
 
   # this isn't a parameter but, since this class is inherited by all classes
   # it is a good place to put this message so that it's the same everywhere
-  $fail_message            = "${::kernel} is not yet supported by this module."
+  $fail_message            = "${facts['kernel']} is not yet supported by this module."
 
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux'   : {
       $config_dir = '/etc/zabbix'
       $log_file   = '/var/log/zabbix/zabbix_agentd.log'
     }
 
-    'Windows' : {
+    'windows' : {
       $config_dir = 'C:/ProgramData/zabbix'
       $log_file   = 'C:/zabbix_agentd.log'
     }
@@ -73,7 +73,7 @@ class zabbixagent::params {
 
   } # end case
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       $package_name = 'zabbix-agent'
     }
@@ -100,13 +100,13 @@ class zabbixagent::params {
     }
   }
 
-  $service_name = $::operatingsystem ? {
+  $service_name = $facts['os']['name'] ? {
     'Windows'            => 'Zabbix Agent',
     /(OpenSuSE|SLES)/    => 'zabbix-agentd',
     default              => 'zabbix-agent',
   }
 
-  $config_name = $::operatingsystem ? {
+  $config_name = $facts['os']['name'] ? {
     'Windows'            => 'zabbix_agentd.conf',
     /(OpenSuSE|SLES)/    => 'zabbix-agentd.conf',
     default              => 'zabbix_agentd.conf',

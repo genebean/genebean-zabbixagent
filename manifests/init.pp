@@ -230,36 +230,29 @@
 # Sample Usage: see README.md
 #
 class zabbixagent (
-  # depreciated vars
-  $include_dir             = undef,
-  $include_file            = undef,
-  $logfile                 = undef,
-  $servers                 = undef,
-  $servers_active          = undef,
-
   # preinstall settings
-  $manage_repo_epel        = $zabbixagent::params::manage_repo_epel,
-  $manage_repo_zabbix      = $zabbixagent::params::manage_repo_zabbix,
+  Boolean $manage_repo_epel        = false,
+  Boolean $manage_repo_zabbix      = false,
 
   # conf settings
-  $config_dir              = $zabbixagent::params::config_dir,
+  Stdlib::Absolutepath $config_dir              = $zabbixagent::params::config_dir,
 
   # install setting
-  $ensure_setting          = $zabbixagent::params::ensure_setting,
-  $custom_require_linux    = $zabbixagent::params::custom_require_linux,
-  $custom_require_windows  = $zabbixagent::params::custom_require_windows,
+  String[1] $ensure_setting                       = 'present',
+  Optional[String[1]] $custom_require_linux       = undef,
+  Optional[String[1]] $custom_require_windows     = undef,
 
   # config file settings
-  $allow_root              = $zabbixagent::params::allow_root,
-  $buffer_send             = $zabbixagent::params::buffer_send,
-  $buffer_size             = $zabbixagent::params::buffer_size,
-  $debug_level             = $zabbixagent::params::debug_level,
-  $enable_remote_commands  = $zabbixagent::params::enable_remote_commands,
-  $host_metadata           = $zabbixagent::params::host_metadata,
-  $host_metadata_item      = $zabbixagent::params::host_metadata_item,
-  $hostname                = $zabbixagent::params::hostname,
-  $hostname_item           = $zabbixagent::params::hostname_item,
-  $include_files           = $zabbixagent::params::include_files,
+  Optional[Integer[0,1]] $allow_root              = undef,
+  Optional[Integer] $buffer_send                  = undef,
+  Optional[Integer] $buffer_size                  = undef,
+  Optional[Integer[0,5]] $debug_level             = undef,
+  Optional[Integer[0,1]] $enable_remote_commands  = undef,
+  Optional[String[1,255]] $host_metadata          = undef,
+  String[1,255] $host_metadata_item               = 'system.uname',
+  String[1] $hostname                             = downcase($facts['networking']['fqdn']),
+  Optional[String[1]] $hostname_item              = undef,
+  Optional[Array[String[1]]] $include_files       = $zabbixagent::params::include_files,
   $item_alias              = $zabbixagent::params::item_alias,
   $listen_ip               = $zabbixagent::params::listen_ip,
   $listen_port             = $zabbixagent::params::listen_port,
@@ -270,12 +263,12 @@ class zabbixagent (
   $log_remote_commands     = $zabbixagent::params::log_remote_commands,
   $log_type                = $zabbixagent::params::log_type,
   $max_lines_per_second    = $zabbixagent::params::max_lines_per_second,
-  $package_name            = $zabbixagent::params::package_name,
+  $package_name            = 'zabbix-agent',
   $perf_counter            = $zabbixagent::params::perf_counter,
   $pid_file                = $zabbixagent::params::pid_file,
   $refresh_active_checks   = $zabbixagent::params::refresh_active_checks,
-  $server                  = $zabbixagent::params::server,
-  $server_active           = $zabbixagent::params::server_active,
+  Variant[String[1], Array[String[1]]] $server                  = '127.0.0.1',
+  Variant[String[1], Array[String[1]]] $server_active           = '127.0.0.1',
   $source_ip               = $zabbixagent::params::source_ip,
   $start_agents            = $zabbixagent::params::start_agents,
   $timeout                 = $zabbixagent::params::timeout,
@@ -294,68 +287,8 @@ class zabbixagent (
   $user                    = $zabbixagent::params::user,
   $version                 = $zabbixagent::params::version,
 ) inherits zabbixagent::params {
-  # validate booleans
-  validate_bool($manage_repo_epel)
-  validate_bool($manage_repo_zabbix)
-
-  # validate strings
-  validate_string($ensure_setting)
-  validate_string($hostname)
-
-  if (!(is_string($server) or is_array($server))) {
-    fail('$servers must be either a string or an array')
-  }
-
-  if (!(is_string($server_active) or is_array($server_active))) {
-    fail('$servers_active must be either a string or an array')
-  }
-
-  if !($version in [ '2.4', '3.0', '3.2' ]) {
+  if (versioncmp($version, '3.0') < 0) {
     fail("Zabbix ${version} is not supported but PR's are welcome.")
-  }
-
-  if ($version == '2.4' and ($log_type)) {
-    fail('The parameter log_type is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_accept)) {
-    fail('The parameter tls_accept is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_ca_file)) {
-    fail('The parameter tls_ca_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_cert_file)) {
-    fail('The parameter tls_cert_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_connect)) {
-    fail('The parameter tls_connect is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_crl_file)) {
-    fail('The parameter tls_crl_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_key_file)) {
-    fail('The parameter tls_key_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_psk_file)) {
-    fail('The parameter tls_psk_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_psk_identity)) {
-    fail('The parameter tls_psk_identity is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_server_cert_issuer)) {
-    fail('The parameter tls_server_cert_issuer is only supported since Zabbix 3.0.') # lint:ignore:80chars
-  }
-
-  if ($version == '2.4' and ($tls_server_cert_subject)) {
-    fail('The parameter tls_server_cert_subject is only supported since Zabbix 3.0.') # lint:ignore:80chars
   }
 
   contain zabbixagent::preinstall

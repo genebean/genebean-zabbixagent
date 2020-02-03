@@ -73,42 +73,17 @@ class zabbixagent::params {
 
   } # end case
 
-  case $facts['os']['family'] {
-    'Debian': {
-      $package_name = 'zabbix-agent'
-    }
-
-    'Redhat': {
-      $package_name = 'zabbix-agent'
-    }
-
-    'Suse': {
-      $package_name = $version ? {
-        '2.4'   => 'zabbix24-agent',
-        '3.0'   => 'zabbix30-agent',
-        '3.2'   => 'zabbix32-agent',
-        default => 'zabbix32-agent',
-      }
-    }
-
-    'Windows': {
-      $package_name = 'zabbix-agent'
-    }
-
-    default: {
-      $package_name = undef
-    }
-  }
+  $package_name = 'zabbix-agent'
 
   $service_name = $facts['os']['name'] ? {
-    'Windows'            => 'Zabbix Agent',
-    /(OpenSuSE|SLES)/    => 'zabbix-agentd',
-    default              => 'zabbix-agent',
+    'windows'         => 'Zabbix Agent',
+    /(OpenSuSE|SLES)/ => 'zabbix-agentd',
+    default           => 'zabbix-agent',
   }
 
   $config_name = $facts['os']['name'] ? {
-    'Windows'            => 'zabbix_agentd.conf',
-    /(OpenSuSE|SLES)/    => 'zabbix-agentd.conf',
-    default              => 'zabbix_agentd.conf',
+    'windows'         => 'zabbix_agentd.conf',
+    /(OpenSuSE|SLES)/ => 'zabbix-agentd.conf',
+    default           => 'zabbix_agentd.conf',
   }
 }

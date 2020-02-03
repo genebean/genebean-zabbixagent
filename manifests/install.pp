@@ -27,7 +27,7 @@ class zabbixagent::install (
 
     } # end Linux
 
-    'Windows' : {
+    'windows' : {
       if ($custom_require_windows) {
         include $custom_require_windows
         Class[$custom_require_windows] -> Package[$package_name]
@@ -38,7 +38,7 @@ class zabbixagent::install (
         provider => 'chocolatey',
         notify   => Service['zabbix-agent'],
       }
-    } # end Windows
+    } # end windows
 
     default : {
       fail($zabbixagent::params::fail_message)

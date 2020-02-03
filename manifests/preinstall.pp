@@ -22,10 +22,28 @@ class zabbixagent::preinstall (
 
       # Zabbix
       if ($manage_repo_zabbix) {
-        file { '/etc/yum.repos.d/zabbix.repo':
-          ensure  => file,
-          content => template('zabbixagent/zabbix.repo.erb'),
-          notify  => Exec['yum clean all'],
+        yumrepo {
+          default:
+            ensure   => present,
+            enabled  => '1',
+            gpgcheck => '1',
+            gpgkey   => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591',
+            notify   => Exec['yum clean all'],
+          ;
+          'zabbix':
+            baseurl => "http://repo.zabbix.com/zabbix/${zabbixagent::version}/rhel/${facts['os']['release']['major']}/$basearch/",
+            descr   => 'Zabbix Official Repository - $basearch',
+          ;
+          'zabbix-debuginfo':
+            baseurl => "http://repo.zabbix.com/zabbix/${zabbixagent::version}/rhel/${facts['os']['release']['major']}/$basearch/debuginfo/",
+            descr   => 'Zabbix Official Repository debuginfo - $basearch',
+            enabled => '0',
+          ;
+          'zabbix-non-supported':
+            baseurl => "http://repo.zabbix.com/non-supported/rhel/${facts['os']['release']['major']}/$basearch/",
+            descr   => 'Zabbix Official Repository non-supported - $basearch',
+            gpgkey  => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX',
+          ;
         }
       }
 

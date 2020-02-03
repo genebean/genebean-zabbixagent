@@ -1,6 +1,9 @@
 fixtures:
   forge_modules:
-    chocolatey:  "puppetlabs/chocolatey"
-    stdlib:      "puppetlabs/stdlib"
+    chocolatey:  'puppetlabs/chocolatey'
+    stdlib:      'puppetlabs/stdlib'
+    yumrepo_core:
+      repo: 'puppetlabs/yumrepo_core'
+      puppet_version: '>= 6.0.0'
   symlinks:
     zabbixagent: "#{source_dir}"

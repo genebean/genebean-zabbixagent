@@ -17,7 +17,6 @@ describe 'zabbixagent' do
         it { is_expected.to compile.with_all_deps }
 
         # Check that all classes are present
-        it { is_expected.to contain_class('zabbixagent::params') }
         it { is_expected.to contain_class('zabbixagent::preinstall') }
         it { is_expected.to contain_class('zabbixagent::install') }
         it { is_expected.to contain_class('zabbixagent::config') }

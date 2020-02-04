@@ -1,57 +1,13 @@
 # Manages configuration of the Zabbix agent and associated repos (if enabled)
-class zabbixagent::config (
-  $allow_root              = $zabbixagent::allow_root,
-  $buffer_send             = $zabbixagent::buffer_send,
-  $buffer_size             = $zabbixagent::buffer_size,
-  $config_dir              = $zabbixagent::config_dir,
-  $config_name             = $zabbixagent::config_name,
-  $debug_level             = $zabbixagent::debug_level,
-  $enable_remote_commands  = $zabbixagent::enable_remote_commands,
-  $host_metadata_item      = $zabbixagent::host_metadata_item,
-  $host_metadata           = $zabbixagent::host_metadata,
-  $hostname_item           = $zabbixagent::hostname_item,
-  $hostname                = $zabbixagent::hostname,
-  $include_files           = $zabbixagent::include_files,
-  $item_alias              = $zabbixagent::item_alias,
-  $listen_ip               = $zabbixagent::listen_ip,
-  $listen_port             = $zabbixagent::listen_port,
-  $load_module_path        = $zabbixagent::load_module_path,
-  $load_module             = $zabbixagent::load_module,
-  $log_file_size           = $zabbixagent::log_file_size,
-  $log_file                = $zabbixagent::log_file,
-  $log_remote_commands     = $zabbixagent::log_remote_commands,
-  $log_type                = $zabbixagent::log_type,
-  $max_lines_per_second    = $zabbixagent::max_lines_per_second,
-  $perf_counter            = $zabbixagent::perf_counter,
-  $pid_file                = $zabbixagent::pid_file,
-  $refresh_active_checks   = $zabbixagent::refresh_active_checks,
-  $server_active           = $zabbixagent::server_active,
-  $server                  = $zabbixagent::server,
-  $source_ip               = $zabbixagent::source_ip,
-  $start_agents            = $zabbixagent::start_agents,
-  $timeout                 = $zabbixagent::timeout,
-  $tls_accept              = $zabbixagent::tls_accept,
-  $tls_ca_file             = $zabbixagent::tls_ca_file,
-  $tls_cert_file           = $zabbixagent::tls_cert_file,
-  $tls_connect             = $zabbixagent::tls_connect,
-  $tls_crl_file            = $zabbixagent::tls_crl_file,
-  $tls_key_file            = $zabbixagent::tls_key_file,
-  $tls_psk_file            = $zabbixagent::tls_psk_file,
-  $tls_psk_identity        = $zabbixagent::tls_psk_identity,
-  $tls_server_cert_issuer  = $zabbixagent::tls_server_cert_issuer,
-  $tls_server_cert_subject = $zabbixagent::tls_server_cert_subject,
-  $unsafe_user_parameters  = $zabbixagent::unsafe_user_parameters,
-  $user_parameter          = $zabbixagent::user_parameter,
-  $user                    = $zabbixagent::user,
-  $version                 = $zabbixagent::version,) {
-  file { $zabbixagent::params::config_dir:
+class zabbixagent::config {
+  file { $zabbixagent::config_dir:
     ensure => directory,
   }
 
-  file { "${config_dir}/${config_name}":
+  file { "${zabbixagent::config_dir}/zabbix_agentd.conf":
     ensure  => file,
     content => template('zabbixagent/zabbix_agentd.conf.erb'),
-    require => File[$zabbixagent::params::config_dir],
+    require => File[$zabbixagent::config_dir],
     notify  => Service['zabbix-agent'],
   }
 

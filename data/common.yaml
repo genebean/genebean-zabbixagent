@@ -1,1 +1,3 @@
 ---
+zabbixagent::config_dir: '/etc/zabbix'
+zabbixagent::service_name: 'zabbix-agent'

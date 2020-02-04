@@ -1,22 +1,45 @@
+---
+dist: xenial
 language: ruby
 cache: bundler
-
+before_install:
+  - bundle -v
+  - rm -f Gemfile.lock
+  - gem update --system $RUBYGEMS_VERSION
+  - gem --version
+  - bundle -v
+script:
+  - 'bundle exec rake $CHECK'
+bundler_args: --without system_tests
+rvm:
+  - 2.5.3
+stages:
+  - static
+  - spec
+  - acceptance
+  -
+    if: tag =~ ^v\d
+    name: deploy
 matrix:
+  fast_finish: true
   include:
-    - rvm: 2.1.6
-      env: PUPPET_VERSION="~> 4.0"
-    - rvm: 2.4.1
-      env: PUPPET_VERSION="~> 5.0"
-    - rvm: 2.4.1
-      env: PUPPET_VERSION="~> 5.0" STRICT_VARIABLES="yes"
-
-script: 'bundle exec rake tests'
-
+    -
+      env: CHECK="check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop syntax lint metadata_lint"
+      stage: static
+    -
+      env: PUPPET_GEM_VERSION="~> 5.0" CHECK=parallel_spec
+      rvm: 2.4.5
+      stage: spec
+    -
+      env: PUPPET_GEM_VERSION="~> 6.0" CHECK=parallel_spec
+      rvm: 2.5.3
+      stage: spec
+    -
+      env: DEPLOY_TO_FORGE=yes
+      stage: deploy
+branches:
+  only:
+    - master
+    - /^v\d/
 notifications:
-  email:
-    on_failure: change
-    on_success: never
-  slack:
-    rooms:
-      - secure: "DyPNG5cMqBAXNQmFPVjf8hqDZFIPy9e42RNWmuyFmBqIWF4q5iYvekCMoTc4DimOBGAvpu84w5wa1XCIlO+/5yMInOM5u6dFCojzUZ8JNXBAsyhbIY/vD+oMndecaMIMNSZh3bOX9T180IBPaR7MoHPGeoV+itoSWQUrIQKELx4="
-      - secure: "PlV/p9vjCEukGqof4r+ZRH49BeQvUZ8RP5krYLjUVfKGHg8wBIUrXn3aFH6Rdh9VjjSMoBPukVy5Mhd/Q1mmLHwzTl/+w/SE7ttgj6W6tAEjvDw1iH+ZWMrh0K/K+DLcNhWqeP4wDsQ2d5x5KOtQV3KIzs8hvF/R7s/BDZf5UqE="
+  email: false

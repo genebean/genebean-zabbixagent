@@ -1,6 +1,23 @@
 ---
-.travis.yml:
-  slack_rooms:
-    - 'DyPNG5cMqBAXNQmFPVjf8hqDZFIPy9e42RNWmuyFmBqIWF4q5iYvekCMoTc4DimOBGAvpu84w5wa1XCIlO+/5yMInOM5u6dFCojzUZ8JNXBAsyhbIY/vD+oMndecaMIMNSZh3bOX9T180IBPaR7MoHPGeoV+itoSWQUrIQKELx4=' # thecomfyseat
-    - 'PlV/p9vjCEukGqof4r+ZRH49BeQvUZ8RP5krYLjUVfKGHg8wBIUrXn3aFH6Rdh9VjjSMoBPukVy5Mhd/Q1mmLHwzTl/+w/SE7ttgj6W6tAEjvDw1iH+ZWMrh0K/K+DLcNhWqeP4wDsQ2d5x5KOtQV3KIzs8hvF/R7s/BDZf5UqE=' # uwg-techs
-
+  .gitlab-ci.yml:
+    delete: true
+  appveyor.yml:
+    delete: true
+  Gemfile:
+    optional:
+      ':development':
+        - gem: 'github_changelog_generator'
+          version: '~> 1.15.0'
+        - gem: 'puppet-lint-top_scope_facts-check'
+          version: '~> 1.0.1'
+        - gem: 'puppet-lint-legacy_facts-check'
+          version: '~> 1.0.3'
+  Rakefile:
+    changelog_user: 'genebean'
+    changelog_project: 'genebean-zabbixagent'
+    changelog_version_tag_pattern: '%s'
+    requires:
+      - 'puppet-strings/tasks'
+  spec/spec_helper.rb:
+    mock_with: ':rspec'
+    coverage_report: true

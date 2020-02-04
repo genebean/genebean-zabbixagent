@@ -1,39 +1,42 @@
 # Installs the zabbix agent
-class zabbixagent::install (
-  $ensure_setting         = $::zabbixagent::ensure_setting,
-  $custom_require_linux   = $::zabbixagent::custom_require_linux,
-  $custom_require_windows = $::zabbixagent::custom_require_windows,
-  $package_name           = $::zabbixagent::package_name,
-  $version                = $::zabbixagent::version) {
-  case $::kernel {
+class zabbixagent::install {
+  case $facts['kernel'] {
     'Linux'   : {
 
-      if ($package_name != 'zabbix-agent') {
+      if ($zabbixagent::package_name != 'zabbix-agent') {
         package { 'zabbix-agent':
           ensure => absent,
-          before => Package[$package_name],
+          before => Package[$zabbixagent::package_name],
         }
       }
 
-      package { $package_name:
-        ensure  => $ensure_setting,
-        notify  => Service[$::zabbixagent::params::service_name],
-        require => $custom_require_linux,
+      if ($zabbixagent::custom_require_linux) {
+        include $zabbixagent::custom_require_linux
+        Class[$zabbixagent::custom_require_linux] -> Package[$zabbixagent::package_name]
+      }
+
+      package { $zabbixagent::package_name:
+        ensure => $zabbixagent::ensure_setting,
+        notify => Service[$zabbixagent::service_name],
       }
 
     } # end Linux
 
-    'Windows' : {
-      package { $package_name:
-        ensure   => $ensure_setting,
+    'windows' : {
+      if ($zabbixagent::custom_require_windows) {
+        include $zabbixagent::custom_require_windows
+        Class[$zabbixagent::custom_require_windows] -> Package[$zabbixagent::package_name]
+      }
+
+      package { $zabbixagent::package_name:
+        ensure   => $zabbixagent::ensure_setting,
         provider => 'chocolatey',
         notify   => Service['zabbix-agent'],
-        require  => $custom_require_windows,
       }
-    } # end Windows
+    } # end windows
 
     default : {
-      fail($::zabbixagent::params::fail_message)
+      fail("${facts['kernel']} is not yet supported by this module.")
     }
   }
 }

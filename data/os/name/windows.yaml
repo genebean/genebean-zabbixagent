@@ -1,0 +1,3 @@
+---
+zabbixagent::config_dir: 'C:/ProgramData/zabbix'
+zabbixagent::service_name: 'Zabbix Agent'

@@ -1,12 +1,9 @@
 # Makes sure the service is running
-class zabbixagent::service(
-  $package_name = $::zabbixagent::package_name,
-  ) {
-
+class zabbixagent::service {
   service { 'zabbix-agent':
     ensure  => running,
-    name    => $::zabbixagent::params::service_name,
+    name    => $zabbixagent::service_name,
     enable  => true,
-    require => Package[$package_name],
+    require => Package[$zabbixagent::package_name],
   }
 }

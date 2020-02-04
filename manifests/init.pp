@@ -24,11 +24,13 @@
 # #### Install
 #
 # **custom_require_linux**
-# Passed directly to require of package resource when on Linux
+# A class name to require before the zabbix agent package is installed on Linux.
+# The named class will also be included.
 # Default: undef
 #
 # **custom_require_windows**
-# Passed directly to require of package resource when on Windows
+# A class name to require before the zabbix agent package is installed on Windows.
+# The named class will also be included.
 # Default: undef
 #
 # **ensure_setting**
@@ -75,7 +77,7 @@
 #
 # **hostname**
 # The hostname used in the config file.
-# Default: downcase($::fqdn)
+# Default: downcase($fqdn)
 #
 # **hostname_item**
 # An item to be used for determining a host's name
@@ -228,170 +230,77 @@
 # Sample Usage: see README.md
 #
 class zabbixagent (
-  # depreciated vars
-  $include_dir             = undef,
-  $include_file            = undef,
-  $logfile                 = undef,
-  $servers                 = undef,
-  $servers_active          = undef,
+  # conf settings
+  Stdlib::Absolutepath $config_dir,
 
   # preinstall settings
-  $manage_repo_epel        = $::zabbixagent::params::manage_repo_epel,
-  $manage_repo_zabbix      = $::zabbixagent::params::manage_repo_zabbix,
-
-  # conf settings
-  $config_dir              = $::zabbixagent::params::config_dir,
+  Boolean $manage_repo_epel                         = false,
+  Boolean $manage_repo_zabbix                       = false,
 
   # install setting
-  $ensure_setting          = $::zabbixagent::params::ensure_setting,
-  $custom_require_linux    = $::zabbixagent::params::custom_require_linux,
-  $custom_require_windows  = $::zabbixagent::params::custom_require_windows,
+  String[1] $ensure_setting                         = 'present',
+  Optional[String[1]] $custom_require_linux         = undef,
+  Optional[String[1]] $custom_require_windows       = undef,
 
   # config file settings
-  $allow_root              = $::zabbixagent::params::allow_root,
-  $buffer_send             = $::zabbixagent::params::buffer_send,
-  $buffer_size             = $::zabbixagent::params::buffer_size,
-  $debug_level             = $::zabbixagent::params::debug_level,
-  $enable_remote_commands  = $::zabbixagent::params::enable_remote_commands,
-  $host_metadata           = $::zabbixagent::params::host_metadata,
-  $host_metadata_item      = $::zabbixagent::params::host_metadata_item,
-  $hostname                = $::zabbixagent::params::hostname,
-  $hostname_item           = $::zabbixagent::params::hostname_item,
-  $include_files           = $::zabbixagent::params::include_files,
-  $item_alias              = $::zabbixagent::params::item_alias,
-  $listen_ip               = $::zabbixagent::params::listen_ip,
-  $listen_port             = $::zabbixagent::params::listen_port,
-  $load_module             = $::zabbixagent::params::load_module,
-  $load_module_path        = $::zabbixagent::params::load_module_path,
-  $log_file                = $::zabbixagent::params::log_file,
-  $log_file_size           = $::zabbixagent::params::log_file_size,
-  $log_remote_commands     = $::zabbixagent::params::log_remote_commands,
-  $log_type                = $::zabbixagent::params::log_type,
-  $max_lines_per_second    = $::zabbixagent::params::max_lines_per_second,
-  $package_name            = $::zabbixagent::params::package_name,
-  $perf_counter            = $::zabbixagent::params::perf_counter,
-  $pid_file                = $::zabbixagent::params::pid_file,
-  $refresh_active_checks   = $::zabbixagent::params::refresh_active_checks,
-  $server                  = $::zabbixagent::params::server,
-  $server_active           = $::zabbixagent::params::server_active,
-  $source_ip               = $::zabbixagent::params::source_ip,
-  $start_agents            = $::zabbixagent::params::start_agents,
-  $timeout                 = $::zabbixagent::params::timeout,
-  $tls_accept              = $::zabbixagent::params::tls_accept,
-  $tls_ca_file             = $::zabbixagent::params::tls_ca_file,
-  $tls_cert_file           = $::zabbixagent::params::tls_cert_file,
-  $tls_connect             = $::zabbixagent::params::tls_connect,
-  $tls_crl_file            = $::zabbixagent::params::tls_crl_file,
-  $tls_key_file            = $::zabbixagent::params::tls_key_file,
-  $tls_psk_file            = $::zabbixagent::params::tls_psk_file,
-  $tls_psk_identity        = $::zabbixagent::params::tls_psk_identity,
-  $tls_server_cert_issuer  = $::zabbixagent::params::tls_server_cert_issuer,
-  $tls_server_cert_subject = $::zabbixagent::params::tls_server_cert_subject,
-  $unsafe_user_parameters  = $::zabbixagent::params::unsafe_user_parameters,
-  $user_parameter          = $::zabbixagent::params::user_parameter,
-  $user                    = $::zabbixagent::params::user,
-  $version                 = $::zabbixagent::params::version,
-) inherits ::zabbixagent::params {
-  # lint:ignore:80chars
-  # these should not be used as they are pre v2.1
-  $depreciation_msg = 'was removed in v2.1. Please update your manifests and/or hiera data.'
-  # lint:endignore
-
-  if ($include_dir) {
-    fail("\$include_dir ${depreciation_msg}")
-  }
-
-  if ($include_file) {
-    fail("\$include_file ${depreciation_msg}")
-  }
-
-  if ($logfile) {
-    fail("\$logfile ${depreciation_msg}")
-  }
-
-  if ($servers) {
-    fail("\$servers ${depreciation_msg}")
-  }
-
-  if ($servers_active) {
-    fail("\$servers_active ${depreciation_msg}")
-  }
-
-  # validate booleans
-  validate_bool($manage_repo_epel)
-  validate_bool($manage_repo_zabbix)
-
-  # validate strings
-  validate_string($ensure_setting)
-  validate_string($hostname)
-
-  if (!(is_string($server) or is_array($server))) {
-    fail('$servers must be either a string or an array')
-  }
-
-  if (!(is_string($server_active) or is_array($server_active))) {
-    fail('$servers_active must be either a string or an array')
-  }
-
-  if !($version in [ '2.4', '3.0', '3.2' ]) {
+  Optional[Integer[0,1]] $allow_root                = undef,
+  Optional[Integer[1,3600]] $buffer_send            = undef,
+  Optional[Integer[2,65535]] $buffer_size           = undef,
+  Optional[Integer[0,5]] $debug_level               = undef,
+  Optional[Integer[0,1]] $enable_remote_commands    = undef,
+  Optional[String[1,255]] $host_metadata            = undef,
+  String[1,255] $host_metadata_item                 = 'system.uname',
+  String[1] $hostname                               = downcase($facts['networking']['fqdn']),
+  Optional[String[1]] $hostname_item                = undef,
+  Optional[Array[String[1]]] $include_files         = undef,
+  Optional[String[1]] $item_alias                   = undef,
+  Optional[Array[Stdlib::IP::Address]] $listen_ip   = undef,
+  Optional[Integer[1024,32767]] $listen_port        = undef,
+  Optional[Array[String[1]]] $load_module           = undef,
+  Optional[Stdlib::Absolutepath] $load_module_path  = undef,
+  Optional[Stdlib::Absolutepath] $log_file          = undef,
+  Optional[Integer[0,1024]] $log_file_size          = undef,
+  Optional[Integer[0,1]] $log_remote_commands       = undef,
+  Optional[Zabbixagent::Logtype] $log_type          = undef,
+  Optional[Integer[1,1000]] $max_lines_per_second   = undef,
+  String[1] $package_name                           = 'zabbix-agent',
+  Optional[String[1]] $perf_counter                 = undef,
+  Optional[Stdlib::Absolutepath] $pid_file          = undef,
+  Optional[Integer[60,3600]] $refresh_active_checks = undef,
+  Zabbixagent::Server $server                       = '127.0.0.1',
+  Zabbixagent::Server $server_active                = '127.0.0.1',
+  Optional[Stdlib::IP::Address] $source_ip          = undef,
+  Optional[Integer[0,100]] $start_agents            = undef,
+  Optional[Integer[1,30]] $timeout                  = undef,
+  Optional[Zabbixagent::Tls::Accept] $tls_accept    = undef,
+  Optional[Stdlib::Absolutepath] $tls_ca_file       = undef,
+  Optional[Stdlib::Absolutepath] $tls_cert_file     = undef,
+  Optional[Zabbixagent::Tls::Connect] $tls_connect  = undef,
+  Optional[Stdlib::Absolutepath] $tls_crl_file      = undef,
+  Optional[Stdlib::Absolutepath] $tls_key_file      = undef,
+  Optional[Stdlib::Absolutepath] $tls_psk_file      = undef,
+  Optional[String[1]] $tls_psk_identity             = undef,
+  Optional[String[1]] $tls_server_cert_issuer       = undef,
+  Optional[String[1]] $tls_server_cert_subject      = undef,
+  Optional[Integer[0,1]] $unsafe_user_parameters    = undef,
+  Optional[Array[String[1]]] $user_parameter        = undef,
+  Optional[String[1]] $user                         = undef,
+  Regexp[/\d+\.\d+/] $version                       = '4.4',
+) {
+  if (versioncmp($version, '3.0') < 0) {
     fail("Zabbix ${version} is not supported but PR's are welcome.")
   }
 
-  if ($version == '2.4' and ($log_type)) {
-    fail('The parameter log_type is only supported since Zabbix 3.0.')
-  }
+  contain zabbixagent::preinstall
+  contain zabbixagent::install
+  contain zabbixagent::config
+  contain zabbixagent::service
 
-  if ($version == '2.4' and ($tls_accept)) {
-    fail('The parameter tls_accept is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_ca_file)) {
-    fail('The parameter tls_ca_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_cert_file)) {
-    fail('The parameter tls_cert_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_connect)) {
-    fail('The parameter tls_connect is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_crl_file)) {
-    fail('The parameter tls_crl_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_key_file)) {
-    fail('The parameter tls_key_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_psk_file)) {
-    fail('The parameter tls_psk_file is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_psk_identity)) {
-    fail('The parameter tls_psk_identity is only supported since Zabbix 3.0.')
-  }
-
-  if ($version == '2.4' and ($tls_server_cert_issuer)) {
-    fail('The parameter tls_server_cert_issuer is only supported since Zabbix 3.0.') # lint:ignore:80chars
-  }
-
-  if ($version == '2.4' and ($tls_server_cert_subject)) {
-    fail('The parameter tls_server_cert_subject is only supported since Zabbix 3.0.') # lint:ignore:80chars
-  }
-
-  anchor { '::zabbixagent::start':
-  }
-  -> class { '::zabbixagent::preinstall':
-  }
-  -> class { '::zabbixagent::install':
-  }
-  -> class { '::zabbixagent::config':
-  }
-  -> class { '::zabbixagent::service':
-  }
-  -> anchor { '::zabbixagent::end':
-  }
+  anchor { 'zabbixagent::start': }
+  -> Class['zabbixagent::preinstall']
+  -> Class['zabbixagent::install']
+  -> Class['zabbixagent::config']
+  -> Class['zabbixagent::service']
+  -> anchor { 'zabbixagent::end': }
 
 }

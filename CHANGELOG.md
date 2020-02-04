@@ -85,7 +85,7 @@
 
 ## 2013-02-18 Release 1.0.0  
 ### Breaking Changes:  
-- Default hostname is now `$::fqdn` instead of `$::hostname`
+- Default hostname is now `$fqdn` instead of `$hostname`
 
 ### Changes:  
 - Added CentOS support (by @martijn)

@@ -229,21 +229,21 @@
 #
 class zabbixagent (
   # depreciated vars
-  $include_dir             = undef,
-  $include_file            = undef,
-  $logfile                 = undef,
-  $servers                 = undef,
-  $servers_active          = undef,
+  $include_dir                                     = undef,
+  $include_file                                    = undef,
+  $logfile                                         = undef,
+  Optional[Variant[String, Array]] $servers        = undef,
+  Optional[Variant[String, Array]] $servers_active = undef,
 
   # preinstall settings
-  $manage_repo_epel        = $::zabbixagent::params::manage_repo_epel,
-  $manage_repo_zabbix      = $::zabbixagent::params::manage_repo_zabbix,
+  Boolean $manage_repo_epel        = $::zabbixagent::params::manage_repo_epel,
+  Boolean $manage_repo_zabbix      = $::zabbixagent::params::manage_repo_zabbix,
 
   # conf settings
   $config_dir              = $::zabbixagent::params::config_dir,
 
   # install setting
-  $ensure_setting          = $::zabbixagent::params::ensure_setting,
+  String $ensure_setting   = $::zabbixagent::params::ensure_setting,
   $custom_require_linux    = $::zabbixagent::params::custom_require_linux,
   $custom_require_windows  = $::zabbixagent::params::custom_require_windows,
 
@@ -255,7 +255,7 @@ class zabbixagent (
   $enable_remote_commands  = $::zabbixagent::params::enable_remote_commands,
   $host_metadata           = $::zabbixagent::params::host_metadata,
   $host_metadata_item      = $::zabbixagent::params::host_metadata_item,
-  $hostname                = $::zabbixagent::params::hostname,
+  String $hostname         = $::zabbixagent::params::hostname,
   $hostname_item           = $::zabbixagent::params::hostname_item,
   $include_files           = $::zabbixagent::params::include_files,
   $item_alias              = $::zabbixagent::params::item_alias,
@@ -315,22 +315,6 @@ class zabbixagent (
 
   if ($servers_active) {
     fail("\$servers_active ${depreciation_msg}")
-  }
-
-  # validate booleans
-  validate_bool($manage_repo_epel)
-  validate_bool($manage_repo_zabbix)
-
-  # validate strings
-  validate_string($ensure_setting)
-  validate_string($hostname)
-
-  if (!(is_string($server) or is_array($server))) {
-    fail('$servers must be either a string or an array')
-  }
-
-  if (!(is_string($server_active) or is_array($server_active))) {
-    fail('$servers_active must be either a string or an array')
   }
 
   if !($version in [ '2.4', '3.0', '3.2' ]) {
